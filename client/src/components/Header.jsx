@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 import MobileMenu from "./MobileMenu";
 import { IoIosMenu } from "react-icons/io";
+import Logo from "./Logo";
+import MobileMenu2 from "./MobileMenu2";
 
-const Header = ({setIsMenuOpen}) => {
+const Header = () => {
+
+      const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
+    <header className="sticky left-0 top-0 w-full bg-white">
     <div className="border-b border-b-gray-200">
-      <div className="default-padding flex gap-2 justify-between items-center">
+      <div className="default-padding flex gap-2 justify-between items-center py-3.5">
         <Link to="/">
-          <h2 className="font-logo text-xl md:text-2xl font-bold text-dark select-none">
-            Blog by Ahsanul
-          </h2>
+          <Logo />
         </Link>
 
         <nav id="desktop-nav" className="hidden md:flex gap-4 md:gap-8 text-dark">
@@ -38,7 +42,7 @@ const Header = ({setIsMenuOpen}) => {
             <CiSearch />
           </button>
 
-          <Link to="/sign-in" className="bg-primary hover:bg-primaryDark duration-200 px-3 py-1.5 text-white rounded cursor-pointer text-sm md:text-base">
+          <Link to="/sign-in" className="button-primary">
             Sign In
           </Link>
 
@@ -50,6 +54,8 @@ const Header = ({setIsMenuOpen}) => {
         </div>
       </div>
     </div>
+    <MobileMenu2 isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>
+    </header>
   );
 };
 
