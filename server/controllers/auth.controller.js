@@ -13,7 +13,7 @@ export const signup = async (req, res, next) => {
     email === "" ||
     password === ""
   ) {
-   next(errorHandler(400, "All fields are required."));
+    next(errorHandler(400, "All fields are required."));
   }
 
   const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -21,13 +21,23 @@ export const signup = async (req, res, next) => {
   const newUser = new User({
     username,
     email,
-    password : hashedPassword,
+    password: hashedPassword,
   });
 
   try {
     await newUser.save();
-    res.json({ message: "signed up successfully" });
+    res.status(201).json({ message: "signed up successfully" });
   } catch (error) {
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0]; // e.g. 'username' or 'email'
+      next(
+        errorHandler(
+          400,
+          `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`
+        )
+      );
+    }
+
     next(error);
   }
 };

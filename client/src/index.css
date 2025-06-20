@@ -41,3 +41,14 @@ html {
   border-bottom: 2px solid var(--color-primary);
   border-color: var(--color-primary);
 }
+
+.password-dot {
+  -webkit-text-security: disc; 
+  font-size: 1.25rem;
+  font-family: 'Arial Black', sans-serif; 
+}
+
+.password-dot::placeholder {
+  font-family: "Urbanist", sans-serif;
+  font-size: 1rem;
+}

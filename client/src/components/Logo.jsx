@@ -1,8 +1,9 @@
 import React from "react";
+import {twMerge} from "tailwind-merge";
 
 const Logo = ({className}) => {
   return (
-    <h2 className={`font-logo text-xl md:text-2xl font-bold text-dark select-none ${className}`}>
+    <h2 className={twMerge(`font-logo text-xl md:text-2xl font-bold text-dark select-none`, className)}>
       Blog by Ahsanul
     </h2>
   );
