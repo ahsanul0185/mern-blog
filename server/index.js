@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 import userRoutes from "./routes/user.route.js"
+import authRoutes from "./routes/auth.route.js"
 
 dotenv.config();
 
@@ -22,9 +23,12 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to the server - Blogs by Ahsanul" });
 });
 
+app.use(express.json());
+
 app.listen(PORT, () => {
   console.log(`server is running at http://localhost:${PORT}`);
 });
 
 
-app.use("/api/user", userRoutes)
+app.use("/api/user", userRoutes);
+app.use("/api/auth", authRoutes);
