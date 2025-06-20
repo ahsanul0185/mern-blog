@@ -32,3 +32,8 @@ html {
   border-color: var(--color-primary);
   color: white;
 }
+
+#desktop-nav a.active {
+  border-bottom: 2px solid var(--color-primary);
+  border-color: var(--color-primary);
+}
