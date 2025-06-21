@@ -24,6 +24,13 @@ const SignUp = () => {
         return setErrorMessage("Please fill out all fields.")
       }
 
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const isValidEmail = emailRegex.test(formData.email);
+
+      if (!isValidEmail) {
+        return setErrorMessage("Invalid email address")
+      }
+
       if (formData.password.length < 6) {
         return setErrorMessage("Password must be at least 6 characters long")
       }
@@ -86,7 +93,7 @@ const SignUp = () => {
               <p className="text-red-600 my-">{errorMessage}</p>
             )}
 
-            <button type="submit" className={`button-primary py-1.5 ${loading ? "bg-primaryDark flex justify-center gap-3 items-center" : "bg-primary"}`} disabled={loading}>
+            <button type="submit" className={`button-primary py-1.5 ${loading ? "bg-primaryDark flex justify-center gap-3 items-center" : "bg-primary"} hover:bg-primaryDark duration-300`} disabled={loading}>
               {
                 loading && (
                   <Loader/>

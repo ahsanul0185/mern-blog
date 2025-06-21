@@ -47,7 +47,18 @@ export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password || email === "" || password === "") {
-    next(errorHandler(400, "All fields are required"));
+   return next(errorHandler(400, "All fields are required"));
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isValidEmail = emailRegex.test(email);
+
+  if (!isValidEmail) {
+    return next(errorHandler(400, "Invalid email address"));
+  }
+
+  if (password.length < 6) {
+    return next(errorHandler(400, "Password must be at least 6 characters long"));
   }
 
   try {
