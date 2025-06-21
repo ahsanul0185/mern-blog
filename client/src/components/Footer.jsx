@@ -6,7 +6,7 @@ import { FaGithub, FaGlobe, FaLinkedinIn } from "react-icons/fa";
 const Footer = () => {
   return (
     <footer className='bg-primary dark:bg-primaryDark dark:border-t dark:border-t-gray-200/40'>
-        <div className='default-padding text-white flex flex-col md:flex-row justify-between items-center gap-6'>
+        <div className={`default-padding text-white flex flex-col md:flex-row justify-between items-center gap-6`}>
             <div className='flex items-center gap-3 order-2 md:order-1'>
                 <div className='flex text-xl gap-2'>
                     <Link to="https://github.com/ahsanul0185" target='_blank' className='hover:text-white/80 duration-300'>

@@ -8,15 +8,17 @@ import MobileMenu2 from "./MobileMenu2";
 import { useSelector } from "react-redux";
 import ProfileAvatar from "./ProfileAvatar";
 import DarkToggleButton from "./DarkToggleButton";
+import useGetTab from "../hooks/useGetTab";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.userR);
+  const {path} = useGetTab();
 
   return (
-    <header className="sticky left-0 top-0 w-full bg-white dark:bg-primaryDark dark:text-gray-200">
+    <header className="sticky left-0 top-0 w-full bg-white dark:bg-primaryDark dark:text-gray-200 z-[9999]">
       <div className="border-b border-b-gray-200 dark:border-b-gray-200/30">
-        <div className="default-padding flex gap-2 justify-between items-center py-3.5">
+        <div className={`${path === "dashboard" ? "px-4" : "default-padding"} flex gap-2 justify-between items-center py-3.5`}>
           <div className="flex items-center gap-3">
             <button
               className="cursor-pointer block md:hidden"
@@ -57,9 +59,9 @@ const Header = () => {
             </button>
 
             <DarkToggleButton />
-            {currentUser ? (
-              <ProfileAvatar currentUser={currentUser} />
-            ) : (
+            {currentUser  ? 
+              path !== "dashboard" && <ProfileAvatar currentUser={currentUser} />
+             : (
               <Link to="/sign-in" className="button-primary">
                 Sign In
               </Link>

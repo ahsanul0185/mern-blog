@@ -12,6 +12,7 @@
   --font-logo: "Marck Script";
 }
 
+
 @layer base {
   .default-padding {
     @apply max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-14 py-3 sm:py-4 md:py-5 lg:py-6;
@@ -33,7 +34,7 @@ html {
 
 
 main {
-  min-height: calc(100vh);
+  min-height: calc(100vh - 67px);
 }
 
 *::selection {
