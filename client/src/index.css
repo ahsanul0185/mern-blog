@@ -26,10 +26,17 @@
 html {
   font-family: "Urbanist", sans-serif;
 }
+
+main {
+  min-height: calc(100vh - 67px);
+}
+
 *::selection {
   background-color: var(--color-primary);
   color: white;
 }
+
+
 
 #mobile-nav a.active {
   background-color: var(--color-primary);
@@ -38,6 +45,11 @@ html {
 }
 
 #desktop-nav a.active {
+  border-bottom: 2px solid var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+#desktop-nav a:hover {
   border-bottom: 2px solid var(--color-primary);
   border-color: var(--color-primary);
 }
@@ -51,4 +63,9 @@ html {
 .password-dot::placeholder {
   font-family: "Urbanist", sans-serif;
   font-size: 1rem;
+}
+
+footer a:hover {
+  font-weight: 600;
+  transition: all 0.3s;
 }

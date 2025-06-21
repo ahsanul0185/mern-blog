@@ -6,6 +6,7 @@ import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 const App = () => {
 
@@ -13,6 +14,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Header />
+      <main className="flex-grow">
       <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/about" element={<About />}/>
@@ -21,7 +23,8 @@ const App = () => {
           <Route path="/dashboard" element={<Dashboard />}/>
           <Route path="/projects" element={<Projects />}/>
       </Routes>
-    
+      </main>
+      <Footer />
     </BrowserRouter>
   )
 }

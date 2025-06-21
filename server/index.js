@@ -8,7 +8,7 @@ import authRoutes from "./routes/auth.route.js";
 dotenv.config();
 
 mongoose
-  .connect(process.env.DB_URL)
+  .connect(process.env.DB_URI)
   .then(() => {
     console.log("db connected successfully");
   })
@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
-
+ 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     const message = err.message || "Internal Server Error";
