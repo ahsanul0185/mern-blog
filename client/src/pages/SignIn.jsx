@@ -3,41 +3,42 @@ import Logo from "../components/Logo";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { inputFieldTyping, signInFailure, signInStart, signInSuccess } from "../features/user/userSlice";
 
 const SignIn = () => {
 
   const [formData, setFormData] = useState({username: '', email: '', password: ''});
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const {loading, error : errorMessage}  = useSelector(state => state.userR)
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
       setFormData(prev => ({...prev, [e.target.id] : e.target.value.trim()}));
-      setErrorMessage(null)
+      dispatch(inputFieldTyping());
   }
 
   const handleSubmit = async (e) => {
       e.preventDefault();
 
       if (!formData.email || !formData.password) {
-        return setErrorMessage("Please fill out all fields.")
+         dispatch(signInFailure("Please fill out all fields."));
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const isValidEmail = emailRegex.test(formData.email);
 
       if (!isValidEmail) {
-        return setErrorMessage("Invalid email address")
+        dispatch(signInFailure("Invalid email address"));
       }
 
       if (formData.password.length < 6) {
-        return setErrorMessage("Password must be at least 6 characters long")
+         dispatch(signInFailure("Password must be at least 6 characters long"));
       }
 
       try {
-        setLoading(true);
-        setErrorMessage(null);
+        dispatch(signInStart());
         const res = await fetch("/api/auth/signin", {
           method : "POST",
           headers : { 'Content-Type' : 'application/json'},
@@ -46,22 +47,18 @@ const SignIn = () => {
 
         const data = await res.json();
 
-        console.log(data)
 
         if (data.success === false) {
-          setLoading(false);
-          return setErrorMessage(data.message);
+          dispatch(signInFailure(data.message));
         }
-        setErrorMessage(null);
-        setLoading(false);
 
         if (res.ok) {
-          navigate("/")
+          dispatch(signInSuccess(data));
+          navigate("/");
         }
 
       } catch (error) {
-        setErrorMessage(error.message)
-        setLoading(false);
+        dispatch(signInFailure(error.message));
       }
   }
 
