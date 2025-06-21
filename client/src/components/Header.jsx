@@ -18,7 +18,7 @@ const Header = () => {
           <Logo />
         </Link>
 
-        <nav id="desktop-nav" className="hidden md:flex gap-4 md:gap-8 text-dark">
+        <nav id="desktop-nav" className="hidden md:flex gap-4 md:gap-8 text-dark mt-0.5">
           <NavLink to="/">Home</NavLink>
           <NavLink to="/about">About</NavLink>
           <NavLink to="/projects">Projects</NavLink>

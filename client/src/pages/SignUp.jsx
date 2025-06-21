@@ -3,6 +3,7 @@ import Logo from "../components/Logo";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
+import OAuth from "../components/OAuth";
 
 const SignUp = () => {
 
@@ -104,7 +105,7 @@ const SignUp = () => {
             </button>
           </form>
 
-          <button className="px-3 py-1.5 flex justify-center items-center gap-4 border border-gray-300 cursor-pointer hover:bg-gray-100 rounded w-full mt-5 duration-200"> <FcGoogle /> Continue with Google</button>
+         <OAuth />
 
 
           <p className="text-gray-600 text-sm mt-5">Have an account? <Link to="/sign-in" className="text-primary ml-2">Sign in</Link></p>

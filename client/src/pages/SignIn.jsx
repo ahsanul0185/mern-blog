@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../components/Logo";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { inputFieldTyping, signInFailure, signInStart, signInSuccess } from "../features/user/userSlice";
+import OAuth from "../components/OAuth";
 
 const SignIn = () => {
 
@@ -62,6 +63,11 @@ const SignIn = () => {
       }
   }
 
+  useEffect(() => {
+    dispatch(inputFieldTyping());
+  }, [])
+  
+
   return (
     <div className="default-padding min-h-[calc(100vh-67px)] grid place-items-center">
       <div className="flex flex-col md:flex-row justify-center place-items-center max-w-4xl gap-12">
@@ -99,7 +105,8 @@ const SignIn = () => {
             </button>
           </form>
 
-          <button className="px-3 py-1.5 flex justify-center items-center gap-4 border border-gray-300 cursor-pointer hover:bg-gray-100 rounded w-full mt-5 duration-200"> <FcGoogle /> Continue with Google</button>
+          
+          <OAuth />
 
 
           <p className="text-gray-600 text-sm mt-5">Don't have an account? <Link to="/sign-up" className="text-primary ml-2">Sign Up</Link></p>

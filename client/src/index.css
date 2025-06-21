@@ -27,8 +27,9 @@ html {
   font-family: "Urbanist", sans-serif;
 }
 
+
 main {
-  min-height: calc(100vh - 67px);
+  min-height: calc(100vh);
 }
 
 *::selection {
@@ -42,6 +43,12 @@ main {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
   color: white;
+}
+
+#desktop-nav a {
+  border-bottom: 2px solid transparent;
+  text-transform: uppercase;
+  font-size: 14px;
 }
 
 #desktop-nav a.active {
