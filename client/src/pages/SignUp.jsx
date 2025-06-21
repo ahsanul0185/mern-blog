@@ -69,7 +69,7 @@ const SignUp = () => {
       <div className="flex flex-col md:flex-row justify-center place-items-center max-w-4xl gap-12">
         <div>
           <Logo className="text-4xl md:text-4xl" />
-          <p className="mt-5 text-gray-600 text-sm md:text-base">
+          <p className="mt-5 text-gray-600 dark:text-gray-400 text-sm md:text-base">
             Discover stories, ideas, and perspectives from voices that matter.
             Join Blog by Ahsanul and be part of the conversation.
           </p>
@@ -78,15 +78,15 @@ const SignUp = () => {
         <div className="w-full md:w-1/2 shrink-0">
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div>
-              <label htmlFor="username" className="text-sm text-gray-600 font-bold">Username</label>
+              <label htmlFor="username" className="text-sm text-gray-600 dark:text-gray-400 font-bold">Username</label>
               <input id="username" onChange={handleChange} value={formData.username} type="text" className="input-field-style" placeholder="e.g. ahsan_writer123"/>
             </div>
             <div>
-              <label htmlFor="email" className="text-sm text-gray-600 font-bold">Email</label>
+              <label htmlFor="email" className="text-sm text-gray-600 dark:text-gray-400 font-bold">Email</label>
               <input id="email" onChange={handleChange} value={formData.email} type="email" className="input-field-style" placeholder="name@company.com"/>
             </div>
             <div>
-              <label htmlFor="password" className="text-sm text-gray-600 font-bold">Password</label>
+              <label htmlFor="password" className="text-sm text-gray-600 dark:text-gray-400 font-bold">Password</label>
               <input id="password" onChange={handleChange} value={formData.password} type="password" className="input-field-style password-dot" placeholder="Create a password"/>
             </div>
 
@@ -108,7 +108,7 @@ const SignUp = () => {
          <OAuth />
 
 
-          <p className="text-gray-600 text-sm mt-5">Have an account? <Link to="/sign-in" className="text-primary ml-2">Sign in</Link></p>
+          <p className="text-gray-600 dark:text-gray-400 text-sm mt-5">Have an account? <Link to="/sign-in" className="text-primary ml-2">Sign in</Link></p>
         </div>
       </div>
     </div>

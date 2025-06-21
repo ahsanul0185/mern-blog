@@ -10,11 +10,10 @@ import Footer from "./components/Footer";
 
 const App = () => {
 
-
   return (
     <BrowserRouter>
       <Header />
-      <main className="flex-grow">
+      <main className="flex-grow bg-white dark:bg-dark dark:text-gray-100">
       <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/about" element={<About />}/>

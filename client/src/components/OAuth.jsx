@@ -44,7 +44,7 @@ const OAuth = () => {
     }
 
   return (
-    <button onClick={handleGoogleClick} className="px-3 py-1.5 flex justify-center items-center gap-4 border border-gray-300 cursor-pointer hover:bg-gray-100 rounded w-full mt-5 duration-200"> <FcGoogle /> Continue with Google</button>
+    <button onClick={handleGoogleClick} className="px-3 py-1.5 flex justify-center items-center gap-4 border border-gray-300 dark:border-gray-200/40 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded w-full mt-5 duration-200"> <FcGoogle /> Continue with Google</button>
   )
 }
 

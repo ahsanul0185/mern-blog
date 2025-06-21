@@ -16,19 +16,19 @@ const MobileMenu2 = ({ isMenuOpen, setIsMenuOpen }) => {
         >
           <NavLink
             to="/"
-            className="border-b border-b-gray-300 py-2 px-4 hover:bg-gray-100"
+            className="border-b border-b-gray-300 dark:border-b-gray-200/40 py-2 px-4 hover:bg-gray-100 dark:hover:bg-dark"
           >
             Home
           </NavLink>
           <NavLink
             to="/about"
-            className="border-b border-b-gray-300 py-2 px-4 hover:bg-gray-100"
+            className="border-b border-b-gray-300 dark:border-b-gray-200/40 py-2 px-4 hover:bg-gray-100 dark:hover:bg-dark"
           >
             About
           </NavLink>
           <NavLink
             to="/projects"
-            className="border-b border-b-gray-300 py-2 px-4 hover:bg-gray-100"
+            className="border-b border-b-gray-300 dark:border-b-gray-200/40 py-2 px-4 hover:bg-gray-100 dark:hover:bg-dark"
           >
             Projects
           </NavLink>
