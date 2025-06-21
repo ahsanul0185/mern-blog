@@ -15,7 +15,9 @@ const Dashboard = () => {
 
 
       {/* Profile */}
+      <div className='grow p-8'>
       {tab === "profile" && <DashProfile />}
+      </div>
     </div>
   )
 }

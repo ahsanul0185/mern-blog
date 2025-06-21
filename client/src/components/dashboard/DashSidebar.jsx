@@ -35,7 +35,7 @@ const DashSidebar = () => {
       <div className="flex flex-col gap-2 mt-8 text-sm md:text-base">
         {sidebarItems.map((item, idx) => <div className="relative">
         {item.id === "profile" && <span className="bg-dark text-white absolute top-1/2 -translate-y-1/2 right-2 px-1.5 py-0.5 text-xs rounded">User</span>}
-        <Link to={item.path ? item.path : ""} className={`flex items-center gap-4 py-2 px-2 hover:bg-primary/40 w-full rounded cursor-pointer ${item.id === tab ? "bg-primary text-white dark:bg-primary/40" : ""}`}>{item.icon} {item.title}</Link>
+        <Link to={item.path ? item.path : ""} className={`flex items-center gap-4 py-2 px-2  w-full rounded cursor-pointer ${item.id === tab ? "bg-primary text-white dark:bg-primary/40" : "hover:bg-primary/40"}`}>{item.icon} {item.title}</Link>
       </div>)}
       </div>
     </div>
