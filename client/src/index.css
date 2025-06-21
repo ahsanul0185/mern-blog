@@ -22,7 +22,7 @@
   }
 
   .button-primary {
-    @apply bg-primary hover:bg-primaryDark duration-200 px-3 py-1.5 text-white rounded cursor-pointer text-sm md:text-base;
+    @apply bg-primary hover:bg-primary/70 duration-200 px-3 py-1.5 text-white rounded cursor-pointer text-sm md:text-base;
   }
 } 
 
