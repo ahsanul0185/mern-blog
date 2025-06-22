@@ -5,12 +5,17 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { FaPencilAlt } from "react-icons/fa";
 import {
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
   updateFalied,
   updateStart,
   updateSuccess,
 } from "../../features/user/userSlice";
 import Loader from "../Loader";
 import { toast } from "sonner";
+import Modal from "../Modal";
+import { IoAlertCircleOutline } from "react-icons/io5";
 
 const DashProfile = () => {
   const {
@@ -18,17 +23,19 @@ const DashProfile = () => {
     loading,
     error: updateError,
   } = useSelector((state) => state.userR);
+
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [progress, setProgress] = useState("");
-  const imageFileRef = useRef();
-  const [error, setError] = useState(null);
-
   const [formData, setFormData] = useState({});
+  const [activeModal, setActiveModal] = useState(null);
+  const [error, setError] = useState(null);
+  const [password, setPassword] = useState("");
+
+  const imageFileRef = useRef();
   const dispatch = useDispatch();
 
   const handleImageChange = (e) => {
-
     const file = e.target.files[0];
 
     if (file.size > 2 * 1024 * 1024) {
@@ -48,6 +55,7 @@ const DashProfile = () => {
     }
   }, [imageFile]);
 
+  // Uploading image to cloudinary
   const handeUploadImage = async () => {
     const fileName = new Date().getTime() + imageFile.name;
 
@@ -79,10 +87,12 @@ const DashProfile = () => {
     }
   };
 
+  // input field change
   const handleChange = async (e) => {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
+  // form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -92,17 +102,14 @@ const DashProfile = () => {
 
     try {
       dispatch(updateStart());
-      const res = await fetch(`/api/user/update/${currentUser._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
 
-      const data = await res.json();
+      const res = await axios.put(
+        `/api/user/update/${currentUser._id}`,
+        formData
+      );
+      const data = await res.data;
 
-      if (res.ok) {
+      if (res.status === 200) {
         dispatch(updateSuccess(data));
         setFormData({});
         toast.success("User profile updated successfully", {
@@ -117,7 +124,47 @@ const DashProfile = () => {
       }
     } catch (error) {
       console.log(error);
-      dispatch(updateFalied(error));
+      dispatch(updateFalied(error.message));
+    }
+  };
+
+  // delete account
+  const handleDeleteAccount = async (password) => {
+    // if (!password || password.length < 6) {
+    //   toast.error("Invalid password", {
+    //     style: {
+    //       backgroundColor: "#a93800",
+    //       color: "white",
+    //       border: "1px solid rgba(255, 255, 255, 0.4)",
+    //     },
+    //   });
+    // }
+
+    try {
+      const res = await axios.delete(`/api/user/delete/${currentUser._id}`, {
+        data: { password },
+      });
+      console.log(res.data);
+      if (res.status === 200) {
+        dispatch(deleteUserSuccess());
+        toast.error("Account deleted", {
+          style: {
+            backgroundColor: "#a93800",
+            color: "white",
+            border: "1px solid rgba(255, 255, 255, 0.4)",
+          },
+        });
+      } else {
+        dispatch(deleteUserFailure("Deletation failed"));
+      }
+    } catch (error) {
+      toast.error(error.response.data.message, {
+        style: {
+          backgroundColor: "#a93800",
+          color: "white",
+          border: "1px solid rgba(255, 255, 255, 0.4)",
+        },
+      });
     }
   };
 
@@ -135,7 +182,11 @@ const DashProfile = () => {
       >
         <div
           className="relative w-32 h-32 cursor-pointer group z-0 rounded-full overflow-hidden"
-          onClick={() => progress ? toast("Please wait for image to upload") :  imageFileRef.current.click()}
+          onClick={() =>
+            progress
+              ? toast("Please wait for image to upload")
+              : imageFileRef.current.click()
+          }
         >
           <CircularProgressbar
             value={progress}
@@ -170,9 +221,6 @@ const DashProfile = () => {
           />
         </div>
 
-        {/* <button onClick={handeUploadImage} className="button-primary mt-3">
-          upload image
-        </button> */}
         {error && <p className="text-red-400 mt-5">{error}</p>}
 
         <div className="w-full mt-12 flex flex-col gap-6">
@@ -205,8 +253,53 @@ const DashProfile = () => {
         </div>
 
         <div className="flex items-center justify-between w-full mt-5 text-sm text-red-500 dark:text-red-400">
-          <button className="cursor-pointer">Delete Account</button>
-          <button className="cursor-pointer">Sign Out</button>
+          <button
+            className="cursor-pointer"
+            onClick={() => setActiveModal("delete")}
+          >
+            Delete Account
+          </button>
+          <Modal
+            showModal={activeModal === "delete"}
+            setShowModal={setActiveModal}
+          >
+            <IoAlertCircleOutline className="text-7xl mx-auto text-gray-300" />
+            <h2 className="font-bold text-2xl mt-2 text-center">
+              Confirm Account Deletion
+            </h2>
+            <p className="mt-5">
+              Please enter your password to confirm you want to permanently
+              delete your account.{" "}
+            </p>
+            <input
+              type="password"
+              className="input-field-style mt-5 password-dot"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <div className="mt-8 flex justify-between">
+              <button
+                onClick={() => handleDeleteAccount(password)}
+                className="button-primary bg-red-600 hover:bg-red-700"
+              >
+                Delete Account
+              </button>
+              <button
+                className="button-primary bg-gray-400 dark:bg-gray-400/30 dark:hover:bg-gray-400/50"
+                onClick={() => setActiveModal(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </Modal>
+
+          <button
+            className="cursor-pointer"
+            onClick={() => setActiveModal("signout")}
+          >
+            Sign Out
+          </button>
         </div>
       </form>
     </div>

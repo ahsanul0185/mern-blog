@@ -68,8 +68,9 @@ main {
 
 .password-dot {
   -webkit-text-security: disc; 
-  font-size: 1.25rem;
+  font-size: 16px;
   font-family: 'Arial Black', sans-serif; 
+  line-height: 0;
 }
 
 .password-dot::placeholder {

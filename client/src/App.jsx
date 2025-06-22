@@ -32,6 +32,7 @@ const App = () => {
       <Footer />
 
       <Toaster position="bottom-right"/>
+      <div id="modal-root"></div>
     </BrowserRouter>
   )
 }
