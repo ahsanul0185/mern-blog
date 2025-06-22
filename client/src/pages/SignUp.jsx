@@ -4,6 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import OAuth from "../components/OAuth";
+import { toast } from "sonner";
 
 const SignUp = () => {
 

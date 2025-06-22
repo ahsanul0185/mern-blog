@@ -54,35 +54,67 @@ export const updateUser = async (req, res, next) => {
   }
 
   try {
-      const updatedUser = await User.findByIdAndUpdate(
-        req.params.userId,
-        {
-          $set: {
-            username: req.body.username,
-            email: req.body.email,
-            profilePicture: req.body.profilePicture,
-            password: req.body.password,
-          },
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      {
+        $set: {
+          username: req.body.username,
+          email: req.body.email,
+          profilePicture: req.body.profilePicture,
+          password: req.body.password,
         },
-        { new: true }
+      },
+      { new: true }
+    );
+
+    const { password, ...rest } = updatedUser._doc;
+
+    res.status(200).json(rest);
+  } catch (error) {
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0]; // e.g. 'username' or 'email'
+      next(
+        errorHandler(
+          400,
+          `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`
+        )
       );
-
-      const { password, ...rest } = updatedUser._doc;
-
-      res.status(200).json(rest);
-    } catch (error) {
-      if (error.code === 11000) {
-        const field = Object.keys(error.keyPattern)[0]; // e.g. 'username' or 'email'
-        next(
-          errorHandler(
-            400,
-            `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`
-          )
-        );
-      }
-
-      next(error);
     }
 
+    next(error);
+  }
+};
 
+export const deleteUser = async (req, res, next) => {
+  const { password } = req.body;
+
+  if (req.user.id !== req.params.userId) {
+    return next(errorHandler(403, "You are not allowed to delete the account"));
+  }
+  if (!password) {
+     return next(errorHandler(400, "Please provide the password."));
+  }
+  if (password.length < 6) {
+     return next(errorHandler(400, "Password must be at least 6 characters long"));
+  }
+
+  try {
+
+    const user = await User.findById(req.params.userId);
+
+    if (user) {
+      const validPassword = bcryptjs.compareSync(password, user.password);
+
+      if (validPassword) {
+        await User.findByIdAndDelete(req.params.userId);
+        res.status(200).json({ message: "User has been deleted." });
+      }else{
+        return next(errorHandler(400, "Invalid password"));
+      }
+    }else {
+       res.status(404).json({ message: "User not found." });
+    }
+  } catch (error) {
+    next(error);
+  }
 };
