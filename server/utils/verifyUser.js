@@ -5,7 +5,7 @@ import  {errorHandler} from "./error.js"
 
 export const verifyToken = (req, res, next) => {
     const token = req.cookies.access_token;
-    
+
     if (!token) {
         return next(errorHandler(401, 'Unauthorised'))
     }
@@ -14,7 +14,6 @@ export const verifyToken = (req, res, next) => {
         if (err) {
             return next(errorHandler(401, 'Unauthorised'));
         }
-
         req.user = user;
         next();
     });

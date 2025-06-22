@@ -55,7 +55,8 @@ const SignUp = () => {
         setLoading(false);
 
         if (res.ok) {
-          navigate("/sign-in")
+          toast.success("Signed up successfully", {style : {backgroundColor : "#008b8c", color : "white", border : "1px solid rgba(255, 255, 255, 0.4)"}});
+          navigate("/sign-in");
         }
 
       } catch (error) {

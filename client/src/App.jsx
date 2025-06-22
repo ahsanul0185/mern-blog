@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {Toaster} from "sonner"
 import Home from "./pages/Home";
 import About from "./pages/About";
 import SignIn from "./pages/SignIn";
@@ -29,6 +30,8 @@ const App = () => {
       </Routes>
       </main>
       <Footer />
+
+      <Toaster position="bottom-right"/>
     </BrowserRouter>
   )
 }

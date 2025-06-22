@@ -55,6 +55,7 @@ const SignIn = () => {
 
         if (res.ok) {
           dispatch(signInSuccess(data));
+          toast.success("Signed in", {style : {backgroundColor : "#008b8c", color : "white", border : "1px solid rgba(255, 255, 255, 0.4)"}});
           navigate("/");
         }
 

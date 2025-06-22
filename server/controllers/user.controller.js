@@ -11,7 +11,11 @@ export const updateUser = async (req, res, next) => {
     return next(errorHandler(403, "You are not allowed to update the user"));
   }
 
-  const { username, password, email } = req.body;
+  const { username, password, email, profilePicture } = req.body;
+
+  if (!username && !password && !email && !profilePicture) {
+    return next(errorHandler(400, "User update failed"));
+  }
 
   if (password) {
     if (password.length < 6) {
@@ -20,12 +24,14 @@ export const updateUser = async (req, res, next) => {
     req.body.password = bcryptjs.hashSync(password, 10);
   }
 
+  if (email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isValidEmail = emailRegex.test(email);
-  
+
     if (!isValidEmail) {
       return next(errorHandler(400, "Invalid email address"));
     }
+  }
 
   if (username) {
     if (username.length < 5 || username.length > 20) {
@@ -45,35 +51,38 @@ export const updateUser = async (req, res, next) => {
         errorHandler(400, "Username can only contain letters and numbers")
       );
     }
+  }
 
-    try {
+  try {
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.userId,
+        {
+          $set: {
+            username: req.body.username,
+            email: req.body.email,
+            profilePicture: req.body.profilePicture,
+            password: req.body.password,
+          },
+        },
+        { new: true }
+      );
 
-        const updatedUser = await User.findByIdAndUpdate(req.params.userId, {
-            $set : { 
-                username : req.body.username,
-                email : req.body.email,
-                profilePicture : req.body.profilePicture,
-                password : req.body.password
-            }
-        }, {new : true});
+      const { password, ...rest } = updatedUser._doc;
 
-        const {password, ...rest} = updatedUser._doc;
-
-        res.status(200).json(rest); 
-
+      res.status(200).json(rest);
     } catch (error) {
-
-        if (error.code === 11000) {
-              const field = Object.keys(error.keyPattern)[0]; // e.g. 'username' or 'email'
-              next(
-                errorHandler(
-                  400,
-                  `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`
-                )
-              );
-            }
+      if (error.code === 11000) {
+        const field = Object.keys(error.keyPattern)[0]; // e.g. 'username' or 'email'
+        next(
+          errorHandler(
+            400,
+            `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`
+          )
+        );
+      }
 
       next(error);
     }
-  }
+
+
 };

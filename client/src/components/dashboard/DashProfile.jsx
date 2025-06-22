@@ -1,19 +1,34 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { FaPencilAlt } from "react-icons/fa";
+import {
+  updateFalied,
+  updateStart,
+  updateSuccess,
+} from "../../features/user/userSlice";
+import Loader from "../Loader";
+import { toast } from "sonner";
 
 const DashProfile = () => {
-  const { currentUser } = useSelector((state) => state.userR);
+  const {
+    currentUser,
+    loading,
+    error: updateError,
+  } = useSelector((state) => state.userR);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [progress, setProgress] = useState("");
   const imageFileRef = useRef();
   const [error, setError] = useState(null);
 
+  const [formData, setFormData] = useState({});
+  const dispatch = useDispatch();
+
   const handleImageChange = (e) => {
+
     const file = e.target.files[0];
 
     if (file.size > 2 * 1024 * 1024) {
@@ -51,30 +66,76 @@ const DashProfile = () => {
             const percent = Math.round((event.loaded * 100) / event.total);
             setProgress(percent);
           },
-        }    
+        }
       );
       setError(null);
       setImageFileUrl(res.data.url);
       setProgress("");
       setImageFile(null);
+      setFormData((prev) => ({ ...prev, profilePicture: res.data.url }));
     } catch (error) {
       console.log(error);
       setError("Upload failed. Try again.");
     }
   };
 
+  const handleChange = async (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (Object.keys(formData).length === 0 || loading) {
+      return;
+    }
+
+    try {
+      dispatch(updateStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        dispatch(updateSuccess(data));
+        setFormData({});
+        toast.success("User profile updated successfully", {
+          style: {
+            backgroundColor: "#008b8c",
+            color: "white",
+            border: "1px solid rgba(255, 255, 255, 0.4)",
+          },
+        });
+      } else {
+        dispatch(updateFalied(data.message));
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch(updateFalied(error));
+    }
+  };
+
+  const showToast = () => {
+    // toast.error("User updated successfully", {style : {backgroundColor : "#a93800", color : "white", border : "1px solid rgba(255, 255, 255, 0.4)"}});
+    // toast.success("User updated successfully", {style : {backgroundColor : "#008b8c", color : "white", border : "1px solid rgba(255, 255, 255, 0.4)"}});
+  };
 
   return (
     <div>
       <h1 className="font-bold text-3xl">Your Profile</h1>
-
       <form
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={handleSubmit}
         className="mt-20 flex flex-col items-center max-w-xl w-full mx-auto"
       >
         <div
           className="relative w-32 h-32 cursor-pointer group z-0 rounded-full overflow-hidden"
-          onClick={() => imageFileRef.current.click()}
+          onClick={() => progress ? toast("Please wait for image to upload") :  imageFileRef.current.click()}
         >
           <CircularProgressbar
             value={progress}
@@ -117,16 +178,29 @@ const DashProfile = () => {
         <div className="w-full mt-12 flex flex-col gap-6">
           <input
             type="text"
+            id="username"
             defaultValue={currentUser.username}
+            onChange={handleChange}
             className="input-field-style "
           />
           <input
             type="email"
+            id="email"
             defaultValue={currentUser.email}
+            onChange={handleChange}
             className="input-field-style "
           />
-          <button type="submit" className="button-primary">
-            Update
+          {updateError && (
+            <p className="text-red-500 dark:text-red-400">{updateError}</p>
+          )}
+          <button
+            type="submit"
+            className="button-primary disabled:bg-primary/50 flex justify-center gap-3 items-center disabled:cursor-auto disabled:opacity-70"
+            disabled={progress || Object.keys(formData).length === 0}
+          >
+            {loading && <Loader />}
+
+            {loading ? "Updating" : "Update"}
           </button>
         </div>
 
