@@ -25,7 +25,7 @@ const DashSidebar = () => {
 
 
   return (
-    <div className="md:h-[calc(100vh-67px)] md:sticky top-[67px] left-0 dark:bg-primaryDark md:w-72 border-b-gray-200 border-b dark:border-b-gray-200/40 md:border-r md:border-r-gray-200 dark:border-r-gray-200/40 px-4 py-6">
+    <div className="md:h-[calc(100vh-67px)] md:sticky top-[67px] left-0 dark:bg-primaryDark md:w-72 border-b-gray-200 border-b md:border-b-0 border-r-0 dark:border-b-gray-200/40 md:border-r md:border-r-gray-200 dark:border-r-gray-200/40 px-4 py-6">
 
       <div>
         <img src={currentUser.profilePicture} alt="profile"  className="mx-auto rounded-full size-16 md:size-20"/>
@@ -33,7 +33,7 @@ const DashSidebar = () => {
       </div>
 
       <div className="flex flex-col gap-2 mt-8 text-sm md:text-base">
-        {sidebarItems.map((item, idx) => <div className="relative">
+        {sidebarItems.map((item, idx) => <div className="relative" key={item.id}>
         {item.id === "profile" && <span className="bg-dark text-white absolute top-1/2 -translate-y-1/2 right-2 px-1.5 py-0.5 text-xs rounded">User</span>}
         <Link to={item.path ? item.path : ""} className={`flex items-center gap-4 py-2 px-2  w-full rounded cursor-pointer ${item.id === tab ? "bg-primary text-white dark:bg-primary/40" : "hover:bg-primary/40"}`}>{item.icon} {item.title}</Link>
       </div>)}
