@@ -1,5 +1,79 @@
-
+import User from "../models/user.model.js";
+import { errorHandler } from "../utils/error.js";
+import bcryptjs from "bcryptjs";
 
 export const test = (req, res) => {
-    res.json({message : "user route working fine"});
-}
+  res.json({ message: "user route working fine" });
+};
+
+export const updateUser = async (req, res, next) => {
+  if (req.user.id !== req.params.userId) {
+    return next(errorHandler(403, "You are not allowed to update the user"));
+  }
+
+  const { username, password, email } = req.body;
+
+  if (password) {
+    if (password.length < 6) {
+      return next(errorHandler(400, "Password must be at least 6 characters"));
+    }
+    req.body.password = bcryptjs.hashSync(password, 10);
+  }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = emailRegex.test(email);
+  
+    if (!isValidEmail) {
+      return next(errorHandler(400, "Invalid email address"));
+    }
+
+  if (username) {
+    if (username.length < 5 || username.length > 20) {
+      return next(
+        errorHandler(400, "Username must be between 7 to 20 characters")
+      );
+    }
+
+    if (username.includes(" ")) {
+      return next(errorHandler(400, "Username cannot contain spaces"));
+    }
+    if (username !== username.toLowerCase()) {
+      return next(errorHandler(400, "Username must be lowercase"));
+    }
+    if (!username.match(/^[a-zA-Z0-9]+$/)) {
+      return next(
+        errorHandler(400, "Username can only contain letters and numbers")
+      );
+    }
+
+    try {
+
+        const updatedUser = await User.findByIdAndUpdate(req.params.userId, {
+            $set : { 
+                username : req.body.username,
+                email : req.body.email,
+                profilePicture : req.body.profilePicture,
+                password : req.body.password
+            }
+        }, {new : true});
+
+        const {password, ...rest} = updatedUser._doc;
+
+        res.status(200).json(rest); 
+
+    } catch (error) {
+
+        if (error.code === 11000) {
+              const field = Object.keys(error.keyPattern)[0]; // e.g. 'username' or 'email'
+              next(
+                errorHandler(
+                  400,
+                  `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`
+                )
+              );
+            }
+
+      next(error);
+    }
+  }
+};

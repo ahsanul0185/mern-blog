@@ -17,8 +17,7 @@ const DashProfile = () => {
     const file = e.target.files[0];
 
     if (file.size > 2 * 1024 * 1024) {
-      console.log(file.size);
-      setError("'File size exceeds 2MB limit.'");
+      setError("File size exceeds 2MB limit.");
       return;
     }
     if (file) {
@@ -64,7 +63,6 @@ const DashProfile = () => {
     }
   };
 
-  console.log(progress);
 
   return (
     <div>

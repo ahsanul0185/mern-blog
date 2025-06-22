@@ -17,6 +17,37 @@ export const signup = async (req, res, next) => {
     next(errorHandler(400, "All fields are required."));
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isValidEmail = emailRegex.test(email);
+
+  if (!isValidEmail) {
+    return next(errorHandler(400, "Invalid email address"));
+  }
+
+  if (password.length < 6) {
+    return next(errorHandler(400, "Password must be at least 6 characters long"));
+  }
+
+  if (username) {
+      if (username.length < 5 || username.length > 20) {
+        return next(
+          errorHandler(400, "Username must be between 7 to 20 characters")
+        );
+      }
+  
+      if (username.includes(" ")) {
+        return next(errorHandler(400, "Username cannot contain spaces"));
+      }
+      if (username !== username.toLowerCase()) {
+        return next(errorHandler(400, "Username must be lowercase"));
+      }
+      if (!username.match(/^[a-zA-Z0-9]+$/)) {
+        return next(
+          errorHandler(400, "Username can only contain letters and numbers")
+        );
+      }
+  }
+
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
   const newUser = new User({
@@ -61,6 +92,8 @@ export const signin = async (req, res, next) => {
     return next(errorHandler(400, "Password must be at least 6 characters long"));
   }
 
+  
+
   try {
     const validUser = await User.findOne({ email });
 
@@ -78,7 +111,7 @@ export const signin = async (req, res, next) => {
 
     const {password : pass, ...rest} = validUser._doc;
 
-    res.status(200).cookie('access-token', token, {httpOnly : true}).json(rest)
+    res.status(200).cookie('access_token', token, {httpOnly : true}).json(rest)
 
   } catch (error) {
     next(error);
