@@ -8,6 +8,7 @@ import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signOut,
   updateFalied,
   updateStart,
   updateSuccess,
@@ -16,6 +17,7 @@ import Loader from "../Loader";
 import { toast } from "sonner";
 import Modal from "../Modal";
 import { IoAlertCircleOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const DashProfile = () => {
   const {
@@ -34,6 +36,7 @@ const DashProfile = () => {
 
   const imageFileRef = useRef();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -296,7 +299,7 @@ const DashProfile = () => {
 
           <button
             className="cursor-pointer"
-            onClick={() => setActiveModal("signout")}
+            onClick={() => {dispatch(signOut()); navigate("/sign-in")}}
           >
             Sign Out
           </button>

@@ -1,27 +1,41 @@
 import { IoMdPerson } from "react-icons/io";
 import { BiLogOutCircle } from "react-icons/bi";
 import useGetTab from "../../hooks/useGetTab";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { signOut } from "../../features/user/userSlice";
 
 const sidebarItems = [
   {
     id : "profile",
     title : "Profile",
     icon : <IoMdPerson className="text-xl"/>,
-    path : "/dashboard?tab=profile"
+    path : "/dashboard?tab=profile",
+    action : ""
   },
   {
     id : "signout",
     title : "Sign Out",
-    icon : <BiLogOutCircle className="text-xl"/>,
+    action : "signout",
+    path : "/sign-in",
   },
 ]
+
+
 
 const DashSidebar = () => {
 
     const {currentUser} = useSelector(state => state.userR);
     const {tab} = useGetTab();
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleSignout = () => {
+          dispatch(signOut()); 
+          navigate("/sign-in");
+    }
 
 
   return (
@@ -37,6 +51,8 @@ const DashSidebar = () => {
         {item.id === "profile" && <span className="bg-dark text-white absolute top-1/2 -translate-y-1/2 right-2 px-1.5 py-0.5 text-xs rounded">User</span>}
         <Link to={item.path ? item.path : ""} className={`flex items-center gap-4 py-2 px-2  w-full rounded cursor-pointer ${item.id === tab ? "bg-primary text-white dark:bg-primary/40" : "hover:bg-primary/40"}`}>{item.icon} {item.title}</Link>
       </div>)}
+
+      <button onClick={handleSignout} className="flex items-center gap-4 py-2 px-2  w-full rounded cursor-pointer hover:bg-primary/40"><BiLogOutCircle className="text-xl"/> Sign Out</button>
       </div>
     </div>
   )

@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
+import { useDispatch } from "react-redux";
+import { signOut } from "../features/user/userSlice";
 
 const ProfileAvatar = ({ currentUser }) => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
+  const dispatch = useDispatch();
+      const navigate = useNavigate();
 
   return (
     <div className="relative">
@@ -36,13 +40,12 @@ const ProfileAvatar = ({ currentUser }) => {
               >
                 Profile
               </Link>
-              <Link
-                to=""
+              <button
                 className="button-primary bg-gray-500 hover:bg-gray-700 text-center text-sm"
-                onClick={() => setDropDownOpen(false)}
+                onClick={() => {setDropDownOpen(false); dispatch(signOut()); navigate("/sign-in")}}
               >
                 Sign Out
-              </Link>
+              </button>
             </div>
           </motion.div>
         )}

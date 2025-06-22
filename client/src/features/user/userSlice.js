@@ -1,11 +1,25 @@
-import { createSlice, current } from "@reduxjs/toolkit";
-
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios"
+import { toast } from "sonner";
 
 const initialState = {
     currentUser : null,
     error : null,
     loading : false
 }
+
+export const signOut = createAsyncThunk("user/signOut", async () => {
+
+    try {
+        const res = await axios.post("/api/auth/signout");
+        if (res.status === 200) {
+            toast.success("Signed out");
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
+});
 
 const userSlice = createSlice({
     name : 'user',
@@ -53,6 +67,14 @@ const userSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+    },
+    extraReducers : (builder) => {
+        builder
+            .addCase(signOut.fulfilled, (state) => {
+                state.currentUser = null;
+                state.loading = false;
+                state.error = null;
+            })
     }
 });
 
