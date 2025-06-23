@@ -40,7 +40,7 @@ const ProfileAvatar = ({ currentUser }) => {
                 onClick={() => setDropDownOpen(false)}
                 className="button-primary text-center text-sm"
               >
-                Profile
+                Dashboard
               </Link>
               <button
                 className="button-primary bg-gray-500 hover:bg-gray-700 text-center text-sm"

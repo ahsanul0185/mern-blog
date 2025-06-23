@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import Logo from "../components/Logo";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import OAuth from "../components/OAuth";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
 
 const SignUp = () => {
 
   const [formData, setFormData] = useState({username: '', email: '', password: ''});
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const {currentUser} = useSelector(state => state.userR);
 
   const navigate = useNavigate();
 
@@ -65,6 +67,8 @@ const SignUp = () => {
         setLoading(false);
       }
   }
+
+  if (currentUser) return <Navigate to="/dashboard?tab=profile"/>
 
   return (
     <div className="default-padding min-h-[calc(100vh-67px)] grid place-items-center">

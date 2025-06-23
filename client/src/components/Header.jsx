@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <header className="sticky left-0 top-0 w-full bg-white dark:bg-primaryDark dark:text-gray-200 z-[9999]">
       <div className="border-b border-b-gray-200 dark:border-b-gray-200/30">
-        <div className={`${path === "dashboard" ? "px-4" : "default-padding"} flex gap-2 justify-between items-center py-3.5`}>
+        <div className={`${path.startsWith("dashboard") ? "px-4" : "default-padding"} flex gap-2 justify-between items-center py-3.5`}>
           <div className="flex items-center gap-3">
             <button
               className="cursor-pointer block md:hidden"
@@ -60,7 +60,7 @@ const Header = () => {
 
             <DarkToggleButton />
             {currentUser  ? 
-              path !== "dashboard" && <ProfileAvatar currentUser={currentUser} />
+              !path.startsWith("dashboard") && <ProfileAvatar currentUser={currentUser} />
              : (
               <Link to="/sign-in" className="button-primary">
                 Sign In

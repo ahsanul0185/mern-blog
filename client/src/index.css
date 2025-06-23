@@ -19,11 +19,14 @@
   }
 
   .input-field-style {
-    @apply border rounded border-gray-200 dark:border-gray-200/40 outline-none focus:border-primary w-full px-3 py-1.5;
+    @apply border rounded border-gray-300 dark:border-gray-200/50 outline-none focus:border-primary w-full px-3 py-1.5;
   }
 
   .button-primary {
     @apply bg-primary hover:bg-primary/70 duration-200 px-3 py-1.5 text-white rounded cursor-pointer text-sm md:text-base;
+  }
+  .form-label-primary {
+    @apply text-sm text-gray-600 dark:text-gray-200 font-semibold;
   }
 } 
 
@@ -81,4 +84,27 @@ main {
 footer a:hover {
   font-weight: 600;
   transition: all 0.3s;
+}
+
+
+/* Markdown editor style */
+
+#theme-root[data-theme="dark"] .w-md-editor {
+  background-color: var(--color-dark) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+#theme-root[data-theme="dark"] .w-md-editor-toolbar {
+  background-color: var(--color-primaryDark) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+#theme-root[data-theme="dark"] .w-md-editor-input {
+  border-right: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 0 0 0 2px !important;
+}
+#theme-root[data-theme="dark"] .wmde-markdown{
+ background-color: var(--color-dark) !important;
+}
+
+.w-md-editor-text{
+  height: 100% !important;
 }

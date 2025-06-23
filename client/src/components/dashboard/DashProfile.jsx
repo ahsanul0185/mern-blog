@@ -103,6 +103,15 @@ const DashProfile = () => {
       return;
     }
 
+    const nothingToChange = Object.keys(currentUser).some(
+      (key) =>
+        formData.hasOwnProperty(key) && currentUser[key] === formData[key]
+    );
+
+    if (nothingToChange) {
+      return toast("Nothing to change");
+    }
+
     try {
       dispatch(updateStart());
 
@@ -115,7 +124,7 @@ const DashProfile = () => {
       if (res.status === 200) {
         dispatch(updateSuccess(data));
         setFormData({});
-        toast.success("User profile updated successfully", {
+        toast.success("Profile updated successfully", {
           style: {
             backgroundColor: "#008b8c",
             color: "white",
@@ -299,7 +308,10 @@ const DashProfile = () => {
 
           <button
             className="cursor-pointer"
-            onClick={() => {dispatch(signOut()); navigate("/sign-in")}}
+            onClick={() => {
+              dispatch(signOut());
+              navigate("/sign-in");
+            }}
           >
             Sign Out
           </button>

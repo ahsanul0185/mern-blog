@@ -6,7 +6,7 @@ const ThemeProvider = ({children}) => {
   const {theme} = useSelector(state => state.themeR);
 
   return (
-    <div data-theme={theme}>
+    <div data-theme={theme} id='theme-root'>
         {children}
     </div>
   )

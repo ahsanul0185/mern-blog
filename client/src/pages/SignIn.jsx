@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../components/Logo";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { inputFieldTyping, signInFailure, signInStart, signInSuccess } from "../features/user/userSlice";
@@ -11,7 +11,7 @@ import { toast } from "sonner";
 const SignIn = () => {
 
   const [formData, setFormData] = useState({username: '', email: '', password: ''});
-  const {loading, error : errorMessage}  = useSelector(state => state.userR)
+  const {currentUser, loading, error : errorMessage}  = useSelector(state => state.userR)
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
