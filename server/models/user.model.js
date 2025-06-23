@@ -20,6 +20,12 @@ const userSchema = new mongoose.Schema({
         type : String,
         default : "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg",
     },
+    role : {
+        type : String,
+        enum : ['user', 'admin'],
+        default : 'user'
+    }
+    
 }, {timestamps : true});
 
 

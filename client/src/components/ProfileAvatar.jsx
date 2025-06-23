@@ -3,14 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { useDispatch } from "react-redux";
 import { signOut } from "../features/user/userSlice";
+import { useEffect } from "react";
 
 const ProfileAvatar = ({ currentUser }) => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const dispatch = useDispatch();
-      const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
-    <div className="relative">
+    <div className="relative" id="avatar">
       <img
         className="size-9 rounded-full cursor-pointer"
         src={currentUser.profilePicture}
@@ -21,6 +22,7 @@ const ProfileAvatar = ({ currentUser }) => {
       <AnimatePresence>
         {dropDownOpen && (
           <motion.div
+          id="avatar-dropdown"
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 10, opacity: 0 }}
@@ -42,7 +44,11 @@ const ProfileAvatar = ({ currentUser }) => {
               </Link>
               <button
                 className="button-primary bg-gray-500 hover:bg-gray-700 text-center text-sm"
-                onClick={() => {setDropDownOpen(false); dispatch(signOut()); navigate("/sign-in")}}
+                onClick={() => {
+                  setDropDownOpen(false);
+                  dispatch(signOut());
+                  navigate("/sign-in");
+                }}
               >
                 Sign Out
               </button>

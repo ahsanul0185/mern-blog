@@ -14,12 +14,6 @@ const sidebarItems = [
     path : "/dashboard?tab=profile",
     action : ""
   },
-  {
-    id : "signout",
-    title : "Sign Out",
-    action : "signout",
-    path : "/sign-in",
-  },
 ]
 
 
@@ -48,11 +42,11 @@ const DashSidebar = () => {
 
       <div className="flex flex-col gap-2 mt-8 text-sm md:text-base">
         {sidebarItems.map((item, idx) => <div className="relative" key={item.id}>
-        {item.id === "profile" && <span className="bg-dark text-white absolute top-1/2 -translate-y-1/2 right-2 px-1.5 py-0.5 text-xs rounded">User</span>}
+        {item.id === "profile" && <span className="bg-dark text-white absolute top-1/2 -translate-y-1/2 right-2 px-1.5 py-0.5 text-xs rounded">{currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1)}</span>}
         <Link to={item.path ? item.path : ""} className={`flex items-center gap-4 py-2 px-2  w-full rounded cursor-pointer ${item.id === tab ? "bg-primary text-white dark:bg-primary/40" : "hover:bg-primary/40"}`}>{item.icon} {item.title}</Link>
       </div>)}
 
-      <button onClick={handleSignout} className="flex items-center gap-4 py-2 px-2  w-full rounded cursor-pointer hover:bg-primary/40"><BiLogOutCircle className="text-xl"/> Sign Out</button>
+      <button onClick={handleSignout} className="flex items-center gap-4 py-2 px-2 mt-2  w-full rounded cursor-pointer hover:bg-primary/40"><BiLogOutCircle className="text-xl"/> Sign Out</button>
       </div>
     </div>
   )
