@@ -11,6 +11,7 @@ import Footer from "./components/Footer";
 import PrivateRoutes from "./routes/PrivateRoutes";
 import CreatePost from "./components/dashboard/CreatePost";
 import AdminRoutes from "./routes/AdminRoutes";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
 
@@ -21,6 +22,7 @@ const App = () => {
       <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/about" element={<About />}/>
+          <Route path="/projects" element={<Projects />}/>
           <Route path="/sign-in" element={<SignIn />}/>
           <Route path="/sign-up" element={<SignUp />}/>
 
@@ -32,9 +34,7 @@ const App = () => {
             </Route>
           </Route>
 
-  
-
-          <Route path="/projects" element={<Projects />}/>
+          <Route path="/*" element={<NotFound />}/>
       </Routes>
       </main>
       <Footer />

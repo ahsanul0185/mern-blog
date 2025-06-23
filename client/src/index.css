@@ -23,7 +23,7 @@
   }
 
   .button-primary {
-    @apply bg-primary hover:bg-primary/70 duration-200 px-3 py-1.5 text-white rounded cursor-pointer text-sm md:text-base;
+    @apply bg-primary hover:bg-primary/70 duration-200 px-3 py-1.5 text-white rounded cursor-pointer text-sm md:text-base disabled:cursor-auto disabled:opacity-70;
   }
   .form-label-primary {
     @apply text-sm text-gray-600 dark:text-gray-200 font-semibold;

@@ -3,7 +3,7 @@ import { errorHandler } from "../utils/error.js";
 import slugify from "slugify";
 
 export const createPost = async (req, res, next) => {
-  const { title, content } = req.body;
+  const { title, content, coverImage } = req.body;
 
   if (req.user.role !== "admin") {
     return next(errorHandler(403, "You are not allowed to create a post"));
@@ -11,6 +11,11 @@ export const createPost = async (req, res, next) => {
 
   if (!title || !content) {
     return next(errorHandler(400, "Please provide all required fileds"));
+  }
+
+  if (!coverImage) {
+    const {coverImage, ...rest} = req.body;
+    req.body = rest;
   }
 
   const slug = slugify(title.toLowerCase());

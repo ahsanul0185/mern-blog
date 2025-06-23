@@ -6,62 +6,196 @@ import { RiDeleteBin7Line } from "react-icons/ri";
 import { FaPencil } from "react-icons/fa6";
 import MDEditor from "@uiw/react-md-editor";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import Loader from "../Loader";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
-  const {theme} = useSelector(state => state.themeR);
-  const [postData, setPostData] = useState("");
+  const { theme } = useSelector((state) => state.themeR);
+  const [laoding, setLoading] = useState(false);
+  const [postData, setPostData] = useState({
+    title: "",
+    category: "",
+    content: "",
+    coverImage: "",
+    tags: [],
+  });
 
   const imageFileRef = useRef();
+  const navigate = useNavigate();
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
 
-  const [tags, setTags] = useState([]);
   const [tagValue, setTagValue] = useState("");
 
+  // IMAGE FILE SELECT
   const handeImageFileInputChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
     if (file.size > 4 * 1024 * 1024) {
-      alert("too lerge file");
+      toast.error("Too lerge image file", {
+        style: {
+          backgroundColor: "#a93800",
+          color: "white",
+          border: "1px solid rgba(255, 255, 255, 0.4)",
+        },
+      });
       return;
     }
     setImageFile(file);
     setImageFileUrl(URL.createObjectURL(file));
   };
 
+  // UPLOADING IMAGE
+  const uploadImageToCloudinary = async () => {
+    if (!imageFile) return;
+
+    const fileName = new Date().getTime() + imageFile.name;
+
+    const imageFormData = new FormData();
+    imageFormData.append("file", imageFile);
+    imageFormData.append("upload_preset", "mern-blog");
+    imageFormData.append("cloud_name", "dw8bzha3e");
+    imageFormData.append("folder", "blog_cover_images");
+    imageFormData.append("public_id", fileName);
+
+    try {
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/dw8bzha3e/image/upload",
+        imageFormData
+      );
+
+      setImageFileUrl(res.data.url);
+      setPostData((prev) => ({ ...prev, coverImage: res.data.url }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // TAG FIELD CHANGE
   const handeTagFieldChange = (e) => {
-    if (e.key === "Enter" && !tags.includes(tagValue) && tags.length < 5) {
-      setTags((prev) => [...prev, tagValue]);
+    if (
+      e.key === "Enter" &&
+      !postData.tags.includes(tagValue) &&
+      postData.tags.length < 5
+    ) {
+      setPostData((prev) => ({
+        ...prev,
+        ["tags"]: [...postData.tags, tagValue],
+      }));
       setTagValue("");
       e.preventDefault();
-      console.log(tags);
     }
     if (e.key === "Backspace" && !tagValue) {
-      setTags((prev) => prev.slice(0, -1));
+      setPostData((prev) => ({
+        ...prev,
+        ["tags"]: postData.tags.slice(0, -1),
+      }));
+    }
+  };
+
+  // INPUT FIELD CHANGE
+  const handleInputFieldChange = (e) => {
+    const { id, value } = e.target;
+    setPostData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  // PUBLISH POST
+  const handlePublishPost = async (e) => {
+    const { title, category, content } = postData;
+
+    if (!title.trim() || !category.trim() || !content.trim()) {
+      toast.error(
+        "Please fill out all required fields: Title, Category, and Content.",
+        {
+          style: {
+            backgroundColor: "#a93800",
+            color: "white",
+            border: "1px solid rgba(255, 255, 255, 0.4)",
+          },
+        }
+      );
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await uploadImageToCloudinary();
+      const res = await axios.post(`/api/post/create`, postData);
+      if (res.status === 201) {
+        toast.success("Post published successfully", {
+          style: {
+            backgroundColor: "#008b8c",
+            color: "white",
+            border: "1px solid rgba(255, 255, 255, 0.4)",
+          },
+        });
+        setLoading(false);
+        setPostData({
+          title: "",
+          category: "",
+          content: "",
+          coverImage: "",
+          tags: [],
+        });
+        navigate(`/posts/${res.data.slug}`);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast(error.response.data.message);
+      console.log(error);
     }
   };
 
   return (
-    <div className="max-w-6xl mx-auto h-[200vh]">
+    <div className="max-w-6xl mx-auto pb-16">
       <div className="flex gap-2 justify-between">
         <h1 className="font-bold text-3xl">Create a new post</h1>
-        <button className="button-primary flex items-center justify-center gap-3">
-          <FaPaperPlane className="text-base" />
-          Publish
+        <button
+          onClick={handlePublishPost}
+          className="button-primary overflow-hidden flex items-center justify-center gap-3"
+          disabled={laoding}
+        >
+          {laoding ? <Loader /> : <FaPaperPlane className="text-base" />}
+          {laoding ? "Publishing" : "Publish"}
         </button>
       </div>
       <div className="mt-12">
         <form className="flex flex-col gap-6">
-          <div>
-            <label htmlFor="title" className="form-label-primary">
-              Title
-            </label>
-            <input
-              type="text"
-              id="title"
-              className="input-field-style"
-              placeholder="How to create a fullstack website"
-            />
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <label htmlFor="title" className="form-label-primary">
+                Title
+              </label>
+              <input
+                type="text"
+                id="title"
+                className="input-field-style"
+                value={postData.title}
+                onChange={handleInputFieldChange}
+                placeholder="How to create a fullstack website"
+              />
+            </div>
+            <div>
+              <label htmlFor="category" className="form-label-primary">
+                Category
+              </label>
+              <select
+                id="category"
+                className="input-field-style py-2 text-gray-300"
+                value={postData.category}
+                onChange={handleInputFieldChange}
+              >
+                <option value="" disabled>
+                  Select Category
+                </option>
+                <option value="technology">Technology</option>
+                <option value="programming">Programming</option>
+                <option value="travel">Travel</option>
+                <option value="health">Health</option>
+              </select>
+            </div>
           </div>
 
           <div
@@ -84,7 +218,10 @@ const CreatePost = () => {
                 />
                 <div className="absolute top-2 right-2 flex items-center gap-2">
                   <button
-                    onClick={(e) => {imageFileRef.current.click();e.preventDefault}}
+                    onClick={(e) => {
+                      imageFileRef.current.click();
+                      e.preventDefault;
+                    }}
                     className="size-7 grid place-items-center bg-primary/50 text-gray-200 hover:text-white dark:bg-dark/50 rounded dark:hover:bg-dark/60 cursor-pointer duration-200"
                   >
                     <FaPencil />
@@ -117,10 +254,12 @@ const CreatePost = () => {
             </label>
             <div data-color-mode={theme} className="bg-red-500 min-h-60">
               <MDEditor
-                value={postData}
-                onChange={(e) => setPostData(e)}
+                value={postData.content}
+                onChange={(e) =>
+                  setPostData((prev) => ({ ...prev, ["content"]: e }))
+                }
                 textareaProps={{
-                  placeholder: "Please enter Markdown text"
+                  placeholder: "Please enter Markdown text",
                 }}
                 height={600}
                 className=""
@@ -133,7 +272,7 @@ const CreatePost = () => {
               Tags
             </label>
             <div className="input-field-style p-1 flex gap-1.5 max-w-full overflow-x-auto">
-              {tags.map((tag) => (
+              {postData.tags.map((tag) => (
                 <button
                   key={tag}
                   className="button-primary text-xs shrink-0 flex gap-1 p-1 px-1.5 items-center"
@@ -142,12 +281,15 @@ const CreatePost = () => {
                   {tag.toUpperCase()}
                   <RxCross2
                     onClick={() =>
-                      setTags((prev) => prev.filter((item) => item !== tag))
+                      setPostData((prev) => ({
+                        ...prev,
+                        ["tags"]: postData.tags.filter((item) => item !== tag),
+                      }))
                     }
                   />
                 </button>
               ))}
-              {tags.length < 5 && (
+              {postData.tags.length < 5 && (
                 <input
                   type="text"
                   id="tags"

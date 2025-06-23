@@ -51,7 +51,7 @@ const DashSidebar = () => {
         </p>
       </div>
 
-      <div className="flex flex-col gap-5 mt-8 text-sm md:text-base">
+      <div className="flex flex-col gap-3 mt-8 text-sm md:text-base">
         {sidebarItems.map((item, idx) => (
           <div className="relative" key={item.id}>
             {item.id === "profile" && (

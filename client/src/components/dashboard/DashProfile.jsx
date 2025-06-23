@@ -65,6 +65,7 @@ const DashProfile = () => {
     const imageData = new FormData();
     imageData.append("file", imageFile);
     imageData.append("upload_preset", "mern-blog");
+    imageData.append("folder", "mern_blog_users");
     imageData.append("cloud_name", "dw8bzha3e");
     imageData.append("public_id", fileName);
 
@@ -142,15 +143,6 @@ const DashProfile = () => {
 
   // delete account
   const handleDeleteAccount = async (password) => {
-    // if (!password || password.length < 6) {
-    //   toast.error("Invalid password", {
-    //     style: {
-    //       backgroundColor: "#a93800",
-    //       color: "white",
-    //       border: "1px solid rgba(255, 255, 255, 0.4)",
-    //     },
-    //   });
-    // }
 
     try {
       const res = await axios.delete(`/api/user/delete/${currentUser._id}`, {
@@ -255,7 +247,7 @@ const DashProfile = () => {
           )}
           <button
             type="submit"
-            className="button-primary disabled:bg-primary/50 flex justify-center gap-3 items-center disabled:cursor-auto disabled:opacity-70"
+            className="button-primary  flex justify-center gap-3 items-center"
             disabled={progress || Object.keys(formData).length === 0}
           >
             {loading && <Loader />}
