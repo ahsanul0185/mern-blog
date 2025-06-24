@@ -148,7 +148,6 @@ const DashProfile = () => {
       const res = await axios.delete(`/api/user/delete/${currentUser._id}`, {
         data: { password },
       });
-      console.log(res.data);
       if (res.status === 200) {
         dispatch(deleteUserSuccess());
         toast.error("Account deleted", {

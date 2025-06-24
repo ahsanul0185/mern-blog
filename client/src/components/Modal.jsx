@@ -5,18 +5,34 @@ import { IoClose } from "react-icons/io5";
 
 const Modal = ({ showModal, setShowModal, children }) => {
 
+  // useEffect(() => {
+  //   if (showModal) {
+  //     document.body.style.overflow = "hidden";
+  //   } else {
+  //     document.body.style.overflow = "";
+  //   }
+
+  //   return () => {
+  //     document.body.style.overflow = "";
+  //   };
+  // }, [showModal]);
+
+
   useEffect(() => {
-    if (showModal) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+  if (showModal) {
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = "hidden";
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
+  } else {
+    document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
+  }
 
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [showModal]);
-
+  return () => {
+    document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
+  };
+}, [showModal]);
 
   return createPortal(
     <motion.div

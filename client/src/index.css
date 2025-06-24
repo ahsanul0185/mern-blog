@@ -45,6 +45,10 @@ main {
   color: white;
 }
 
+body {
+  background-color: darkslategray;
+}
+
 
 
 #mobile-nav a.active {
