@@ -1,7 +1,7 @@
 import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-const BlogPosts = () => {
+const DashPosts = () => {
   return (
     <div>
 
@@ -24,4 +24,4 @@ const BlogPosts = () => {
   );
 };
 
-export default BlogPosts;
+export default DashPosts;

@@ -3,8 +3,8 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import DashSidebar from "../components/dashboard/DashSidebar";
 import DashProfile from "../components/dashboard/DashProfile";
 import useGetTab from "../hooks/useGetTab";
-import BlogPosts from "../components/dashboard/BlogPosts";
 import { useSelector } from "react-redux";
+import DashPosts from "../components/dashboard/DashPosts";
 
 const Dashboard = () => {
 
@@ -20,7 +20,7 @@ const Dashboard = () => {
       {/* Profile */}
       <div className='grow p-8'>
       {tab === "profile" && <DashProfile />}
-      {currentUser.role === "admin" && tab === "blog_posts" && <BlogPosts />}
+      {currentUser.role === "admin" && tab === "blog_posts" && <DashPosts />}
       {!tab && <Outlet />}
       </div>
     </div>
