@@ -5,6 +5,8 @@ import slugify from "slugify";
 export const createPost = async (req, res, next) => {
   const { title, content, coverImage } = req.body;
 
+  console.log(req.user)
+
   if (req.user.role !== "admin") {
     return next(errorHandler(403, "You are not allowed to create a post"));
   }
@@ -88,6 +90,40 @@ export const deletePost = async (req, res, next) => {
    
     await Post.findByIdAndDelete(req.params.postId)
     res.status(200).json({message : "The post has been deleted"})
+    
+  } catch (error) {
+    next(error);
+  }
+
+}
+
+export const updatePost = async (req, res, next) => {
+
+  const {userId, postId} = req.params;
+  let {title, content, category, tags, coverImage } = req.body;
+
+  if (!coverImage) {
+    coverImage = "https://blog.kanalysis.com/wp-content/uploads/2023/01/placeholder-116.png";
+  }
+
+
+  if (req.user.role !== "admin" || req.user.id !== userId) {
+    return next(403, 'You are not allowed to update this post')
+  }
+
+  try {
+   
+    const updatedPost = await Post.findByIdAndUpdate(postId, {
+      $set : {
+        title,
+        content,
+        coverImage,
+        category,
+        tags
+      }
+    }, {new : true})
+    
+    res.status(200).json(updatedPost);
     
   } catch (error) {
     next(error);

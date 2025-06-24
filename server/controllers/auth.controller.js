@@ -127,7 +127,7 @@ export const google = async (req, res, next) => {
     const user = await User.findOne({email});
 
     if (user) {
-      const token = jwt.sign({id : user._id}, process.env.JWT_SECRET);
+      const token = jwt.sign({id : user._id, role : user.role}, process.env.JWT_SECRET);
 
       const {password, ...rest} = user._doc;
       res.status(200).cookie('access_token', token, {httpOnly : true}).json(rest);

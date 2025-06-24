@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { FaPaperPlane } from "react-icons/fa";
 import { IoImageOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import { RiDeleteBin7Line } from "react-icons/ri";
@@ -9,10 +8,11 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import Loader from "../Loader";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const CreatePost = () => {
+const UpdatePost = () => {
   const { theme } = useSelector((state) => state.themeR);
+  const { currentUser } = useSelector((state) => state.userR);
   const [laoding, setLoading] = useState(false);
   const [postData, setPostData] = useState({
     title: "",
@@ -29,10 +29,23 @@ const CreatePost = () => {
 
   const [tagValue, setTagValue] = useState("");
 
+
+  
+  const location = useLocation();
+  const post = location.state;
+
+  useEffect(() => { 
+    setPostData(post);
+    setImageFileUrl(post.coverImage);
+  }, [])
+  
+
   // IMAGE FILE SELECT
   const handeImageFileInputChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+
     if (file.size > 4 * 1024 * 1024) {
       toast.error("Too lerge image file", {
         style: {
@@ -102,7 +115,7 @@ const CreatePost = () => {
   };
 
   // PUBLISH POST
-  const handlePublishPost = async (e) => {
+  const handleUpdatePost = async (e) => {
     const { title, category, content } = postData;
 
     if (!title.trim() || !category.trim() || !content.trim()) {
@@ -121,21 +134,23 @@ const CreatePost = () => {
 
     try {
       setLoading(true);
-
       const imageUrl = await uploadImageToCloudinary();
 
-      const res = await axios.post(`/api/post/create`, {
+      const res = await axios.put(`/api/post/update/${post._id}/${currentUser._id}`, {
         ...postData,
-        coverImage: imageUrl,
+        coverImage: imageUrl || imageFileUrl,
       });
-      if (res.status === 201) {
-        toast.success("Post published successfully", {
+
+
+      if (res.status === 200) {
+        toast.success("Post updated successfully", {
           style: {
             backgroundColor: "#008b8c",
             color: "white",
             border: "1px solid rgba(255, 255, 255, 0.4)",
           },
         });
+
         setLoading(false);
         setPostData({
           title: "",
@@ -148,7 +163,7 @@ const CreatePost = () => {
       }
     } catch (error) {
       setLoading(false);
-      toast(error.response.data.message);
+    //   toast(error);
       console.log(error);
     }
   };
@@ -156,14 +171,14 @@ const CreatePost = () => {
   return (
     <div className="">
       <div className="flex gap-2 justify-between">
-        <h1 className="font-bold text-3xl">Create a new post</h1>
+        <h1 className="font-bold text-3xl">Update Post</h1>
         <button
-          onClick={handlePublishPost}
+          onClick={handleUpdatePost}
           className="button-primary overflow-hidden flex items-center justify-center gap-3"
           disabled={laoding}
         >
-          {laoding ? <Loader /> : <FaPaperPlane className="text-base" />}
-          {laoding ? "Publishing" : "Publish"}
+          {laoding ? <Loader /> : ""}
+          {laoding ? "Updating" : "Update"}
         </button>
       </div>
       <div className="mt-12">
@@ -214,10 +229,10 @@ const CreatePost = () => {
               onChange={handeImageFileInputChange}
               hidden
             />
-            {imageFile && (
+            {(imageFile || imageFileUrl) && (
               <div className="absolute w-full h-full">
                 <img
-                  src={imageFileUrl || ""}
+                  src={imageFileUrl || postData.coverImage || null}
                   alt=""
                   className="w-full h-full object-cover rounded"
                 />
@@ -318,4 +333,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default UpdatePost;

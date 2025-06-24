@@ -10,6 +10,7 @@ import { MdOutlineDelete } from "react-icons/md";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import Modal from "../Modal";
 import { toast } from "sonner";
+import LoaderBlogList from "../loaders/LoaderBlogList";
 
 const DashPosts = () => {
 
@@ -64,7 +65,7 @@ const DashPosts = () => {
   
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <div className="flex gap-2 justify-between">
         <h1 className="font-bold text-3xl">Blog posts</h1>
         <Link
@@ -77,16 +78,16 @@ const DashPosts = () => {
       </div>
 
     {/* Posts List*/}
-    <div className="mt-16 ">
+    <div className="mt-16 grow">
       {loading ? (
-        <div className="h-full">
-          <Loader />
+        <div className="h-full grid place-items-center">
+          <LoaderBlogList/>
         </div>
       ) : <div className="flex flex-col gap-5 rounded overflow-x-auto flex-nowrap custom-scrollbar">
-          {posts ? (
+          {posts.length !==0 ? (
           posts.map(post => <Post key={post._id} post={post} setPosts={setPosts} />)
         ) : (
-          !loading && <h2>No posts found : ( </h2>
+          !loading && <h2 className="text-2xl font-bold">No posts found : ( </h2>
         )}
         </div>}
         {showMore && <button onClick={handleShowMorePosts} className="button-primary mt-6 w-full">Show More</button>}
@@ -125,7 +126,7 @@ const Post = ({post, setPosts}) => {
 
   return (
     <div className="relative min-w-[580px] flex gap-4 bg-white/10 items-center p-2.5 rounded group border border-gray-300 dark:border-gray-200/20">
-      <img src={coverImage || null} className="w-16 md:w-26 aspect-square rounded object-cover"  alt="blog image" />
+      <img onClick={() => navigate(`/post/${slug}`)} src={coverImage || null} className="w-16 md:w-26 aspect-square rounded cursor-pointer object-cover"  alt="blog image" />
       <div className="grow flex flex-col items-start gap-1">
         
           <h2 onClick={() => navigate(`/post/${slug}`)} className="font-semibold cursor-pointer text-sm md:text-base">{title}</h2>
@@ -139,7 +140,7 @@ const Post = ({post, setPosts}) => {
       </div>
 
       <div className="absolute top-2.5 right-2.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-200  md:text-xl flex gap-2">
-        <Link to={`/update-post/${slug}`} className="text-gray-600 dark:text-gray-300 duration-200 hover:text-primary"><FiEdit /></Link>
+        <button onClick={() => navigate(`/dashboard/update-post/${post._id}`, {state : post})} to={``} className="text-gray-600 dark:text-gray-300 duration-200 hover:text-primary"><FiEdit /></button>
         <button onClick={() => setActiveModal("delete-post")}><MdOutlineDelete className="text-[18px] md:text-[22px] text-red-400 hover:text-red-600 duration-200" /></button>
       </div>
 
