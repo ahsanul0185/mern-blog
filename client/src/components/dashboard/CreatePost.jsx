@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
 import { IoImageOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
@@ -67,7 +67,7 @@ const CreatePost = () => {
       );
 
       setImageFileUrl(res.data.url);
-      setPostData((prev) => ({ ...prev, coverImage: res.data.url }));
+      return res.data.url;
     } catch (error) {
       console.log(error);
     }
@@ -118,11 +118,14 @@ const CreatePost = () => {
       );
       return;
     }
+    
 
     try {
       setLoading(true);
-      await uploadImageToCloudinary();
-      const res = await axios.post(`/api/post/create`, postData);
+      
+      const imageUrl = await uploadImageToCloudinary();
+
+      const res = await axios.post(`/api/post/create`, {...postData, coverImage : imageUrl});
       if (res.status === 201) {
         toast.success("Post published successfully", {
           style: {
@@ -149,7 +152,7 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto pb-16">
+    <div className="">
       <div className="flex gap-2 justify-between">
         <h1 className="font-bold text-3xl">Create a new post</h1>
         <button
@@ -220,7 +223,7 @@ const CreatePost = () => {
                   <button
                     onClick={(e) => {
                       imageFileRef.current.click();
-                      e.preventDefault;
+                      e.preventDefault();
                     }}
                     className="size-7 grid place-items-center bg-primary/50 text-gray-200 hover:text-white dark:bg-dark/50 rounded dark:hover:bg-dark/60 cursor-pointer duration-200"
                   >

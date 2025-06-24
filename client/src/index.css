@@ -108,3 +108,24 @@ footer a:hover {
 .w-md-editor-text{
   height: 100% !important;
 }
+
+
+/* Custom scrollbar */
+
+.custom-scrollbar {
+  overflow-x: auto;
+  
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3); /* gray-500 */
+  border-radius: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent; /* gray-200 */
+}

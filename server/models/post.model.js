@@ -23,7 +23,7 @@ const postSchema = new mongoose.Schema(
     coverImage: {
       type: String,
       default:
-        "https://theroostingplace.blog/wp-content/uploads/2020/12/qi-bin-w4hbafegiac-unsplash.jpg",
+        "https://blog.kanalysis.com/wp-content/uploads/2023/01/placeholder-116.png",
     },
     category: {
       type: String,
