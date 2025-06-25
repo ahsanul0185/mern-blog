@@ -7,7 +7,7 @@ import { FaPencil } from "react-icons/fa6";
 import MDEditor from "@uiw/react-md-editor";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import Loader from "../Loader";
+import Loader from "../loaders/Loader";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
@@ -144,7 +144,7 @@ const CreatePost = () => {
           coverImage: "",
           tags: [],
         });
-        navigate(`/posts/${res.data.slug}`);
+        navigate(`/post/${res.data.slug}`);
       }
     } catch (error) {
       setLoading(false);

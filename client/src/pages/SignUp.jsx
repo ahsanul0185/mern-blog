@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Logo from "../components/Logo";
 import { FcGoogle } from "react-icons/fc";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import Loader from "../components/Loader";
+import Loader from "../components/loaders/Loader";
 import OAuth from "../components/OAuth";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";

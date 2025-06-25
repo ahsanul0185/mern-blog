@@ -13,6 +13,7 @@ import CreatePost from "./components/dashboard/CreatePost";
 import AdminRoutes from "./routes/AdminRoutes";
 import NotFound from "./pages/NotFound";
 import UpdatePost from "./components/dashboard/UpdatePost";
+import Post from "./pages/Post";
 
 const App = () => {
 
@@ -22,10 +23,12 @@ const App = () => {
       <main className="flex-grow bg-white dark:bg-dark dark:text-gray-100">
       <Routes>
           <Route path="/" element={<Home />}/>
-          <Route path="/about" element={<About />}/>
-          <Route path="/projects" element={<Projects />}/>
           <Route path="/sign-in" element={<SignIn />}/>
           <Route path="/sign-up" element={<SignUp />}/>
+
+          <Route path="/about" element={<About />}/>
+          <Route path="/projects" element={<Projects />}/>
+          <Route path="/post/:slug" element={<Post />}/>
 
           <Route element={<PrivateRoutes/>}>
             <Route path="/dashboard" element={<Dashboard />}>

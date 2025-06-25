@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Logo from "../components/Logo";
 import { FcGoogle } from "react-icons/fc";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import Loader from "../components/Loader";
+import Loader from "../components/loaders/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { inputFieldTyping, signInFailure, signInStart, signInSuccess } from "../features/user/userSlice";
 import OAuth from "../components/OAuth";

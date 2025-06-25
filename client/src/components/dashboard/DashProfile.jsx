@@ -13,7 +13,7 @@ import {
   updateStart,
   updateSuccess,
 } from "../../features/user/userSlice";
-import Loader from "../Loader";
+import Loader from "../loaders/Loader";
 import { toast } from "sonner";
 import Modal from "../Modal";
 import { IoAlertCircleOutline } from "react-icons/io5";

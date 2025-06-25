@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Loader from "../Loader";
+import Loader from "../loaders/Loader";
 import moment from "moment";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineDelete } from "react-icons/md";
