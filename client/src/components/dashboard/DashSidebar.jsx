@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "../../features/user/userSlice";
 import { HiRectangleStack } from "react-icons/hi2";
+import { FaUsers } from "react-icons/fa";
 
 const sidebarItems = [
   {
@@ -22,6 +23,13 @@ const adminOptions = [
     title: "Blog Posts",
     icon: <HiRectangleStack className="text-xl" />,
     path: "/dashboard?tab=blog_posts",
+    adminOption: true,
+  },
+  {
+    id: "users",
+    title: "Users",
+    icon: <FaUsers className="text-xl" />,
+    path: "/dashboard?tab=users",
     adminOption: true,
   },
 ];

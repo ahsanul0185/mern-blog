@@ -5,8 +5,6 @@ import slugify from "slugify";
 export const createPost = async (req, res, next) => {
   const { title, content, coverImage } = req.body;
 
-  console.log(req.user)
-
   if (req.user.role !== "admin") {
     return next(errorHandler(403, "You are not allowed to create a post"));
   }
@@ -26,7 +24,7 @@ export const createPost = async (req, res, next) => {
     ...req.body,
     slug,
     userId: req.user.id,
-  });
+  }); 
 
   try {
     const createdPost = await newPost.save();
