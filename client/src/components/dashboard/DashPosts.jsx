@@ -204,13 +204,12 @@ const Post = ({ post, setPosts }) => {
           onClick={() =>
             navigate(`/dashboard/update-post/${post._id}`, { state: post })
           }
-          to={``}
-          className="text-gray-600 dark:text-gray-300 duration-200 hover:text-primary"
+          className="text-gray-600 dark:text-gray-300 duration-200 hover:text-primary cursor-pointer"
         >
           <FiEdit />
         </button>
         <button onClick={() => setActiveModal("delete-post")}>
-          <MdOutlineDelete className="text-[18px] md:text-[22px] text-red-400 hover:text-red-600 duration-200" />
+          <MdOutlineDelete className="text-[18px] md:text-[22px] text-red-400 hover:text-red-600 duration-200 cursor-pointer" />
         </button>
       </div>
 

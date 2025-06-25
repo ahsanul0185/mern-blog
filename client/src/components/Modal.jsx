@@ -5,19 +5,6 @@ import { IoClose } from "react-icons/io5";
 
 const Modal = ({ showModal, setShowModal, children }) => {
 
-  // useEffect(() => {
-  //   if (showModal) {
-  //     document.body.style.overflow = "hidden";
-  //   } else {
-  //     document.body.style.overflow = "";
-  //   }
-
-  //   return () => {
-  //     document.body.style.overflow = "";
-  //   };
-  // }, [showModal]);
-
-
   useEffect(() => {
   if (showModal) {
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
