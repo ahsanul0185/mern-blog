@@ -110,7 +110,7 @@ footer a:hover {
 }
 
 .w-md-editor-text{
-  height: 100% !important;
+  height: fit-content !important;
 }
 
 

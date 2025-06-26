@@ -273,7 +273,7 @@ const UpdatePost = () => {
             <label htmlFor="content" className="form-label-primary">
               Content
             </label>
-            <div data-color-mode={theme} className="bg-red-500 min-h-60">
+            <div data-color-mode={theme} className="bg-green-500">
               <MDEditor
                 value={postData.content}
                 onChange={(e) =>
@@ -282,8 +282,8 @@ const UpdatePost = () => {
                 textareaProps={{
                   placeholder: "Please enter Markdown text",
                 }}
-                height={600}
-                className=""
+                
+                className="min-h-[600px]" 
               />
             </div>
           </div>
