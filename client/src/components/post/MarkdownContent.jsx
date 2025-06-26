@@ -48,7 +48,7 @@ const MarkdownContent = ({content}) => {
                         return <li className='mb-2 leading-[22px]'>{children}</li>
                     },
                     blockquote({children}){
-                        return <blockquote className='border-l-4 border-teal-400 pl-4 italic bg-gray-200 dark:bg-primary/30 pt-6 pb-2 mb-2 rounded'>{children}</blockquote>
+                        return <blockquote className='border-l-4 border-teal-400 pl-4 italic bg-gray-200 dark:bg-primary/30 pt-6 pb-2 mb-4 rounded'>{children}</blockquote>
                     },
                     h1({children}){
                         return <h1 className='text-2xl font-bold mt-6 mb-4'>{children}</h1>

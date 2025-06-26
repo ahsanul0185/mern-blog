@@ -13,7 +13,7 @@ const ProfileAvatar = ({ currentUser }) => {
   return (
     <div className="relative" id="avatar">
       <img
-        className="size-9 rounded-full cursor-pointer"
+        className="size-9 rounded-full cursor-pointer object-cover"
         src={currentUser.profilePicture}
         alt=""
         onClick={() => setDropDownOpen((prev) => !prev)}

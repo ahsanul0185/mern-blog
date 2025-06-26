@@ -116,7 +116,7 @@ const DashUsers = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <h2 className="text-3xl font-bold">Users List</h2>
       <div className="mt-16">
         {loading ? (
@@ -166,7 +166,7 @@ const DashUsers = () => {
                       <div className="relative w-fit mx-auto">
                         <img
                           src={user.profilePicture}
-                          className="size-9 md:size-12 min-w-fit rounded-full"
+                          className="size-9 md:size-12 min-w-fit rounded-full aspect-square object-cover"
                           alt=""
                         />
 
@@ -226,8 +226,8 @@ const DashUsers = () => {
 
           {userToDelete && 
           
-          <div className="flex gap-3 my-6 bg-primary/40 p-2 rounded">
-            <img src={userToDelete.profilePicture} className="size-12 rounded-full" alt="user profile" />
+          <div className="flex gap-3 my-6 bg-primary/40 p-3 rounded">
+            <img src={userToDelete.profilePicture} className="size-10 rounded-full" alt="user profile" />
             <div>
               <h2 className="text-gray-600 dark:text-gray-300 font-semibold">@{userToDelete.username}</h2>
               <p className="text-xs">User since {moment(userToDelete.updatedAt).format("Do MMMM YYYY")}</p>

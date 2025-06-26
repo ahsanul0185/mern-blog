@@ -14,11 +14,13 @@ import AdminRoutes from "./routes/AdminRoutes";
 import NotFound from "./pages/NotFound";
 import UpdatePost from "./components/dashboard/UpdatePost";
 import Post from "./pages/Post";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
 
   return (
     <BrowserRouter>
+    <ScrollToTop />
       <Header />
       <main className="flex-grow bg-white dark:bg-dark dark:text-gray-100">
       <Routes>

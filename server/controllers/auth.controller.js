@@ -58,7 +58,7 @@ export const signup = async (req, res, next) => {
 
   try {
     await newUser.save();
-    res.status(201).json({ message: "signed up successfully" });
+    res.status(201).json({ message: "Signed up successfully" });
   } catch (error) {
     if (error.code === 11000) {
       const field = Object.keys(error.keyPattern)[0]; // e.g. 'username' or 'email'

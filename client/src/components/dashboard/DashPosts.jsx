@@ -170,7 +170,7 @@ const Post = ({ post, setPosts }) => {
       <div className="grow flex flex-col items-start gap-1">
         <h2
           onClick={() => navigate(`/post/${slug}`)}
-          className="font-semibold cursor-pointer text-sm md:text-base"
+          className="font-semibold cursor-pointer text-sm md:text-base pr-12"
         >
           {title}
         </h2>

@@ -52,7 +52,7 @@ const DashSidebar = () => {
         <img
           src={currentUser.profilePicture}
           alt="profile"
-          className="mx-auto rounded-full size-16 md:size-20"
+          className="mx-auto rounded-full size-16 md:size-20 object-cover"
         />
         <p className="text-center font-semibold text-gray-500 dark:text-gray-300 mt-3 text-sm md:text-base">
           {currentUser.email}
