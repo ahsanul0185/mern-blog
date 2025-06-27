@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Loader from "../loaders/Loader";
 import axios from "axios";
@@ -11,7 +11,8 @@ const CommentSection = ({ postId }) => {
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState([]);
-
+  
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -62,7 +63,27 @@ const CommentSection = ({ postId }) => {
       console.log(error);
       toast.error("Failed to comment");
     }
-  };
+  }; 
+
+
+  const handleLike = async (commentId) => {
+    
+
+    if (!currentUser) {
+      return toast("You need sign in first to like the comment")
+    }
+
+    try {
+      const res = await axios.put(`/api/comment/like_comment/${commentId}`);
+
+      if (res.status === 200) {
+        setComments(prev => prev.map(comment => comment._id === commentId ? {...comment, likes : res.data.likes} : comment));
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="mt-12">
@@ -134,7 +155,7 @@ const CommentSection = ({ postId }) => {
         {/* Comments */}
         <div className="mt-6 flex flex-col gap-6">
           {comments.length !== 0 ? (
-            comments.map((comment) => <Comment key={comment._id} comment={comment} />)
+            comments.map((comment) => <Comment key={comment._id} comment={comment} onLike={handleLike}/>)
           ) : (
             <h2 className="text-gray-600 dark:text-gray-300 italic">No comments yet!</h2>
           )}

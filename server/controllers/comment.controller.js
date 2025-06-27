@@ -28,8 +28,6 @@ export const createComment = async (req, res, next) => {
 
 export const getPostComments = async (req, res, next) => {
 
-    console.log(req.params)
-
     if (!req.params.postId) {
          return next(errorHandler(400, "Please provide a post id"));
     }
@@ -40,6 +38,42 @@ export const getPostComments = async (req, res, next) => {
     });
     
     res.status(200).json(comments);
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const likeComment = async (req, res, next) => {
+
+    if (!req.params.commentId) {
+         return next(errorHandler(400, "Please provide a comment id"));
+    } 
+
+
+    try {  
+    
+        const comment = await Comment.findById(req.params.commentId);
+
+
+        if (!comment) {
+             return next(errorHandler(400, "Comment not found"));
+        }
+
+
+        const userIndex  = comment.likes.indexOf(req.user.id);
+
+        console.log(userIndex)
+
+        if (userIndex === -1) {
+            comment.likes.push(req.user.id);
+        }else {
+            comment.likes.splice(userIndex, 1);
+        }
+
+        await comment.save();
+    
+    res.status(200).json(comment);
 
     } catch (error) {
         next(error);
