@@ -36,7 +36,7 @@ const Modal = ({ showModal, setShowModal, children }) => {
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.5 }}
-          transition={{ type: "spring", stiffness: 360, damping: 30 }}
+          // transition={{ type: "spring", stiffness: 360, damping: 30 }}
           onClick={(e) => e.stopPropagation()}
           className="bg-white dark:bg-primaryDark border dark:text-gray-200 border-gray-300/40 rounded p-5 relative max-w-md w-full"
         >

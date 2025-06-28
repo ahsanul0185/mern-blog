@@ -32,31 +32,41 @@ const Comment = ({ comment, onLike, setComments }) => {
     getUser();
   }, [comment]);
 
-
   const handleEditComment = async () => {
     try {
-      const res = await axios.put(`/api/comment/edit_comment/${comment._id}`, {content : editCommentText});
+      const res = await axios.put(`/api/comment/edit_comment/${comment._id}`, {
+        content: editCommentText,
+      });
       if (res.status === 200) {
-        setComments(prev => prev.map(c => c._id === comment._id ? {...c, isEditing : false, content : res.data.content} : c))
+        setComments((prev) =>
+          prev.map((c) =>
+            c._id === comment._id
+              ? { ...c, isEditing: false, content: res.data.content }
+              : c
+          )
+        );
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const handleDeleteComment = async (commentId) => {
     try {
-      const res = await axios.delete(`/api/comment/delete_comment/${commentId}`);
+      const res = await axios.delete(
+        `/api/comment/delete_comment/${commentId}`
+      );
 
       if (res.status === 200) {
-        setComments(prev => prev.filter(c => c._id !== comment._id));
+        setComments((prev) => prev.filter((c) => c._id !== comment._id));
         setActiveModal(null);
-        toast("Comment deleted successfully")
+        toast("Comment deleted successfully");
       }
     } catch (error) {
-      console.log(error)
+      setActiveModal(null);
+      console.log(error);
     }
-  }
+  };
 
   return !comment.isEditing ? (
     <div className="flex gap-3 items-start">
@@ -90,36 +100,72 @@ const Comment = ({ comment, onLike, setComments }) => {
           <span>
             {comment.likes.length} {comment.likes.length > 1 ? "Likes" : "Like"}
           </span>
-          {(currentUser?._id === comment.userId || currentUser?.role === "admin") && <><button onClick={() => setComments(prev => prev.map(item => item._id === comment._id ? {...item, isEditing : true} : {...item, isEditing : false}))} className="cursor-pointer hover:bg-primary/30 rounded px-1 py-0.5">Edit</button>
-          <button onClick={() => setActiveModal("delete-comment")} className="cursor-pointer hover:bg-primary/30 rounded px-1 py-0.5">Delete </button></>}
+          {(currentUser?._id === comment.userId ||
+            currentUser?.role === "admin") && (
+            <>
+              <button
+                onClick={() =>
+                  setComments((prev) =>
+                    prev.map((item) =>
+                      item._id === comment._id
+                        ? { ...item, isEditing: true }
+                        : { ...item, isEditing: false }
+                    )
+                  )
+                }
+                className="cursor-pointer hover:bg-primary/30 rounded px-1 py-0.5"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => setActiveModal("delete-comment")}
+                className="cursor-pointer hover:bg-primary/30 rounded px-1 py-0.5"
+              >
+                Delete{" "}
+              </button>
+            </>
+          )}
         </div>
       </div>
 
-        <Modal showModal={activeModal === "delete-comment"} setShowModal={setActiveModal}>
-            <IoAlertCircleOutline className="text-7xl mx-auto text-gray-300" />
-                    <h2 className="font-bold text-2xl mt-2 text-center">
-                      Are you sure you want to delete this comment?
-                    </h2>
-            
-                    <div className="mt-8 flex justify-between">
-                      <button
-                        onClick={() => handleDeleteComment(comment._id)}
-                        className="button-primary bg-red-600 hover:bg-red-700"
-                      >
-                        Delete
-                      </button>
-                      <button
-                        className="button-primary bg-gray-400 dark:bg-gray-400/30 dark:hover:bg-gray-400/50"
-                        onClick={() => setActiveModal(null)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-        </Modal>
+      <Modal
+        showModal={activeModal === "delete-comment"}
+        setShowModal={setActiveModal}
+      >
+        <IoAlertCircleOutline className="text-7xl mx-auto text-gray-300" />
+        <h2 className="font-bold text-2xl mt-2 text-center">
+          Are you sure you want to delete this comment?
+        </h2>
 
+        <div className="mt-8 flex justify-between">
+          <button
+            onClick={() => handleDeleteComment(comment._id)}
+            className="button-primary bg-red-600 hover:bg-red-700"
+          >
+            Delete
+          </button>
+          <button
+            className="button-primary bg-gray-400 dark:bg-gray-400/30 dark:hover:bg-gray-400/50"
+            onClick={() => setActiveModal(null)}
+          >
+            Cancel
+          </button>
+        </div>
+      </Modal>
     </div>
   ) : (
-    <InputCommentField text={editCommentText} setText={setEditCommentText} onSubmit={handleEditComment} loading={loading} buttonText="Save" onCancel={() => setComments(prev => prev.map(item => ({...item, isEditing : false})))} />
+    <InputCommentField
+      text={editCommentText}
+      setText={setEditCommentText}
+      onSubmit={handleEditComment}
+      loading={loading}
+      buttonText="Save"
+      onCancel={() =>
+        setComments((prev) =>
+          prev.map((item) => ({ ...item, isEditing: false }))
+        )
+      }
+    />
   );
 };
 

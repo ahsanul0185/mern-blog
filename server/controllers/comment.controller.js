@@ -95,8 +95,6 @@ export const editComment = async (req, res, next) => {
       { new: true }
     );
 
-    console.log(editedComment);
-
     res.status(200).json(editedComment);
   } catch (error) {
     next(error);
@@ -122,8 +120,6 @@ export const deleteComment = async (req, res, next) => {
     }
 
     await Comment.findByIdAndDelete(req.params.commentId);
-
-    console.log(req.params.commentId)
 
     res
       .status(200)

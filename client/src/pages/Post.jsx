@@ -12,12 +12,15 @@ import { FaFacebook, FaLinkedin } from "react-icons/fa6";
 import icon_facebook from "../assets/icon_facebook.webp";
 import icon_linkedin from "../assets/icon_linkedin.png";
 import CommentSection from "../components/post/CommentSection"
+import RecentPosts from "../components/post/RecentPosts";
 
 
 const Post = () => {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
+  const [recentPosts, setRecentPosts] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [copied, setCopied] = useState(false);
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
@@ -26,13 +29,16 @@ const Post = () => {
   useEffect(() => {
     const getPost = async () => {
       try {
+        setLoading(true)
         const res = await axios.get(`/api/post/get_posts?slug=${slug}`);
 
         if (res.status === 200) {
           setPost(res.data.posts[0]);
           setError(null);
         }
+        setLoading(false)
       } catch (error) {
+        setLoading(false)
         setError("Faild to get the post");
         console.log(error);
         toast.error("Could not get the post");
@@ -41,6 +47,21 @@ const Post = () => {
 
     getPost();
   }, [slug]);
+
+  useEffect(() => {
+    const getRecentPosts = async () => {
+      try {
+        const res =await axios.get("/api/post/get_posts?limit=5");
+        if (res.status === 200) {
+          setRecentPosts(res.data.posts)
+        }
+      } catch (error) { 
+        console.log(error)
+      }
+    }
+    getRecentPosts()
+  }, [slug])
+  
 
   const handleCopyClick = () => {
     navigator.clipboard.writeText(shareUrl).then(() => {
@@ -57,7 +78,7 @@ const Post = () => {
     return content.replace(/\\`/g, "`");
   };
 
-  if (!post)
+  if (!post || loading)
     return (
       <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
         {" "}
@@ -75,8 +96,8 @@ const Post = () => {
     }
 
   return (
-    <div className="default-padding pt-12">
-      <div>
+    <div className="default-padding pt-12 flex flex-col lg:flex-row items-start gap-6 relative">
+      <div className="grow">
         <h2 className="font-semibold md:font-bold md:text-2xl">{post.title}</h2>
 
         <div className="mt-2 md:mt-4 flex items-center gap-4">
@@ -151,8 +172,9 @@ const Post = () => {
         </div>
       </div>
 
-      {/* AI */}
-      <div></div>
+     <div className="lg:w-[29%] shrink-0 rounded sticky right-0 top-[90px] lg:px-5 mb-16">
+        <RecentPosts recentPosts={recentPosts}/>
+      </div>
     </div>
   );
 };
