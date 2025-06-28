@@ -8,14 +8,20 @@ import InputCommentField from "./InputCommentField";
 import Modal from "../Modal";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import { toast } from "sonner";
+import CommentReplies from "./CommentReplies";
+import Loader from "../loaders/Loader";
 
-const Comment = ({ comment, onLike, setComments }) => {
+const Comment = ({ comment, onLike, setComments, type, setParentComments, setShowReplies }) => {
   const [user, setUser] = useState(null);
   const { currentUser } = useSelector((state) => state.userR);
 
   const [editCommentText, setEditCommentText] = useState(comment.content || "");
   const [loading, setLoading] = useState(false);
   const [activeModal, setActiveModal] = useState("");
+
+  const [isReplying, setIsReplying] = useState(false);
+  const [replyCommentText, setReplyCommentText] = useState("");
+  
 
   useEffect(() => {
     const getUser = async () => {
@@ -58,7 +64,13 @@ const Comment = ({ comment, onLike, setComments }) => {
       );
 
       if (res.status === 200) {
+
         setComments((prev) => prev.filter((c) => c._id !== comment._id));
+
+        if (type === "reply") {
+          setParentComments(prev => prev.map(c => c.replies.includes(commentId) ? {...c, replies : c.replies.filter(rId => rId !== commentId)} : c))
+        }
+
         setActiveModal(null);
         toast("Comment deleted successfully");
       }
@@ -68,6 +80,25 @@ const Comment = ({ comment, onLike, setComments }) => {
     }
   };
 
+  const handleReplyComment = async () => {
+    try {
+
+      const res = await axios.put(`/api/comment/reply_comment/${comment._id}`, {postId : comment.postId, userId : currentUser._id, content : replyCommentText})
+
+      if (res.status === 200) {
+        setComments(prev => prev.map(c => c._id === comment._id ? res.data : c));
+        setIsReplying(false);
+        setReplyCommentText("");
+        toast("Replied successfully");
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  if (!user) return <Loader />
+
   return !comment.isEditing ? (
     <div className="flex gap-3 items-start">
       <img
@@ -76,17 +107,20 @@ const Comment = ({ comment, onLike, setComments }) => {
           "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"
         }
         alt="user profile"
-        className="w-10 aspect-square shrink-0 object-cover rounded-full border border-gray-200/40"
+        className={`${type === "reply" ? "w-8" : "w-10"} aspect-square shrink-0 object-cover rounded-full border border-gray-200/40`}
       />
-      <div>
+      <div className="grow">
         <div className="flex text-sm gap-2 items-center text-gray-600 dark:text-gray-300">
           <h3 className="font-semibold">
             {user ? `@${user.username}` : "Anonymous"}
           </h3>
           <span className="text-xs">{moment(comment.createdAt).fromNow()}</span>
         </div>
+
         <p>{comment.content}</p>
-        <div className="text-xs mt-2 flex items-center gap-2">
+
+
+        <div className="text-xs my-2 flex items-center gap-2">
           <button
             onClick={() => onLike(comment._id)}
             className="cursor-pointer hover:bg-primary/30 size-6 grid place-items-center rounded duration-200"
@@ -125,7 +159,16 @@ const Comment = ({ comment, onLike, setComments }) => {
               </button>
             </>
           )}
+          {type !== "reply" && <button
+                onClick={() => setIsReplying(true)}
+                className="cursor-pointer hover:bg-primary/30 rounded px-1 py-0.5"
+              >
+                Reply{" "}
+              </button>}
         </div>
+
+          {isReplying && <InputCommentField text={replyCommentText} setText={setReplyCommentText} onSubmit={handleReplyComment} onCancel={() => setIsReplying(false)} buttonText="Reply"/>}
+
       </div>
 
       <Modal

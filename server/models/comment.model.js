@@ -15,7 +15,15 @@ const commentSchema = new mongoose.Schema({
         type : String,
         required : true
      },
+     parentCommentId : {
+        type : String,
+        default : null
+     },
      likes : {
+        type : Array,
+        default : []
+     },
+     replies : {
         type : Array,
         default : []
      },

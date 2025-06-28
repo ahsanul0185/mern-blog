@@ -6,18 +6,19 @@ import Loader from "../loaders/Loader";
 import axios from "axios";
 import Comment from "./Comment";
 import InputCommentField from "./InputCommentField";
+import CommentReplies from "./CommentReplies";
 
 const CommentSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.userR);
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState([]);
+
   
-  const navigate = useNavigate();
 
 
   useEffect(() => {
-      const getComments = async () => {
+    const getComments = async () => {
       try {
         const res = await axios.get(`/api/comment/get_post_comments/${postId}`);
 
@@ -49,7 +50,7 @@ const CommentSection = ({ postId }) => {
 
       if (res.status === 201) {
         setCommentText("");
-        setComments(prev => [res.data, ...prev])
+        setComments((prev) => [res.data, ...prev]);
       }
       setLoading(false);
       toast.success("Comment added", {
@@ -64,37 +65,38 @@ const CommentSection = ({ postId }) => {
       console.log(error);
       toast.error("Failed to comment");
     }
-  }; 
-
+  };
 
   const handleLike = async (commentId) => {
-    
-
     if (!currentUser) {
-      return toast("You need sign in first to like the comment")
+      return toast("You need sign in first to like the comment");
     }
 
     try {
       const res = await axios.put(`/api/comment/like_comment/${commentId}`);
 
       if (res.status === 200) {
-        setComments(prev => prev.map(comment => comment._id === commentId ? {...comment, likes : res.data.likes} : comment));
+        setComments((prev) =>
+          prev.map((comment) =>
+            comment._id === commentId
+              ? { ...comment, likes: res.data.likes }
+              : comment
+          )
+        );
+        console.log(res.data)
       }
-
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <div className="mt-12">
       <h2 className="text-xl font-semibold flex items-center gap-2">
         <span>
-          {comments.length > 0 && (comments.length < 10
-          ? "0" + comments.length
-          : comments.length)} 
+          {comments.length > 0 &&
+            (comments.length < 10 ? "0" + comments.length : comments.length)}
         </span>
-
         Comments
       </h2>
 
@@ -105,16 +107,34 @@ const CommentSection = ({ postId }) => {
           </Link>
         ) : (
           <div>
-              <InputCommentField text={commentText} setText={setCommentText} loading={loading} onSubmit={handleSubmitComment} onCancel={() => setCommentText("")} buttonText="Comment" />
+            <InputCommentField
+              text={commentText}
+              setText={setCommentText}
+              loading={loading}
+              onSubmit={handleSubmitComment}
+              onCancel={() => setCommentText("")}
+              buttonText="Comment"
+            />
           </div>
         )}
 
         {/* Comments */}
         <div className="mt-6 flex flex-col gap-6">
           {comments.length !== 0 ? (
-            comments.map((comment) => <Comment key={comment._id} comment={comment} onLike={handleLike} setComments={setComments}/>)
+            comments.map((comment) => (
+              comment.parentCommentId === null && <div key={comment._id}>
+                <Comment
+                  comment={comment}
+                  onLike={handleLike}
+                  setComments={setComments}
+                />
+                {comment.replies.length !== 0 && <CommentReplies parentComment={comment} replies={comment.replies} setParentComments={setComments}/>}
+              </div>
+            ))
           ) : (
-            <h2 className="text-gray-600 dark:text-gray-300 italic">No comments yet!</h2>
+            <h2 className="text-gray-600 dark:text-gray-300 italic">
+              No comments yet!
+            </h2>
           )}
         </div>
       </div>

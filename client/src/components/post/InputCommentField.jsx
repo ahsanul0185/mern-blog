@@ -21,7 +21,7 @@ const InputCommentField = ({
       <Link to="/dashboard?tab=profile" className="shrink-0">
         <img
           src={currentUser?.profilePicture}
-          className="w-10 aspect-square object-cover rounded-full border border-gray-200/40"
+          className={`${buttonText === "Reply" ? "w-8" : "w-10"} aspect-square object-cover rounded-full border border-gray-200/40`}
           alt="profile picture"
         />
       </Link>
@@ -33,7 +33,7 @@ const InputCommentField = ({
             rows={1}
             autoFocus={buttonText !== "Comment"}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Write your comment..."
+          placeholder={buttonText === "Reply" ? "" : "Write your comment..."}
             maxLength={200}
             value={text}
             ref={(e) => e && (e.selectionStart = e.selectionEnd = e.value.length)}

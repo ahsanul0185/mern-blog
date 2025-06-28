@@ -51,7 +51,7 @@ const Post = () => {
   useEffect(() => {
     const getRecentPosts = async () => {
       try {
-        const res =await axios.get("/api/post/get_posts?limit=5");
+        const res =await axios.get("/api/post/get_posts?limit=4");
         if (res.status === 200) {
           setRecentPosts(res.data.posts)
         }

@@ -119,11 +119,77 @@ export const deleteComment = async (req, res, next) => {
       );
     }
 
+    if (comment.parentCommentId) {
+           await Comment.findByIdAndUpdate(comment.parentCommentId, {
+        $pull: { replies: comment._id },
+      });
+    }
+
     await Comment.findByIdAndDelete(req.params.commentId);
 
     res
       .status(200)
       .json({ message: `commentId : ${comment._id} deleted successfully` });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+export const replyComment = async (req, res, next) => {
+
+  if (!req.params.commentId) {
+    return next(errorHandler(400, "Please provide a comment id"));
+  }
+
+  try {
+    const parentComment = await Comment.findById(req.params.commentId);
+
+    if (!parentComment) {
+      return next(errorHandler(400, "Comment not found"));
+    }
+
+const newReplyComment = await Comment.create({
+  userId: req.user.id,
+  postId: req.body.postId,
+  parentCommentId: parentComment._id,
+  content: req.body.content,
+});
+
+        const updatedParent = await Comment.findByIdAndUpdate(
+      parentComment._id,
+      { $push: { replies: newReplyComment._id } },
+      { new: true }
+    );
+
+    res
+      .status(200)
+      .json(updatedParent);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+export const getCommentReplies = async (req, res, next) => {
+
+  if (!req.params.commentId) {
+    return next(errorHandler(400, "Please provide a comment id"));
+  }
+
+  try {
+   
+    const commentReplies = await Comment.find({parentCommentId : req.params.commentId});
+
+    if (commentReplies.length === 0) {
+       return next(errorHandler(404, "No replies found"));
+    }
+    
+    res
+      .status(200)
+      .json(commentReplies);
   } catch (error) {
     next(error);
   }
