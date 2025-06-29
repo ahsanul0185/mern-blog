@@ -67,7 +67,8 @@ const CommentSection = ({ postId }) => {
     }
   };
 
-  const handleLike = async (commentId) => {
+  const handleLike = async (comment) => {
+    const commentId = comment._id;
     if (!currentUser) {
       return toast("You need sign in first to like the comment");
     }
@@ -128,7 +129,7 @@ const CommentSection = ({ postId }) => {
                   onLike={handleLike}
                   setComments={setComments}
                 />
-                {comment.replies.length !== 0 && <CommentReplies parentComment={comment} replies={comment.replies} setParentComments={setComments}/>}
+                {comment.replies.length !== 0 && <div className="ml-13"><CommentReplies parentComment={comment} replies={comment.replies} setParentComments={setComments}/></div>}
               </div>
             ))
           ) : (

@@ -28,7 +28,8 @@ const CommentReplies = ({ replies, parentComment, setParentComments }) => {
 
 
   
-  const handleLike = async (commentId) => {
+  const handleLike = async (comment) => {
+    const commentId = comment._id;
     if (!currentUser) {
       return toast("You need sign in first to like the comment");
     }
@@ -52,10 +53,10 @@ const CommentReplies = ({ replies, parentComment, setParentComments }) => {
 
 
   return (
-    <div className="ml-13">
+    <div className="">
       <button
         onClick={() => setShowReplies((prev) => !prev)}
-        className="text-sm mb-2 flex items-center gap-2 cursor-pointer hover:bg-primary/30 px-2 rounded py-0.5"
+        className="text-sm my-2 flex items-center gap-2 cursor-pointer hover:bg-primary/30 px-2 rounded py-0.5"
       >
         {replies.length} {replies.length > 1 ? "Replies" : "Reply"}{" "}
         {!showReplies ? <FaAngleDown /> : <FaAngleUp />}

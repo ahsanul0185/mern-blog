@@ -29,6 +29,8 @@ export const getPostComments = async (req, res, next) => {
   if (!req.params.postId) {
     return next(errorHandler(400, "Please provide a post id"));
   }
+  
+
 
   try {
     const comments = await Comment.find({ postId: req.params.postId }).sort({
@@ -36,6 +38,33 @@ export const getPostComments = async (req, res, next) => {
     });
 
     res.status(200).json(comments);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export const getAllComments = async (req, res, next) => {
+
+  if (req.user.role !== "admin") {
+    return next(errorHandler(403, "You are not allowed to get all the comments"));
+  }
+
+    const startIndex = parseInt(req.query.startIndex) || 0;
+  const limit = parseInt(req.query.limit) || 10;
+  const sortDirection = req.query.sort === "desc" ? -1 : 1;
+
+  try {
+    const comments = await Comment.find().sort({
+      createdAt: sortDirection,
+    }).skip(startIndex).limit(limit);
+
+    const totalComments = await Comment.countDocuments();
+    const now = new Date();
+    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+    const lastMonthComments = await Comment.countDocuments({createdAt : {$gte : oneMonthAgo}});
+
+    res.status(200).json({comments, totalComments, lastMonthComments});
   } catch (error) {
     next(error);
   }

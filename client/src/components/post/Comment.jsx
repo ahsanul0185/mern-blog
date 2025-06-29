@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import CommentReplies from "./CommentReplies";
 import Loader from "../loaders/Loader";
 
-const Comment = ({ comment, onLike, setComments, type, setParentComments, setShowReplies }) => {
+const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
   const [user, setUser] = useState(null);
   const { currentUser } = useSelector((state) => state.userR);
 
@@ -120,9 +120,9 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments, setSho
         <p>{comment.content}</p>
 
 
-        <div className="text-xs my-2 flex items-center gap-2">
+        <div className="text-xs mt-2 flex items-center gap-2">
           <button
-            onClick={() => onLike(comment._id)}
+            onClick={() => onLike(comment)}
             className="cursor-pointer hover:bg-primary/30 size-6 grid place-items-center rounded duration-200"
           >
             {comment.likes.indexOf(currentUser?._id) === -1 ? (
@@ -153,7 +153,7 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments, setSho
               </button>
               <button
                 onClick={() => setActiveModal("delete-comment")}
-                className="cursor-pointer hover:bg-primary/30 rounded px-1 py-0.5"
+                className="cursor-pointer hover:bg-red-500/60 rounded px-1 py-0.5"
               >
                 Delete{" "}
               </button>
