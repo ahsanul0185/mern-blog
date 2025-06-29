@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import DashPosts from "../components/dashboard/DashPosts";
 import DashUsers from "../components/dashboard/DashUsers";
 import DashComments from "../components/dashboard/DashComments";
+import DashInsights from "../components/dashboard/DashInsights";
 
 const Dashboard = () => {
   const { tab } = useGetTab();
@@ -24,6 +25,7 @@ const Dashboard = () => {
         {currentUser.role === "admin" && tab === "blog_posts" && <DashPosts />}
         {currentUser.role === "admin" && tab === "users" && <DashUsers />}
         {currentUser.role === "admin" && tab === "comments" && <DashComments />}
+        {currentUser.role === "admin" && tab === "insights" && <DashInsights />}
 
         {/* Admin Routes */}
         {!tab && <Outlet />}

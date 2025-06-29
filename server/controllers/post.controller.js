@@ -35,6 +35,7 @@ export const createPost = async (req, res, next) => {
 };
 
 
+
 export const getPosts = async (req, res, next) => {
 
   const startIndex = parseInt(req.query.startIndex) || 0;
@@ -76,6 +77,44 @@ export const getPosts = async (req, res, next) => {
     next(error)
   }
 }
+
+
+export const getPostStateByCategory = async (req, res, next) => {
+
+  if (req.user.role !== "admin") {
+    return next(errorHandler(403, "You are not allowed to get the post stats by category"))
+  }
+
+  try {
+
+    const stats = await Post.aggregate([
+      {
+        $group : {
+          _id : "$category",
+          posts : {$sum : 1}
+        }
+      },
+      {
+        $project : {
+          _id : 0,
+          category : "$_id",
+          posts : 1
+        }
+      },
+      {
+        $sort : {posts : -1}
+      }
+    ]);
+
+    
+    res.status(200).json(stats);
+    
+  } catch (error) {
+    next(error)
+  }
+}
+
+
 
 
 export const deletePost = async (req, res, next) => {

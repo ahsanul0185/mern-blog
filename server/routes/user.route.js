@@ -11,4 +11,4 @@ router.delete("/delete/:userId", verifyToken, deleteUser);
 router.get("/get_users", verifyToken, getUsers);
 router.get("/:userId", getUser);
 
-export default router;
+export default router;       
