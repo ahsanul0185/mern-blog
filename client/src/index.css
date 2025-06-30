@@ -4,13 +4,13 @@
 /* @custom-variant dark (&:where(.dark, .dark *)); */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-
 @theme {
-  --color-primary: #00ADAE;
-  --color-primaryDark:  #004145;
+  --color-primary: #00adae;
+  --color-primaryDark: #004145;
   --color-dark: #002c30;
   --font-logo: "Marck Script";
-  --animate-fadeIn : fade-in 0.3s ease-in-out;
+  --animate-fadeIn: fade-in 0.3s ease-in-out;
+  --animate-shimmer: shimmer 1.5s ease-in-out infinite;
 
   @keyframes fade-in {
     from {
@@ -20,8 +20,18 @@
       opacity: 1;
     }
   }
+  @keyframes shimmer {
+    0% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.4;
+    }
+  }
 }
-
 
 @layer base {
   .default-padding {
@@ -38,13 +48,11 @@
   .form-label-primary {
     @apply text-sm text-gray-600 dark:text-gray-200 font-semibold;
   }
-} 
-
+}
 
 html {
   font-family: "Urbanist", sans-serif;
 }
-
 
 main {
   min-height: calc(100vh - 67px);
@@ -58,8 +66,6 @@ main {
 body {
   background-color: darkslategray;
 }
-
-
 
 #mobile-nav a.active {
   background-color: var(--color-primary);
@@ -84,9 +90,9 @@ body {
 }
 
 .password-dot {
-  -webkit-text-security: disc; 
+  -webkit-text-security: disc;
   font-size: 16px;
-  font-family: 'Arial Black', sans-serif; 
+  font-family: "Arial Black", sans-serif;
   line-height: 0;
 }
 
@@ -99,7 +105,6 @@ footer a:hover {
   font-weight: 600;
   transition: all 0.3s;
 }
-
 
 /* Markdown editor style */
 
@@ -115,24 +120,23 @@ footer a:hover {
   border-right: 1px solid rgba(255, 255, 255, 0.3) !important;
   border-radius: 0 0 0 2px !important;
 }
-#theme-root[data-theme="dark"] .wmde-markdown{
- background-color: var(--color-dark) !important;
+#theme-root[data-theme="dark"] .wmde-markdown {
+  background-color: var(--color-dark) !important;
 }
 
-.w-md-editor-text{
+.w-md-editor-text {
   height: fit-content !important;
 }
-
 
 /* Custom scrollbar */
 
 .custom-scrollbar {
   overflow-x: auto;
-  
 }
 
 .custom-scrollbar::-webkit-scrollbar {
   height: 8px;
+  width: 5px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -145,4 +149,13 @@ footer a:hover {
 }
 
 
-/* custom animation */
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}

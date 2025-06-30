@@ -27,10 +27,10 @@ const MobileMenu2 = ({ isMenuOpen, setIsMenuOpen }) => {
             About
           </NavLink>
           <NavLink
-            to="/projects"
+            to="/all_blogs"
             className="border-b border-b-gray-300 dark:border-b-gray-200/40 py-2 px-4 hover:bg-gray-100 dark:hover:bg-dark"
           >
-            Projects
+            Blogs
           </NavLink>
         </nav>
         </motion.div>

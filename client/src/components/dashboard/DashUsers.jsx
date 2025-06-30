@@ -120,7 +120,7 @@ const DashUsers = () => {
       <h2 className="text-3xl font-bold">Users List</h2>
       <div className="mt-16">
         {loading ? (
-          <div className="h-full grid place-items-center">
+          <div className="grid place-items-center overflow-hidden">
             <Loader lg />
           </div>
         ) : users.length > 0 ? (

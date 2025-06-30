@@ -37,7 +37,7 @@ const Header = () => {
           >
             <NavLink to="/">Home</NavLink>
             <NavLink to="/about">About</NavLink>
-            <NavLink to="/projects">Projects</NavLink>
+            <NavLink to="/all_blogs">Blogs</NavLink>
           </nav>
 
           <div className="flex gap-5 items-center">

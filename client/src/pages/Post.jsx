@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import Loader from "../components/loaders/Loader";
 import moment from "moment";
-import { IoSparkles } from "react-icons/io5";
+import { IoSparkles, IoSparklesOutline } from "react-icons/io5";
 import MarkdownContent from "../components/post/MarkdownContent";
 import { FacebookShareButton, LinkedinShareButton } from "react-share";
 import { LuCheck, LuCopy, LuLink } from "react-icons/lu";
@@ -13,6 +13,10 @@ import icon_facebook from "../assets/icon_facebook.webp";
 import icon_linkedin from "../assets/icon_linkedin.png";
 import CommentSection from "../components/post/CommentSection"
 import RecentPosts from "../components/post/RecentPosts";
+import NewsLetter from "../components/hero/NewsLetter";
+import Drawer from "../components/Drawer";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 
 const Post = () => {
@@ -24,6 +28,10 @@ const Post = () => {
 
   const [copied, setCopied] = useState(false);
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [postSummary, setPostSummary] = useState(null);
+  const [loadingS, setLoadingS] = useState({summary : false});
 
 
   useEffect(() => {
@@ -60,7 +68,7 @@ const Post = () => {
       }
     }
     getRecentPosts()
-  }, [slug])
+  }, [slug]);
   
 
   const handleCopyClick = () => {
@@ -77,6 +85,27 @@ const Post = () => {
   const sanitizeMarkdown = (content) => {
     return content.replace(/\\`/g, "`");
   };
+
+
+  const handleSummarizePost = async () => {
+    try {
+      setOpenDrawer(true);
+      setLoadingS(prev => ({...prev, summary : true}))
+    const res = await axios.post("/api/ai/generate_post_summary", {content : post.content});
+
+    if (res.status === 200) {
+      setPostSummary(res.data);
+    }
+
+      console.log("Drawer Open")
+    } catch (error) {
+      console.log(error)
+    }finally {
+      setLoadingS(prev => ({...prev, summary : false}))
+    }
+  }
+
+
 
   if (!post || loading)
     return (
@@ -96,6 +125,7 @@ const Post = () => {
     }
 
   return (
+    <>
     <div className="default-padding pt-12 flex flex-col lg:flex-row items-start gap-6 relative">
       <div className="grow">
         <h2 className="font-semibold md:font-bold md:text-2xl">{post.title}</h2>
@@ -109,7 +139,7 @@ const Post = () => {
             {moment(post.updatedAt).format("Do MMMM YYYY")}
           </p>
           <div className="size-1 rounded-full bg-gray-600 dark:bg-gray-300" />
-          <button className="button-primary text-xs md:text-sm flex items-center gap-2 bg-gradient-to-r from-teal-600 to-teal-500 py-0.5">
+          <button onClick={handleSummarizePost} className="button-primary text-xs md:text-sm flex items-center gap-2 bg-gradient-to-r from-teal-600 to-teal-500 py-0.5 hover:from-primaryDark  duration-300">
             <IoSparkles />
             Summerize Post
           </button>
@@ -143,7 +173,7 @@ const Post = () => {
 
 
         {/* comment section */}
-        <div>
+        <div id="comments">
           <CommentSection postId={post._id}/>
         </div>
 
@@ -175,7 +205,21 @@ const Post = () => {
      <div className="lg:w-[29%] shrink-0 rounded sticky right-0 top-[90px] lg:px-5 mb-16">
         <RecentPosts recentPosts={recentPosts}/>
       </div>
+
+      
+      <Drawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} loading={loadingS.summary} title="Summary of the post">
+         
+
+          <div className="mt-5">
+            <h3 className="font-semibold mb-5 text-[17px]">{postSummary?.title}</h3>
+            <MarkdownContent content={postSummary && sanitizeMarkdown(postSummary?.summary)} />
+          </div>
+      </Drawer>
+
+
     </div>
+    <NewsLetter />
+    </>
   );
 };
 

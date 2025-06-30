@@ -3,13 +3,12 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#9883E5"];
 
 const CategoryChart = ({ chartData }) => {
-  console.log(chartData);
-
+    
   return (
    <div>
-    <h2 className="font-semibold">Category Insights</h2>
-     <div className="flex items-center">
-        <ResponsiveContainer width={"60%"} height={400} className="">
+    <h2 className="text-[19px] font-semibold">Category Insights</h2>
+     <div className="flex items-center gap-5">
+        <ResponsiveContainer width={"60%"} height={400}>
       <PieChart>
         <Pie
           data={chartData}
@@ -18,6 +17,7 @@ const CategoryChart = ({ chartData }) => {
           innerRadius={100}
           paddingAngle={5}
           outerRadius={120}
+   
         >
 
           {chartData.map((entry, index) => (

@@ -10,6 +10,7 @@ import axios from "axios";
 import Loader from "../loaders/Loader";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import AIPostIdeas from "./AIPostIdeas";
 
 const CreatePost = () => {
   const { theme } = useSelector((state) => state.themeR);
@@ -126,7 +127,7 @@ const CreatePost = () => {
 
       const res = await axios.post(`/api/post/create`, {
         ...postData,
-        coverImage: imageUrl,
+        coverImage: imageUrl || postData.coverImage,
       });
       if (res.status === 201) {
         toast.success("Post published successfully", {
@@ -166,153 +167,162 @@ const CreatePost = () => {
           {laoding ? "Publishing" : "Publish"}
         </button>
       </div>
-      <div className="mt-12">
-        <form className="flex flex-col gap-6">
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <label htmlFor="title" className="form-label-primary">
-                Title
-              </label>
-              <input
-                type="text"
-                id="title"
-                className="input-field-style"
-                value={postData.title}
-                onChange={handleInputFieldChange}
-                placeholder="How to create a fullstack website"
-              />
-            </div>
-            <div>
-              <label htmlFor="category" className="form-label-primary">
-                Category
-              </label>
-              <select
-                id="category"
-                className="input-field-style py-2 text-gray-300"
-                value={postData.category}
-                onChange={handleInputFieldChange}
-              >
-                <option value="" disabled>
-                  Select Category
-                </option>
-                <option value="technology">Technology</option>
-                <option value="programming">Programming</option>
-                <option value="travel">Travel</option>
-                <option value="health">Health</option>
-              </select>
-            </div>
-          </div>
 
-          <div
-            className="relative min-h-52"
-            onClick={() => imageFileRef.current.click()}
-          >
-            <input
-              type="file"
-              className="input-field-style"
-              ref={imageFileRef}
-              onChange={handeImageFileInputChange}
-              hidden
-            />
-            {imageFile && (
-              <div className="absolute w-full h-full">
-                <img
-                  src={imageFileUrl || ""}
-                  alt=""
-                  className="w-full h-full object-cover rounded"
-                />
-                <div className="absolute top-2 right-2 flex items-center gap-2">
-                  <button
-                    onClick={(e) => {
-                      imageFileRef.current.click();
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    className="size-7 grid place-items-center bg-primary/50 text-gray-200 hover:text-white dark:bg-dark/50 rounded dark:hover:bg-dark/60 cursor-pointer duration-200"
-                  >
-                    <FaPencil />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      setImageFile(null);
-                      setImageFileUrl("");
-                      e.stopPropagation();
-                    }}
-                    className="size-7 grid place-items-center bg-primary/50 text-gray-200 hover:text-white dark:bg-dark/50 rounded dark:hover:bg-dark/60 cursor-pointer duration-200"
-                  >
-                    <RiDeleteBin7Line />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {!imageFile && (
-              <div className="border-[2px] rounded min-h-52 border-gray-400 border-dotted flex flex-col gap-2 items-center justify-center cursor-pointer hover:bg-gray-300/50 dark:hover:bg-black/50 duration-300 ease-out">
-                <IoImageOutline className="text-gray-600 dark:text-gray-300 text-4xl" />
-                <p className="text-sm">Click to uplaod a cover image</p>
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="content" className="form-label-primary">
-              Content
-            </label>
-            <div data-color-mode={theme} className="bg-red-500 min-h-60">
-              <MDEditor
-                value={postData.content}
-                onChange={(e) =>
-                  setPostData((prev) => ({ ...prev, ["content"]: e }))
-                }
-                textareaProps={{
-                  placeholder: "Please enter Markdown text",
-                }}
-                height={600}
-                className=""
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="tags" className="form-label-primary ">
-              Tags
-            </label>
-            <div className="input-field-style p-1 flex gap-1.5 max-w-full overflow-x-auto">
-              {postData.tags.map((tag) => (
-                <button
-                  key={tag}
-                  className="button-primary text-xs shrink-0 flex gap-1 p-1 px-1.5 items-center"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  {tag.toUpperCase()}
-                  <RxCross2
-                    onClick={() =>
-                      setPostData((prev) => ({
-                        ...prev,
-                        ["tags"]: postData.tags.filter((item) => item !== tag),
-                      }))
-                    }
-                  />
-                </button>
-              ))}
-              {postData.tags.length < 5 && (
+      <div className="relative flex gap-6 mt-12 items-start">
+        <div className="grow">
+          <form className="flex flex-col gap-6">
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <label htmlFor="title" className="form-label-primary">
+                  Title
+                </label>
                 <input
                   type="text"
-                  id="tags"
-                  className="outline-none flex-1 text-base"
-                  value={tagValue}
-                  onChange={(e) =>
-                    setTagValue((prev) =>
-                      prev.length < 16 ? e.target.value : prev
-                    )
-                  }
-                  onKeyDown={handeTagFieldChange}
-                  placeholder="Type and press Enter"
+                  id="title"
+                  className="input-field-style"
+                  value={postData.title}
+                  onChange={handleInputFieldChange}
+                  placeholder="How to create a fullstack website"
                 />
+              </div>
+              <div>
+                <label htmlFor="category" className="form-label-primary">
+                  Category
+                </label>
+                <select
+                  id="category"
+                  className="input-field-style py-2 text-gray-300"
+                  value={postData.category}
+                  onChange={handleInputFieldChange}
+                >
+                  <option value="" disabled>
+                    Select Category
+                  </option>
+                  <option value="technology">Technology</option>
+                  <option value="programming">Programming</option>
+                  <option value="travel">Travel</option>
+                  <option value="health">Health</option>
+                </select>
+              </div>
+            </div>
+
+            <div
+              className="relative min-h-52"
+              onClick={() => imageFileRef.current.click()}
+            >
+              <input
+                type="file"
+                className="input-field-style"
+                ref={imageFileRef}
+                onChange={handeImageFileInputChange}
+                hidden
+              />
+              {imageFile || postData.coverImage && (
+                <div className="absolute w-full h-full">
+                  <img
+                    src={imageFileUrl || postData.coverImage || ""}
+                    alt=""
+                    className="w-full h-full object-cover rounded"
+                  />
+                  <div className="absolute top-2 right-2 flex items-center gap-2">
+                    <button
+                      onClick={(e) => {
+                        imageFileRef.current.click();
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      className="size-7 grid place-items-center bg-primary/50 text-gray-200 hover:text-white dark:bg-dark/50 rounded dark:hover:bg-dark/60 cursor-pointer duration-200"
+                    >
+                      <FaPencil />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        setImageFile(null);
+                        setImageFileUrl("");
+                        e.stopPropagation();
+                      }}
+                      className="size-7 grid place-items-center bg-primary/50 text-gray-200 hover:text-white dark:bg-dark/50 rounded dark:hover:bg-dark/60 cursor-pointer duration-200"
+                    >
+                      <RiDeleteBin7Line />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {!imageFile && (
+                <div className="border-[2px] rounded min-h-52 border-gray-400 border-dotted flex flex-col gap-2 items-center justify-center cursor-pointer hover:bg-gray-300/50 dark:hover:bg-black/50 duration-300 ease-out">
+                  <IoImageOutline className="text-gray-600 dark:text-gray-300 text-4xl" />
+                  <p className="text-sm">Click to uplaod a cover image</p>
+                </div>
               )}
             </div>
-          </div>
-        </form>
+
+            <div>
+              <label htmlFor="content" className="form-label-primary">
+                Content
+              </label>
+              <div data-color-mode={theme} className="bg-red-500 min-h-60">
+                <MDEditor
+                  value={postData.content}
+                  onChange={(e) =>
+                    setPostData((prev) => ({ ...prev, ["content"]: e }))
+                  }
+                  textareaProps={{
+                    placeholder: "Please enter Markdown text",
+                  }}
+                  height={600}
+                  className=""
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="tags" className="form-label-primary ">
+                Tags
+              </label>
+              <div className="input-field-style p-1 flex gap-1.5 max-w-full overflow-x-auto">
+                {postData.tags.map((tag) => (
+                  <button
+                    key={tag}
+                    className="button-primary text-xs shrink-0 flex gap-1 p-1 px-1.5 items-center"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    {tag.toUpperCase()}
+                    <RxCross2
+                      onClick={() =>
+                        setPostData((prev) => ({
+                          ...prev,
+                          ["tags"]: postData.tags.filter(
+                            (item) => item !== tag
+                          ),
+                        }))
+                      }
+                    />
+                  </button>
+                ))}
+                {postData.tags.length < 5 && (
+                  <input
+                    type="text"
+                    id="tags"
+                    className="outline-none flex-1 text-base"
+                    value={tagValue}
+                    onChange={(e) =>
+                      setTagValue((prev) =>
+                        prev.length < 16 ? e.target.value : prev
+                      )
+                    }
+                    onKeyDown={handeTagFieldChange}
+                    placeholder="Type and press Enter"
+                  />
+                )}
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div className="shrink-0 mt-6 max-w-sm w-full dark:bg-primaryDark border border-gray-300 dark:border-gray-200/40 rounded">
+          <AIPostIdeas setPostData={setPostData}/>
+        </div>
       </div>
     </div>
   );

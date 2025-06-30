@@ -7,9 +7,13 @@ import { HiRectangleStack } from "react-icons/hi2";
 import { IoArrowUp } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import CategoryChart from "./CategoryChart";
+import RecentPosts from "../post/RecentPosts";
+import { Link, useNavigate } from "react-router-dom";
+import Comment from "../post/Comment";
 
 const DashInsights = () => {
   const { currentUser } = useSelector((state) => state.userR);
+  const navigate = useNavigate();
   const [insights, setInsights] = useState([
     {
       title: "Total Users",
@@ -34,6 +38,8 @@ const DashInsights = () => {
     },
   ]);
   const [categoryPosts, setCategoryPosts] = useState([]);
+  const [recentPosts, setRecentPosts] = useState([]);
+  const [comments, setRecentComments] = useState([]);
 
   useEffect(() => {
     const getUsersData = async () => {
@@ -80,7 +86,7 @@ const DashInsights = () => {
 
     const getCommentsData = async () => {
       try {
-        const res = await axios.get("/api/comment/get_all_comments");
+        const res = await axios.get("/api/comment/get_all_comments?order=desc");
         if (res.status === 200) {
           setInsights((prev) =>
             prev.map((insight, idx) =>
@@ -100,37 +106,67 @@ const DashInsights = () => {
     };
 
     const getCategory = async () => {
-        try {
-            const res = await axios.get("/api/post/get_post_state_by_category");
-            if (res.status === 200) {
-                setCategoryPosts(res.data.map(item => ({...item, category : item.category.charAt(0).toUpperCase() + item.category.slice(1)})));
-            }
-        } catch (error) {
-            console.log(error)
+      try {
+        const res = await axios.get("/api/post/get_post_state_by_category");
+        if (res.status === 200) {
+          setCategoryPosts(
+            res.data.map((item) => ({
+              ...item,
+              category:
+                item.category.charAt(0).toUpperCase() + item.category.slice(1),
+            }))
+          );
         }
-    } 
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const getRecentPosts = async () => {
+      try {
+        const res = await axios.get("/api/post/get_posts?limit=5");
+        if (res.status === 200) {
+          setRecentPosts(res.data.posts);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const getAllComments = async () => {
+      try {
+        const res = await axios.get("/api/comment/get_all_comments?limit=5");
+        if (res.status === 200) {
+          setRecentComments(res.data.comments);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
     if (currentUser.role === "admin") {
-      getUsersData();  
+      getUsersData();
       getPostsData();
       getCommentsData();
       getCategory();
+      getRecentPosts();
+      getAllComments();
     }
   }, []);
 
-  useEffect(() => {
-    console.log(insights);
-  }, [insights]);
 
   return (
     <div>
       <div>
-        <h2 className="text-3xl font-semibold">Hello {currentUser.username} !</h2>
+        <h2 className="text-3xl font-semibold">
+          Hello {currentUser.username} !
+        </h2>
         <p className="mt-1 text-gray-600 dark:text-gray-300">
           {moment().format("Do MMMM YYYY")}
         </p>
       </div>
 
+      {/* Top insights */}
       <div className="mt-10 flex flex-col lg:flex-row items-center gap-6">
         {insights?.map((insight) => (
           <div
@@ -151,25 +187,80 @@ const DashInsights = () => {
                 <IoArrowUp />
                 {insight.lastMonth}
               </span>
-
-                Last month
-         
+              Last month
             </div>
           </div>
         ))}
       </div>
 
-
-      <div className="mt-6 flex gap-6">
-        <div className="w-[60%] bg-gray-200 dark:bg-primaryDark dark:border border-gray-300 dark:border-gray-200/40 p-4 rounded">
-        <CategoryChart chartData={categoryPosts} />
+      <div className="mt-6 flex flex-col lg:flex-row gap-6">
+        {/* Donut Chart */}
+        <div className="lg:w-[60%] shrink-0 bg-gray-200 dark:bg-primaryDark dark:border border-gray-300 dark:border-gray-200/40 p-4 rounded">
+          <CategoryChart chartData={categoryPosts} />
         </div>
 
+        {/* Recent Posts */}
         <div className="grow bg-gray-200  dark:bg-primaryDark  dark:border border-gray-300 dark:border-gray-200/40 p-4 rounded">
-          <h2 className="font-semibold">Recent Posts</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-[19px]">Recent Posts</h2>
+            <Link
+              to="/dashboard?tab=blog_posts"
+              className="text-sm cursor-pointer hover:text-primary duration-200"
+            >
+              See All
+            </Link>
+          </div>
+
+          <div className="flex flex-col gap-4 mt-6">
+            {recentPosts.map((post) => (
+              <div
+              key={post._id}
+                className="flex items-center gap-3 cursor-pointer"
+                onClick={() => navigate(`/post/${post.slug}`)}
+              >
+                <img
+                  src={post.coverImage}
+                  alt="post image"
+                  className="w-18 aspect-[3/2] object-cover rounded"
+                />
+                <div>
+                  <h3 className="text-[13.5px] line-clamp-2">{post.title}</h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-300">
+                    {moment(post.createdAt).fromNow()}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
+      {/* Recent Comments */}
+      <div className="mt-6 bg-gray-200  dark:bg-primaryDark  dark:border border-gray-300 dark:border-gray-200/40 p-4 rounded">
+        <div className="flex items-center justify-between">
+          <h2 className="font-semibold text-[19px]">Recent Comments</h2>
+          <Link
+            to="/dashboard?tab=comments"
+            className="text-sm cursor-pointer hover:text-primary duration-200"
+          >
+            See All
+          </Link>
+        </div>
+
+        <div className="mt-6 flex flex-col gap-6">
+          {comments.map((comment) => (
+            <div key={comment._id} >
+              <Comment comment={comment} type="dash" />
+              <Link
+            to={`/post/${comment.postId}`}
+            className="text-xs px-1 py-0.5 rounded cursor-pointer hover:bg-primary/30 duration-200 ml-13 bg-primary/50"
+          >
+            See Post
+          </Link>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

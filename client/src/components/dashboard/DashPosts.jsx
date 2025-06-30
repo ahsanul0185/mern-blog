@@ -159,7 +159,7 @@ const Post = ({ post, setPosts }) => {
   };
 
   return (
-    <div className="relative min-w-[580px] flex gap-4 bg-white/10 items-center p-2.5 rounded group border border-gray-300 dark:border-gray-200/20">
+    <div className="relative min-w-[580px] flex gap-4 bg-white/10 dark:bg-primaryDark items-center p-2.5 rounded group border border-gray-300 dark:border-gray-200/20">
       <img
         onClick={() => navigate(`/post/${slug}`)}
         src={coverImage || null}

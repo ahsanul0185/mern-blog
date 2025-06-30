@@ -8,7 +8,6 @@ import InputCommentField from "./InputCommentField";
 import Modal from "../Modal";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import { toast } from "sonner";
-import CommentReplies from "./CommentReplies";
 import Loader from "../loaders/Loader";
 
 const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
@@ -21,7 +20,6 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
 
   const [isReplying, setIsReplying] = useState(false);
   const [replyCommentText, setReplyCommentText] = useState("");
-  
 
   useEffect(() => {
     const getUser = async () => {
@@ -64,11 +62,19 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
       );
 
       if (res.status === 200) {
-
         setComments((prev) => prev.filter((c) => c._id !== comment._id));
 
         if (type === "reply") {
-          setParentComments(prev => prev.map(c => c.replies.includes(commentId) ? {...c, replies : c.replies.filter(rId => rId !== commentId)} : c))
+          setParentComments((prev) =>
+            prev.map((c) =>
+              c.replies.includes(commentId)
+                ? {
+                    ...c,
+                    replies: c.replies.filter((rId) => rId !== commentId),
+                  }
+                : c
+            )
+          );
         }
 
         setActiveModal(null);
@@ -82,22 +88,26 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
 
   const handleReplyComment = async () => {
     try {
-
-      const res = await axios.put(`/api/comment/reply_comment/${comment._id}`, {postId : comment.postId, userId : currentUser._id, content : replyCommentText})
+      const res = await axios.put(`/api/comment/reply_comment/${comment._id}`, {
+        postId: comment.postId,
+        userId: currentUser._id,
+        content: replyCommentText,
+      });
 
       if (res.status === 200) {
-        setComments(prev => prev.map(c => c._id === comment._id ? res.data : c));
+        setComments((prev) =>
+          prev.map((c) => (c._id === comment._id ? res.data : c))
+        );
         setIsReplying(false);
         setReplyCommentText("");
         toast("Replied successfully");
       }
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  if (!user) return <Loader />
+  if (!user) return <Loader />;
 
   return !comment.isEditing ? (
     <div className="flex gap-3 items-start">
@@ -107,7 +117,9 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
           "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"
         }
         alt="user profile"
-        className={`${type === "reply" ? "w-8" : "w-10"} aspect-square shrink-0 object-cover rounded-full border border-gray-200/40`}
+        className={`${
+          type === "reply" ? "w-8" : "w-10"
+        } aspect-square shrink-0 object-cover rounded-full border border-gray-200/40`}
       />
       <div className="grow">
         <div className="flex text-sm gap-2 items-center text-gray-600 dark:text-gray-300">
@@ -119,56 +131,68 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
 
         <p>{comment.content}</p>
 
-
-        <div className="text-xs mt-2 flex items-center gap-2">
-          <button
-            onClick={() => onLike(comment)}
-            className="cursor-pointer hover:bg-primary/30 size-6 grid place-items-center rounded duration-200"
-          >
-            {comment.likes.indexOf(currentUser?._id) === -1 ? (
-              <RiThumbUpLine size={16} />
-            ) : (
-              <RiThumbUpFill size={16} />
-            )}
-          </button>
-          <span>
-            {comment.likes.length} {comment.likes.length > 1 ? "Likes" : "Like"}
-          </span>
-          {(currentUser?._id === comment.userId ||
-            currentUser?.role === "admin") && (
-            <>
-              <button
-                onClick={() =>
-                  setComments((prev) =>
-                    prev.map((item) =>
-                      item._id === comment._id
-                        ? { ...item, isEditing: true }
-                        : { ...item, isEditing: false }
+        {/* Comment Actions */}
+        {type !== "dash" && (
+          <div className="text-xs mt-2 flex items-center gap-2">
+            <button
+              onClick={() => onLike(comment)}
+              className="cursor-pointer hover:bg-primary/30 size-6 grid place-items-center rounded duration-200"
+            >
+              {comment.likes.indexOf(currentUser?._id) === -1 ? (
+                <RiThumbUpLine size={16} />
+              ) : (
+                <RiThumbUpFill size={16} />
+              )}
+            </button>
+            <span>
+              {comment.likes.length}{" "}
+              {comment.likes.length > 1 ? "Likes" : "Like"}
+            </span>
+            {(currentUser?._id === comment.userId ||
+              currentUser?.role === "admin") && (
+              <>
+                <button
+                  onClick={() =>
+                    setComments((prev) =>
+                      prev.map((item) =>
+                        item._id === comment._id
+                          ? { ...item, isEditing: true }
+                          : { ...item, isEditing: false }
+                      )
                     )
-                  )
-                }
-                className="cursor-pointer hover:bg-primary/30 rounded px-1 py-0.5"
-              >
-                Edit
-              </button>
+                  }
+                  className="cursor-pointer hover:bg-primary/30 rounded px-1 py-0.5"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => setActiveModal("delete-comment")}
+                  className="cursor-pointer hover:bg-red-500/60 rounded px-1 py-0.5"
+                >
+                  Delete{" "}
+                </button>
+              </>
+            )}
+            {type !== "reply" && (
               <button
-                onClick={() => setActiveModal("delete-comment")}
-                className="cursor-pointer hover:bg-red-500/60 rounded px-1 py-0.5"
-              >
-                Delete{" "}
-              </button>
-            </>
-          )}
-          {type !== "reply" && <button
                 onClick={() => setIsReplying(true)}
                 className="cursor-pointer hover:bg-primary/30 rounded px-1 py-0.5"
               >
                 Reply{" "}
-              </button>}
-        </div>
+              </button>
+            )}
+          </div>
+        )}
 
-          {isReplying && <InputCommentField text={replyCommentText} setText={setReplyCommentText} onSubmit={handleReplyComment} onCancel={() => setIsReplying(false)} buttonText="Reply"/>}
-
+        {isReplying && (
+          <InputCommentField
+            text={replyCommentText}
+            setText={setReplyCommentText}
+            onSubmit={handleReplyComment}
+            onCancel={() => setIsReplying(false)}
+            buttonText="Reply"
+          />
+        )}
       </div>
 
       <Modal

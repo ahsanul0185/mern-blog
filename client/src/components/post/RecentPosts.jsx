@@ -12,7 +12,7 @@ const RecentPosts = ({ recentPosts }) => {
       <div className="flex flex-col gap-5 mt-6">
         {recentPosts.map((post, idx) => (
           <div key={post._id} className="flex flex-col items-start gap-2">
-            <span className="text-xs font-semibold text-teal-300">
+            <span className="text-xs font-semibold text-primary">
               {post.category.charAt(0).toUpperCase() + post.category.slice(1)}
             </span>
             <div className="flex items-start gap-3">

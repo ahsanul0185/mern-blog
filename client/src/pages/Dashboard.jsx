@@ -19,13 +19,15 @@ const Dashboard = () => {
       <DashSidebar />
 
       {/* Dashboard */}
-      <div className="grow p-4 md:p-8 overflow-x-auto max-w-6xl w-full mx-auto md:pb-16">
+      <div className="grow p-4 md:p-8  overflow-x-auto md:pb-16">
         {/* Tabs */}
-        {tab === "profile" && <DashProfile />}
+        <div className="overflow-x-auto max-w-6xl w-full mx-auto">
+          {tab === "profile" && <DashProfile />}
         {currentUser.role === "admin" && tab === "blog_posts" && <DashPosts />}
         {currentUser.role === "admin" && tab === "users" && <DashUsers />}
         {currentUser.role === "admin" && tab === "comments" && <DashComments />}
         {currentUser.role === "admin" && tab === "insights" && <DashInsights />}
+        </div>
 
         {/* Admin Routes */}
         {!tab && <Outlet />}

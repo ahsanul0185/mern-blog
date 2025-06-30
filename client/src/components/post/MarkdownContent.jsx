@@ -11,7 +11,7 @@ const MarkdownContent = ({content}) => {
   if (!content)  return
 
   return (
-    <div>
+    <div className='max-w-full'>
         <div>
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -82,10 +82,10 @@ const MarkdownContent = ({content}) => {
                         return <tr className='bg-white dark:bg-primaryDark dark:border-gray-200/30 border-b border-gray-200 hover:bg-primary/10 dark:hover:bg-primary/20'>{children}</tr>
                     },
                     th({children}){
-                        return <th className='px-6 py-3 bg-primary/70'>{children}</th>
+                        return <th className='px-2.5 md:px-6 py-3 bg-primary/70'>{children}</th>
                     },
                     td({children}){
-                        return <td className='px-6 py-2'>{children}</td>
+                        return <td className='px-2.5 md:px-6 py-2'>{children}</td>
                     },
                     hr(){
                         return <hr className='border-gray-200 border-b dark:border-gray-200/40'/>
@@ -106,47 +106,98 @@ const MarkdownContent = ({content}) => {
 export default MarkdownContent;
 
 
-const CodeBlock  = ({code, language}) => {
+// const CodeBlock  = ({code, language}) => {
 
-    const [copied, setCopied] = useState(false);
-    const {theme} = useSelector(state => state.themeR)
+//     const [copied, setCopied] = useState(false);
+//     const {theme} = useSelector(state => state.themeR)
 
-    const copyCode = () => {
-        navigator.clipboard.writeText(code);
-        setCopied(true);
-        setTimeout(() => {
-            setCopied(false);
-        }, 2000);
-    }
+//     const copyCode = () => {
+//         navigator.clipboard.writeText(code);
+//         setCopied(true);
+//         setTimeout(() => {
+//             setCopied(false);
+//         }, 2000);
+//     }
 
-    return (
-        <div className='mb-10 border border-gray-300 dark:border-gray-200/40 rounded-md custom-scrollbar'>
-            <div className='flex items-center justify-between bg-gray-300 dark:bg-primaryDark h-full px-2 py-1 rounded-t-md border-b border-b-gray-300 dark:border-gray-200/40 '>
-                <div className='flex items-center gap-2'>
-                    <LuCode size={16} className=''/>
-                    <span className=''>
-                        {language || "Code"}
-                    </span>
-                </div>
+//     return (
+//         <div className='mb-10 w-full border border-gray-300 dark:border-gray-200/40 rounded-md custom-scrollbar'>
+//             <div className='flex items-center justify-between bg-gray-300 dark:bg-primaryDark h-full px-2 py-1 rounded-t-md border-b border-b-gray-300 dark:border-gray-200/40 '>
+//                 <div className='flex items-center gap-2'>
+//                     <LuCode size={16} className=''/>
+//                     <span className=''>
+//                         {language || "Code"}
+//                     </span>
+//                 </div>
                 
-                <button
-                    onClick={copyCode}
-                    className='flex gap-2 items-center cursor-pointer'
-                    aria-label='Copy code'
-                >
-                    {copied ? (<LuCheck size={16} className='text-green-600' />) : (<LuCopy size={16}/>)}
-                    {copied && <span className=''>Copied!</span>}
-                </button>
-            </div>
+//                 <button
+//                     onClick={copyCode}
+//                     className='flex gap-2 items-center cursor-pointer'
+//                     aria-label='Copy code'
+//                 >
+//                     {copied ? (<LuCheck size={16} className='text-green-600' />) : (<LuCopy size={16}/>)}
+//                     {copied && <span className=''>Copied!</span>}
+//                 </button>
+//             </div>
             
-            <SyntaxHighlighter language={language} style={theme === "dark" ? coldarkDark : coldarkCold} customStyle={{margin : 0, borderRadius : "0 0 6px 6px"}}>
-                {code}
-                hello world
-            </SyntaxHighlighter>
+//             <SyntaxHighlighter language={language} style={theme === "dark" ? coldarkDark : coldarkCold} customStyle={{margin : 0, borderRadius : "0 0 6px 6px"}}>
+//                 {code}
+//                 hello world
+//             </SyntaxHighlighter>
 
+//         </div>
+//     )
+
+// }
+
+const CodeBlock = ({ code, language }) => {
+  const [copied, setCopied] = useState(false);
+  const { theme } = useSelector(state => state.themeR);
+
+  const copyCode = () => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="mb-10 w-full rounded-md border border-gray-300 dark:border-gray-200/40">
+      <div className="flex items-center justify-between bg-gray-300 dark:bg-primaryDark px-2 py-1 border-b border-b-gray-300 dark:border-gray-200/40">
+        <div className="flex items-center gap-2">
+          <LuCode size={16} />
+          <span>{language || "Code"}</span>
         </div>
-    )
+        <button
+          onClick={copyCode}
+          className="flex gap-2 items-center cursor-pointer"
+          aria-label="Copy code"
+        >
+          {copied ? (
+            <>
+              <LuCheck size={16} className="text-green-600" />
+              <span>Copied!</span>
+            </>
+          ) : (
+            <LuCopy size={16} />
+          )}
+        </button>
+      </div>
 
-}
-
-
+      {/* This wrapper enables scrolling */}
+      <div className="w-full overflow-x-auto text-sm">
+        <SyntaxHighlighter
+          language={language}
+          style={theme === "dark" ? coldarkDark : coldarkCold}
+          customStyle={{
+            margin: 0,
+            padding: "1rem",
+            width: "fit-content", // let content grow
+            minWidth: "100%", // but don't shrink smaller than parent
+            whiteSpace: "pre", // prevent line wrapping
+          }}
+        >
+          {code}
+        </SyntaxHighlighter>
+      </div>
+    </div>
+  );
+};

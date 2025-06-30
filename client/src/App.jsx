@@ -5,7 +5,6 @@ import About from "./pages/About";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
-import Projects from "./pages/Projects";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoutes from "./routes/PrivateRoutes";
@@ -15,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import UpdatePost from "./components/dashboard/UpdatePost";
 import Post from "./pages/Post";
 import ScrollToTop from "./components/ScrollToTop";
+import Blogs from "./pages/Blogs";
 
 const App = () => {
 
@@ -29,7 +29,7 @@ const App = () => {
           <Route path="/sign-up" element={<SignUp />}/>
 
           <Route path="/about" element={<About />}/>
-          <Route path="/projects" element={<Projects />}/>
+          <Route path="/all_blogs" element={<Blogs />}/>
           <Route path="/post/:slug" element={<Post />}/>
 
           <Route element={<PrivateRoutes/>}>
@@ -47,7 +47,7 @@ const App = () => {
       <Footer />
 
       <Toaster position="bottom-right"/>
-      <div id="modal-root"></div>
+          <div id="modal-root"></div>
     </BrowserRouter>
   )
 }

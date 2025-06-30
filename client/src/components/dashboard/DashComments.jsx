@@ -33,7 +33,9 @@ const DashComments = () => {
     <div>
       <h2 className="text-3xl font-bold">Comments</h2>
       {loading ? (
-        <Loader md />
+        <div className="grid place-items-center overflow-hidden mt-14">
+            <Loader lg />
+          </div>
       ) : (
         <div className="mt-12 flex flex-col gap-5">
           {comments?.map(
@@ -55,7 +57,7 @@ const DashComments = () => {
 
 export default DashComments;
 
-const CommentRow = ({ comment, setLoading, setComments }) => {
+const CommentRow = ({ comment, setComments }) => {
   const [post, setPost] = useState(null);
 
   const [showReplies, setShowReplies] = useState(false);
@@ -131,7 +133,7 @@ const CommentRow = ({ comment, setLoading, setComments }) => {
   };
 
   return (
-    <div className=" bg-white/10 p-2.5 rounded group border border-gray-300 dark:border-gray-200/20">
+    <div className=" bg-white/10 dark:bg-primaryDark p-2.5 rounded group border border-gray-300 dark:border-gray-200/20">
       <div className="flex justify-between items-start gap-3">
         <div className="w-full">
           <div className="w-full ">
