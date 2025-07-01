@@ -37,6 +37,9 @@ const postSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+        .addCase(generatePostIdeas.pending, (state, action) => {
+            state.postIdeas = null
+        })
         .addCase(generatePostIdeas.fulfilled, (state, action) => {
             state.postIdeas = action.payload
         })

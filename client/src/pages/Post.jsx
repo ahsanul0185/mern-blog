@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "axios";
-import Loader from "../components/loaders/Loader";
+import LoaderPostPage from "../components/loaders/LoaderPostPage";
 import moment from "moment";
 import { IoSparkles, IoSparklesOutline } from "react-icons/io5";
 import MarkdownContent from "../components/post/MarkdownContent";
@@ -15,8 +15,6 @@ import CommentSection from "../components/post/CommentSection"
 import RecentPosts from "../components/post/RecentPosts";
 import NewsLetter from "../components/hero/NewsLetter";
 import Drawer from "../components/Drawer";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 
 
 const Post = () => {
@@ -109,10 +107,7 @@ const Post = () => {
 
   if (!post || loading)
     return (
-      <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
-        {" "}
-        <Loader lg />{" "}
-      </div>
+     <LoaderPostPage />
     );
 
     if (error) {

@@ -22,7 +22,7 @@ const MarkdownContent = ({content}) => {
 
                         const isInline = !className;
                         return !isInline ? (
-                            <CodeBlock code={String(children).replace(/\n$/, "")} language={language}/>
+                              <CodeBlock code={String(children).replace(/\n$/, "")} language={language}/>
                         ) : (
                             <code className='px-1 py-0.5 text-sm bg-gray-100 dark:bg-primary/30 rounded' {...props}>
                                 {children}
@@ -149,6 +149,10 @@ export default MarkdownContent;
 
 // }
 
+
+
+
+
 const CodeBlock = ({ code, language }) => {
   const [copied, setCopied] = useState(false);
   const { theme } = useSelector(state => state.themeR);
@@ -160,8 +164,8 @@ const CodeBlock = ({ code, language }) => {
   };
 
   return (
-    <div className="mb-10 w-full rounded-md border border-gray-300 dark:border-gray-200/40">
-      <div className="flex items-center justify-between bg-gray-300 dark:bg-primaryDark px-2 py-1 border-b border-b-gray-300 dark:border-gray-200/40">
+    <div className="mb-10 w-full rounded-md border border-gray-300 dark:border-gray-200/40 overflow-auto">
+      <div className="flex items-center justify-between rounded-t-md bg-gray-300 dark:bg-primaryDark px-2 py-1 border-b border-b-gray-300 dark:border-gray-200/40">
         <div className="flex items-center gap-2">
           <LuCode size={16} />
           <span>{language || "Code"}</span>
@@ -173,8 +177,8 @@ const CodeBlock = ({ code, language }) => {
         >
           {copied ? (
             <>
-              <LuCheck size={16} className="text-green-600" />
-              <span>Copied!</span>
+              <LuCheck size={16} className="text-green-600 dark:text-white" />
+
             </>
           ) : (
             <LuCopy size={16} />
@@ -182,17 +186,22 @@ const CodeBlock = ({ code, language }) => {
         </button>
       </div>
 
-      {/* This wrapper enables scrolling */}
-      <div className="w-full overflow-x-auto text-sm">
+      {/* Responsive scrollable code block */}
+      <div className="overflow-x-auto max-w-fit text-sm">
+
+
+
         <SyntaxHighlighter
           language={language}
           style={theme === "dark" ? coldarkDark : coldarkCold}
+          showLineNumbers={true}
+          wrapLines={true}
+          wrapLongLines={true}
           customStyle={{
             margin: 0,
-            padding: "1rem",
-            width: "fit-content", // let content grow
-            minWidth: "100%", // but don't shrink smaller than parent
-            whiteSpace: "pre", // prevent line wrapping
+            padding: "1rem 1rem 1rem 0.5rem",
+            borderRadius : "0 0 6px 6px",
+            whiteSpace: "pre",
           }}
         >
           {code}
@@ -201,3 +210,4 @@ const CodeBlock = ({ code, language }) => {
     </div>
   );
 };
+

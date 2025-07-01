@@ -16,9 +16,16 @@ ENSURE
 
 - code block width
 - create post ai box height
-- skelton loader
 - email verification
-- change the ai prompts
-- generate comment reply
-- comment list query
 - search functionality
+- make every page mobile responsive
+- create about page
+
+done - skelton loader
+done - generate comment reply
+done* - infinite scroll
+done - comment list query
+done - change the ai prompts
+
+
+01775675798

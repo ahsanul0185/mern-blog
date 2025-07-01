@@ -10,6 +10,7 @@ import CategoryChart from "./CategoryChart";
 import RecentPosts from "../post/RecentPosts";
 import { Link, useNavigate } from "react-router-dom";
 import Comment from "../post/Comment";
+import DashInsightsSkeleton from "../loaders/DashInsightsSkeleton";
 
 const DashInsights = () => {
   const { currentUser } = useSelector((state) => state.userR);
@@ -40,6 +41,7 @@ const DashInsights = () => {
   const [categoryPosts, setCategoryPosts] = useState([]);
   const [recentPosts, setRecentPosts] = useState([]);
   const [comments, setRecentComments] = useState([]);
+    const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getUsersData = async () => {
@@ -135,7 +137,7 @@ const DashInsights = () => {
 
     const getAllComments = async () => {
       try {
-        const res = await axios.get("/api/comment/get_all_comments?limit=5");
+        const res = await axios.get("/api/comment/get_all_comments?sort=desc&limit=5");
         if (res.status === 200) {
           setRecentComments(res.data.comments);
         }
@@ -144,16 +146,25 @@ const DashInsights = () => {
       }
     };
 
+        const fetchAll = async () => {
+      setLoading(true);
+      await Promise.all([
+        getUsersData(),
+        getPostsData(),
+        getCommentsData(),
+        getCategory(),
+        getRecentPosts(),
+        getAllComments(),
+      ]);
+      setLoading(false);
+    };
+
     if (currentUser.role === "admin") {
-      getUsersData();
-      getPostsData();
-      getCommentsData();
-      getCategory();
-      getRecentPosts();
-      getAllComments();
+fetchAll()
     }
   }, []);
 
+  if (loading) return <DashInsightsSkeleton />;
 
   return (
     <div>

@@ -87,7 +87,7 @@ const DashSidebar = () => {
         {sidebarItems.map((item, idx) => (
           <div className="relative" key={item.id}>
             {item.id === "profile" && (
-              <motion.span initial={{opacity : 0}} animate={{opacity : expended ? 1 : 0}} transition={{delay: expended ? 0.3 : 0, duration : expended ? 0.3 : 0 }} className="bg-dark text-white absolute top-1/2 -translate-y-1/2 right-2 px-1.5 py-0.5 text-xs rounded">
+              <motion.span initial={{opacity : 0}} animate={{opacity : expended ? 1 : 0, visibility : expended ? "visible" : "hidden"}} transition={{delay: expended ? 0.3 : 0, duration : expended ? 0.3 : 0 }} className="bg-dark text-white absolute top-1/2 -translate-y-1/2 right-2 px-1.5 py-0.5 text-xs rounded">
                 {currentUser.role.charAt(0).toUpperCase() +
                   currentUser.role.slice(1)}
               </motion.span>
@@ -130,7 +130,7 @@ const DashSidebar = () => {
         </button>
       </div>
 
-      <button onClick={() => setExpended(prev => !prev)} className="absolute cursor-pointer bottom-20 right-0 translate-x-[40%] size-8 grid place-items-center rounded-full dark:bg-primaryDark border border-gray-300 dark:border-gray-200/40"><TfiAngleRight className={`${expended ? "rotate-180" : ""} transition-transform duration-200`} /></button>
+      <button onClick={() => setExpended(prev => !prev)} className="absolute hover:bg-dark duration-200 transition-colors cursor-pointer bottom-20 right-0 translate-x-[40%] size-8 grid place-items-center rounded-full dark:bg-primaryDark border border-gray-300 dark:border-gray-200/40"><TfiAngleRight className={`${expended ? "rotate-180" : ""} transition-transform duration-200`} /></button>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import Loader from "../loaders/Loader";
 import { useNavigate } from "react-router-dom";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "../post/Comment";
+import DashCommentsSkeleton from "../loaders/DashCommentsSkeleton";
 
 const DashComments = () => {
   const { currentUser } = useSelector((state) => state.userR);
@@ -33,9 +34,7 @@ const DashComments = () => {
     <div>
       <h2 className="text-3xl font-bold">Comments</h2>
       {loading ? (
-        <div className="grid place-items-center overflow-hidden mt-14">
-            <Loader lg />
-          </div>
+        <DashCommentsSkeleton />
       ) : (
         <div className="mt-12 flex flex-col gap-5">
           {comments?.map(
@@ -133,8 +132,8 @@ const CommentRow = ({ comment, setComments }) => {
   };
 
   return (
-    <div className=" bg-white/10 dark:bg-primaryDark p-2.5 rounded group border border-gray-300 dark:border-gray-200/20">
-      <div className="flex justify-between items-start gap-3">
+    <div className=" bg-white/10 dark:bg-primaryDark p-4 rounded group border border-gray-300 dark:border-gray-200/20">
+      <div className="flex flex-col xl:flex-row justify-between items-start gap-3">
         <div className="w-full">
           <div className="w-full ">
             <Comment
@@ -175,7 +174,7 @@ const CommentRow = ({ comment, setComments }) => {
 
         {/* Post */}
         <div
-          className="flex items-center gap-3 w-[40%] shrink-0 cursor-pointer mt-4"
+          className="flex items-center gap-3 xl:w-[40%] shrink-0 cursor-pointer mt-4"
           onClick={() => navigate(`/post/${post?.slug}`)}
         >
           <img

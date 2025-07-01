@@ -1,30 +1,72 @@
+
+// PREVIOUS PROMPT
+
+// const blogPostIdeasPrompt = (topics) => `
+
+//     Generate a list of 5 blog post ideas releted to ${topics}.
+
+//     For each blog post idea, return : 
+//     - a title
+//     - a 2-line description about the post
+//     - 3 relevent tags
+//     - the tone (e.g., technical, casual, beginner-friendly, etc.)
+//     - there are only 4 categories. Programming, Technology, Travel and Health
+
+//     Return the result as an array of JSON objects in this format : 
+
+//     [
+//         {
+//             "title" : "",
+//             "description" : "",
+//             "category" : "",
+//             "tags" : ["", "", ""],
+//             "tone" : ""
+//         }
+//     ]
+
+
+//     Important : Do NOT add any extra text outside the JSON format. Only return valid JSON.
+
+// `;
+
+ 
+
 const blogPostIdeasPrompt = (topics) => `
 
-    Generate a list of 5 blog post ideas releted to ${topics}.
+You are an AI blog assistant.
 
-    For each blog post idea, return : 
-    - a title
-    - a 2-line description about the post
-    - 3 relevent tags
-    - the tone (e.g., technical, casual, beginner-friendly, etc.)
-    - there are only 4 categories. Programming, Technology, Travel and Health
+You will receive a list of topics: "${topics}".
 
-    Return the result as an array of JSON objects in this format : 
+🔹 Your task:
+- Choose ONE most relevant category from this list: Programming, Technology, Travel, or Health.
+- Then generate 5 blog post ideas strictly within the chosen category.
+- Do NOT mix ideas from multiple categories. All 5 ideas must belong to the same selected category only.
 
-    [
-        {
-            "title" : "",
-            "description" : "",
-            "category" : "",
-            "tags" : ["", "", ""],
-            "tone" : ""
-        }
-    ]
+For each blog post idea, include:
+- "title": a creative and relevant blog title
+- "description": a 2-line summary of the post
+- "category": must be one of the 4 categories (Programming, Technology, Travel, or Health)
+- "tags": 3 relevant tags in an array
+- "tone": e.g., technical, casual, beginner-friendly, etc.
 
+🎯 Output Format:
+Return ONLY a valid JSON array of 5 objects like this:
 
-    Important : Do NOT add any extra text outside the JSON format. Only return valid JSON.
+[
+  {
+    "title": "",
+    "description": "",
+    "category": "",
+    "tags": ["", "", ""],
+    "tone": ""
+  }
+]
 
+⚠️ Important:
+- Return ONLY valid JSON.
+- Do NOT include any explanation or markdown.
 `;
+
 
 
 const generateReplyPrompt = (comment) => {

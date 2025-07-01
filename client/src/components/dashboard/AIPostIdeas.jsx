@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { IoSparkles } from "react-icons/io5";
+import { IoReload, IoSparkles } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { generatePostIdeas } from "../../features/posts/postSlice";
 import Modal from "../Modal";
 import { toast } from "sonner";
 import Loader from "../loaders/Loader";
+import SkeltonLoader from "../loaders/SkeltonLoader";
 
 const AIPostIdeas = ({ setPostData }) => {
   const { currentUser } = useSelector((state) => state.userR);
@@ -20,10 +21,10 @@ const AIPostIdeas = ({ setPostData }) => {
   const [loadingGenerate, setLoadingGenerate] = useState(false);
 
   useEffect(() => {
-    if (currentUser.role === "admin" && postIdeas.length === 0) {
+    if (currentUser.role === "admin" && !postIdeas) {
       dispatch(generatePostIdeas());
     }
-  }, [currentUser, postIdeas.length, dispatch]);
+  }, [currentUser]);
 
   const handleIdeaClick = (idea) => {
     setActiveModal(true);
@@ -64,11 +65,11 @@ const AIPostIdeas = ({ setPostData }) => {
 
       const aiGeneratedPostData = {
         title: generatePostData.title,
-        category: selectedPostIdea.category,
+        category: selectedPostIdea?.category || "",
         content: res.data,
         coverImage:
           "https://img.freepik.com/premium-photo/purple-pink-colored-liquid-with-purple-background_605423-227906.jpg",
-        tags: selectedPostIdea.tags,
+        tags: selectedPostIdea?.tags,
       };
 
       if (res.status === 200) {
@@ -78,6 +79,7 @@ const AIPostIdeas = ({ setPostData }) => {
       console.log(aiGeneratedPostData);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to generate post")
     } finally {
       setLoadingGenerate(false);
       setActiveModal(null);
@@ -85,13 +87,14 @@ const AIPostIdeas = ({ setPostData }) => {
   };
 
   return (
-    <div className="overflow-auto">
-      <div className="flex items-center justify-between gap-2 p-5 ">
+    <div className="h-full">
+      <div className="flex items-center justify-between gap-2 p-5 shrink-0">
         <h2 className="font-semibold flex items-center gap-2 text-primary dark:text-white">
           {" "}
           <IoSparkles /> Ideas for your next post
         </h2>
-        <button
+        <div className="flex gap-2">
+          <button
           onClick={() => {
             setGeneratePostData({ tone: "", title: "" });
             setActiveModal(true);
@@ -100,12 +103,21 @@ const AIPostIdeas = ({ setPostData }) => {
         >
           Generate New
         </button>
+
+        <button onClick={() => postIdeas && dispatch(generatePostIdeas())} className=" cursor-pointer hover:text-white">
+          <IoReload />
+        </button>
+        </div>
       </div>
 
-      <div className="flex flex-col max-h-[100vh] custom-scrollbar">
-        {postIdeas?.map((idea, idx) => (
+      <div className="flex flex-col overflow-auto custom-scrollbar">
+        {!postIdeas ? <div className="px-5 pb-5"><SkeltonLoader /><SkeltonLoader /></div> : 
+        
+        postIdeas?.map((idea, idx) => (
           <PostIdeaCard key={idx} idea={idea} onIdeaClick={handleIdeaClick} />
-        ))}
+        ))
+          
+        }
       </div>
 
       <Modal
@@ -131,6 +143,7 @@ const AIPostIdeas = ({ setPostData }) => {
               className="input-field-style outline-none resize-none overflow-hidden"
               onChange={handleInputChange}
               name="title"
+              maxLength={400}
               placeholder="What's on your mind..."
               value={generatePostData.title}
               ref={(e) =>
@@ -138,6 +151,7 @@ const AIPostIdeas = ({ setPostData }) => {
               }
               onInput={(e) => {
                 e.target.style.height = "auto";
+                e.target.style.maxHeight = "200px";
                 e.target.style.height = `${e.target.scrollHeight}px`;
               }}
             ></textarea>

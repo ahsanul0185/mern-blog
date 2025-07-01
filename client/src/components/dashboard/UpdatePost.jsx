@@ -29,22 +29,18 @@ const UpdatePost = () => {
 
   const [tagValue, setTagValue] = useState("");
 
-
-  
   const location = useLocation();
   const post = location.state;
 
-  useEffect(() => { 
+  useEffect(() => {
     setPostData(post);
     setImageFileUrl(post.coverImage);
-  }, [])
-  
+  }, []);
 
   // IMAGE FILE SELECT
   const handeImageFileInputChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
 
     if (file.size > 4 * 1024 * 1024) {
       toast.error("Too lerge image file", {
@@ -114,7 +110,7 @@ const UpdatePost = () => {
     setPostData((prev) => ({ ...prev, [id]: value }));
   };
 
-  // PUBLISH POST
+  // UPDATE POST
   const handleUpdatePost = async (e) => {
     const { title, category, content } = postData;
 
@@ -136,11 +132,13 @@ const UpdatePost = () => {
       setLoading(true);
       const imageUrl = await uploadImageToCloudinary();
 
-      const res = await axios.put(`/api/post/update/${post._id}/${currentUser._id}`, {
-        ...postData,
-        coverImage: imageUrl || imageFileUrl,
-      });
-
+      const res = await axios.put(
+        `/api/post/update/${post._id}/${currentUser._id}`,
+        {
+          ...postData,
+          coverImage: imageUrl || imageFileUrl,
+        }
+      );
 
       if (res.status === 200) {
         toast.success("Post updated successfully", {
@@ -163,23 +161,48 @@ const UpdatePost = () => {
       }
     } catch (error) {
       setLoading(false);
-    //   toast(error);
+      //   toast(error);
       console.log(error);
     }
+  };
+
+  // CANCEL POST
+  const handleCancel = async () => {
+    
+    navigate("/dashboard?tab=blog_posts");
+    setPostData({
+      title: "",
+      category: "",
+      content: "",
+      coverImage: "",
+      tags: [],
+    });
+
+    setImageFile(null);
+    setImageFileUrl(null);
+
   };
 
   return (
     <div className="">
       <div className="flex gap-2 justify-between">
         <h1 className="font-bold text-3xl">Update Post</h1>
-        <button
-          onClick={handleUpdatePost}
-          className="button-primary overflow-hidden flex items-center justify-center gap-3"
-          disabled={laoding}
-        >
-          {laoding ? <Loader /> : ""}
-          {laoding ? "Updating" : "Update"}
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={handleCancel}
+            className="button-primary bg-gray-400 dark:bg-gray-500 hover:bg-gray-600 overflow-hidden flex items-center justify-center gap-3"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleUpdatePost}
+            className="button-primary overflow-hidden flex items-center justify-center gap-3"
+            disabled={laoding}
+          >
+            {laoding ? <Loader /> : ""}
+            {laoding ? "Updating" : "Update"}
+          </button>
+        </div>
       </div>
       <div className="mt-12">
         <form className="flex flex-col gap-6">
@@ -282,8 +305,7 @@ const UpdatePost = () => {
                 textareaProps={{
                   placeholder: "Please enter Markdown text",
                 }}
-                
-                className="min-h-[600px]" 
+                className="min-h-[600px]"
               />
             </div>
           </div>

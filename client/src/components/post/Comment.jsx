@@ -191,6 +191,7 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
             onSubmit={handleReplyComment}
             onCancel={() => setIsReplying(false)}
             buttonText="Reply"
+            parentComment={comment}
           />
         )}
       </div>

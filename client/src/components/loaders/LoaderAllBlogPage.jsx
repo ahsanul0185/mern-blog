@@ -9,7 +9,7 @@ const LoaderAllBlogPage = () => {
           key={idx}
           className="w-full flex flex-col gap-3 justify-between animate-pulse"
         >
-          <div className="bg-gray-300 dark:bg-primary/30 rounded-2xl w-full aspect-square" />
+          <div className="bg-gray-300 dark:bg-primary/30 rounded-2xl w-full aspect-video" />
           <div className="bg-gray-300 dark:bg-primary/30 rounded w-[20%] h-6" />
           <div className="bg-gray-300 dark:bg-primary/30 rounded w-full h-10" />
 

@@ -154,11 +154,35 @@ const CreatePost = () => {
     }
   };
 
+  const handleCancel = async () => {
+    
+    navigate("/dashboard?tab=blog_posts");
+    setPostData({
+    title: "",
+    category: "",
+    content: "",
+    coverImage: "",
+    tags: [],
+  })
+
+  setImageFile(null)
+  setImageFileUrl(null)
+
+  }
+
   return (
     <div className="">
       <div className="flex gap-2 justify-between">
         <h1 className="font-bold text-3xl">Create a new post</h1>
-        <button
+<div className="flex gap-3">
+          <button
+          onClick={handleCancel}
+          className="button-primary bg-gray-400 dark:bg-gray-500 hover:bg-gray-600 overflow-hidden flex items-center justify-center gap-3"
+        >
+          Cancel
+        </button>
+
+          <button
           onClick={handlePublishPost}
           className="button-primary overflow-hidden flex items-center justify-center gap-3"
           disabled={laoding}
@@ -166,6 +190,7 @@ const CreatePost = () => {
           {laoding ? <Loader /> : <FaPaperPlane className="text-base" />}
           {laoding ? "Publishing" : "Publish"}
         </button>
+</div>
       </div>
 
       <div className="relative flex gap-6 mt-12 items-start">
@@ -217,7 +242,7 @@ const CreatePost = () => {
                 onChange={handeImageFileInputChange}
                 hidden
               />
-              {imageFile || postData.coverImage && (
+              {(imageFile || postData.coverImage) && (
                 <div className="absolute w-full h-full">
                   <img
                     src={imageFileUrl || postData.coverImage || ""}
@@ -281,7 +306,7 @@ const CreatePost = () => {
                 Tags
               </label>
               <div className="input-field-style p-1 flex gap-1.5 max-w-full overflow-x-auto">
-                {postData.tags.map((tag) => (
+                {postData.tags?.map((tag) => (
                   <button
                     key={tag}
                     className="button-primary text-xs shrink-0 flex gap-1 p-1 px-1.5 items-center"
@@ -292,7 +317,7 @@ const CreatePost = () => {
                       onClick={() =>
                         setPostData((prev) => ({
                           ...prev,
-                          ["tags"]: postData.tags.filter(
+                          ["tags"]: postData.tags?.filter(
                             (item) => item !== tag
                           ),
                         }))
@@ -300,7 +325,7 @@ const CreatePost = () => {
                     />
                   </button>
                 ))}
-                {postData.tags.length < 5 && (
+                {postData.tags?.length < 5 && (
                   <input
                     type="text"
                     id="tags"
@@ -320,7 +345,7 @@ const CreatePost = () => {
           </form>
         </div>
 
-        <div className="shrink-0 mt-6 max-w-sm w-full dark:bg-primaryDark border border-gray-300 dark:border-gray-200/40 rounded">
+        <div className="shrink-0 overflow-auto mt-6 max-w-sm w-full dark:bg-primaryDark border border-gray-300 dark:border-gray-200/40 rounded">
           <AIPostIdeas setPostData={setPostData}/>
         </div>
       </div>

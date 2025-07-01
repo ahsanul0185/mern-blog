@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import Loader from "../loaders/Loader";
+import DashUsersSkeleton from "../loaders/DashUsersSkeleton";
 import { MdOutlineDelete } from "react-icons/md";
 import { BsShieldLockFill } from "react-icons/bs";
 import Modal from "../Modal";
@@ -120,9 +120,7 @@ const DashUsers = () => {
       <h2 className="text-3xl font-bold">Users List</h2>
       <div className="mt-16">
         {loading ? (
-          <div className="grid place-items-center overflow-hidden">
-            <Loader lg />
-          </div>
+         <DashUsersSkeleton />
         ) : users.length > 0 ? (
           <div className="relative overflow-x-auto rounded border border-gray-200 dark:border-gray-200/40 custom-scrollbar">
             <table className="w-full text-sm text-left rtl:text-right text-gray-600 dark:text-gray-200">
