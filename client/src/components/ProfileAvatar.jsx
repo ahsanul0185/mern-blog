@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { useDispatch } from "react-redux";
@@ -10,8 +10,26 @@ const ProfileAvatar = ({ currentUser }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const dropdownRef = useRef();
+
+  useEffect(() => {
+    
+    const handleClick = (event) => {
+       if (!dropdownRef.current.contains(event.target)) {
+        setDropDownOpen(false)
+       }
+    }
+
+    window.addEventListener("click", handleClick);
+
+  
+    return () => window.removeEventListener("click", handleClick)
+  }, [])
+  
+
+
   return (
-    <div className="relative" id="avatar">
+    <div className="relative" id="avatar"      ref={dropdownRef}>
       <img
         className="size-9 rounded-full cursor-pointer object-cover"
         src={currentUser.profilePicture}
@@ -27,7 +45,7 @@ const ProfileAvatar = ({ currentUser }) => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 10, opacity: 0 }}
             transition={{ type: "tween" }}
-            className="absolute bg-gray-100 dark:bg-primaryDark top-full translate-y-2 right-0 p-2 rounded w-3xs border border-gray-200/40"
+            className="absolute bg-gray-50 shadow-xl dark:bg-primaryDark top-full translate-y-2 right-0 p-2 rounded w-3xs border border-gray-200 dark:border-gray-200/40"
           >
             <p className="text-gray-600 dark:text-gray-200 py-2 text-sm font-bold truncate">
               {currentUser.email}

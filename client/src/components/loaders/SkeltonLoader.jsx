@@ -6,7 +6,7 @@ const SkeltonLoader = () => {
     <div className="mt-5 space-y-4">
       {/* Title */}
       <div
-        className="bg-gray-300 dark:bg-primary/40 h-10 w-[90%] rounded animate-shimmer"
+        className="bg-gray-300 dark:bg-primary/40 h-8 w-[90%] rounded animate-shimmer"
         style={{ animationDelay: delays[0], animationFillMode: 'both' }}
       ></div>
 
@@ -21,7 +21,7 @@ const SkeltonLoader = () => {
       ].map((width, i) => (
         <div
           key={i}
-          className={`bg-gray-300 dark:bg-primary/40 h-6 rounded ${width} mx-2 animate-shimmer`}
+          className={`bg-gray-300 dark:bg-primary/40 h-5 rounded ${width} mx-2 animate-shimmer`}
           style={{ animationDelay: delays[i + 1], animationFillMode: 'both' }}
         ></div>
       ))}

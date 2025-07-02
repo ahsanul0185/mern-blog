@@ -14,7 +14,7 @@ const Dashboard = () => {
   const { currentUser } = useSelector((state) => state.userR);
 
   return (
-    <div className="flex flex-col md:flex-row min-h-[calc(100vh-67px)] relative overflow-x-clip">
+    <div className="flex min-h-[calc(100vh-67px)] relative overflow-x-clip">
       {/* Sidebar */}
       <DashSidebar />
 
