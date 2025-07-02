@@ -30,7 +30,9 @@ const Dashboard = () => {
         </div>
 
         {/* Admin Routes */}
-        {!tab && <Outlet />}
+        <div className="overflow-x-auto max-w-7xl w-full mx-auto">
+          {!tab && <Outlet />}
+        </div>
       </div>
     </div>
   );

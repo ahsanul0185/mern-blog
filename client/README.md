@@ -18,8 +18,8 @@ ENSURE
 - search functionality
 - create about page
 - make every page mobile responsive
-- make the sidebar open on hover 
 
+done - make the sidebar open on hover 
 done - create post ai box height
 done - code block width
 done - skelton loader

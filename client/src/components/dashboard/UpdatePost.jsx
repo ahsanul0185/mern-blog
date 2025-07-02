@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { IoImageOutline } from "react-icons/io5";
+import { IoAlertCircleOutline, IoImageOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import { FaPencil } from "react-icons/fa6";
@@ -9,6 +9,7 @@ import axios from "axios";
 import Loader from "../loaders/Loader";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
+import Modal from "../Modal";
 
 const UpdatePost = () => {
   const { theme } = useSelector((state) => state.themeR);
@@ -31,6 +32,7 @@ const UpdatePost = () => {
 
   const location = useLocation();
   const post = location.state;
+  const [activeModal, setActiveModal] = useState(null);
 
   useEffect(() => {
     setPostData(post);
@@ -183,14 +185,44 @@ const UpdatePost = () => {
 
   };
 
+  // DELETE POST
+    const handleDeletePost = async (postId) => {
+    try {
+      const res = await axios.delete(
+        `/api/post/delete/${postId}/${currentUser._id}`
+      );
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        setActiveModal(null);
+        navigate("/dashboard?tab=blog_posts")
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Failed to delete the post", {
+        style: {
+          backgroundColor: "#a93800",
+          color: "white",
+          border: "1px solid rgba(255, 255, 255, 0.4)",
+        },
+      });
+      setActiveModal(null);
+    }
+  };
+
   return (
     <div className="">
       <div className="flex gap-2 justify-between">
         <h1 className="font-bold text-3xl">Update Post</h1>
         <div className="flex gap-3">
+                    <button
+            onClick={() => setActiveModal("delete-post")}
+            className="button-primary bg-red-500 hover:bg-red-700 overflow-hidden flex items-center justify-center gap-3"
+          >
+            Delete
+          </button>
           <button
             onClick={handleCancel}
-            className="button-primary bg-gray-400 dark:bg-gray-500 hover:bg-gray-600 overflow-hidden flex items-center justify-center gap-3"
+            className="button-primary bg-gray-100 dark:bg-transparent hover:bg-gray-200 dark:hover:bg-primaryDark overflow-hidden flex items-center justify-center gap-3 text-gray-600 dark:text-gray-200"
           >
             Cancel
           </button>
@@ -242,7 +274,7 @@ const UpdatePost = () => {
           </div>
 
           <div
-            className="relative min-h-52"
+            className="relative min-h-52 lg:min-h-72"
             onClick={() => imageFileRef.current.click()}
           >
             <input
@@ -351,6 +383,35 @@ const UpdatePost = () => {
           </div>
         </form>
       </div>
+
+
+
+      <Modal
+        showModal={activeModal === "delete-post"}
+        setShowModal={setActiveModal}
+      >
+        <IoAlertCircleOutline className="text-7xl mx-auto text-gray-300" />
+        <h2 className="font-bold text-2xl mt-2 text-center">
+          Are you sure you want to delete this post?
+        </h2>
+
+        <div className="mt-8 flex justify-between">
+          <button
+            onClick={() => handleDeletePost(postData._id)}
+            className="button-primary bg-red-600 hover:bg-red-700"
+          >
+            Yes, I'm sure
+          </button>
+          <button
+            className="button-primary bg-gray-400 dark:bg-gray-400/30 dark:hover:bg-gray-400/50"
+            onClick={() => setActiveModal(null)}
+          >
+            Cancel
+          </button>
+        </div>
+      </Modal>
+
+
     </div>
   );
 };

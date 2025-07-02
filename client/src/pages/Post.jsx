@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "axios";
 import LoaderPostPage from "../components/loaders/LoaderPostPage";
@@ -15,6 +15,8 @@ import CommentSection from "../components/post/CommentSection"
 import RecentPosts from "../components/post/RecentPosts";
 import NewsLetter from "../components/hero/NewsLetter";
 import Drawer from "../components/Drawer";
+import { useSelector } from "react-redux";
+import { FaPencilAlt } from "react-icons/fa";
 
 
 const Post = () => {
@@ -30,6 +32,9 @@ const Post = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [postSummary, setPostSummary] = useState(null);
   const [loadingS, setLoadingS] = useState({summary : false});
+
+  const {currentUser} = useSelector(state => state.userR);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -123,7 +128,18 @@ const Post = () => {
     <>
     <div className="default-padding pt-12 flex flex-col lg:flex-row items-start gap-6 relative">
       <div className="w-full md:flex-1 min-w-0">
-        <h2 className="font-semibold md:font-bold md:text-2xl">{post.title}</h2>
+
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="font-semibold md:font-bold md:text-2xl">{post.title}</h2>
+                 {currentUser.role === "admin" &&  <button
+                    onClick={() =>
+                      navigate(`/dashboard/update-post/${post._id}`, { state: post })
+                    }
+                    className="duration-200 cursor-pointer px-3 py-1 rounded flex items-center hover:bg-gray-200 dark:hover:bg-primary/50 gap-2 bg-gray-100 dark:bg-primaryDark"
+                  >
+                    <FaPencilAlt size={12} className="text-gray-600 dark:text-gray-300"/>Edit
+                  </button>}
+        </div>
 
         <div className="mt-2 md:mt-4 flex items-center gap-4">
           <h3 className="text-sm md:font-semibold md:text-base text-gray-600 dark:text-gray-300">

@@ -196,7 +196,7 @@ const adminOptions = [
 const DashSidebar = () => {
   const { currentUser } = useSelector((state) => state.userR);
   const { tab, path } = useGetTab();
-  const [expended, setExpended] = useState(true);
+  const [expended, setExpended] = useState(false);
   const [active, setActive] = useState(false);
 
   const dispatch = useDispatch();
