@@ -87,7 +87,7 @@ const AIPostIdeas = ({ setPostData }) => {
   };
 
   return (
-    <div className="h-full">
+    <div className="h-full flex flex-col">
       <div className="flex items-center justify-between gap-2 p-5 shrink-0">
         <h2 className="font-semibold flex items-center gap-2 text-primary dark:text-white">
           {" "}
@@ -110,7 +110,7 @@ const AIPostIdeas = ({ setPostData }) => {
         </div>
       </div>
 
-      <div className="flex flex-col overflow-auto custom-scrollbar">
+      <div className="flex flex-col flex-1 overflow-auto custom-scrollbar">
         {!postIdeas ? <div className="px-5 pb-5"><SkeltonLoader /><SkeltonLoader /></div> : 
         
         postIdeas?.map((idea, idx) => (

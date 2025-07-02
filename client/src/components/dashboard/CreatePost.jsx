@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
 import { IoImageOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
@@ -11,6 +11,7 @@ import Loader from "../loaders/Loader";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import AIPostIdeas from "./AIPostIdeas";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 const CreatePost = () => {
   const { theme } = useSelector((state) => state.themeR);
@@ -24,11 +25,15 @@ const CreatePost = () => {
   });
 
   const imageFileRef = useRef();
-  const navigate = useNavigate();
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
 
+  const navigate = useNavigate();
   const [tagValue, setTagValue] = useState("");
+
+  const formRef = useRef();
+  const [formHeight, setFormHeight] = useState();
+    const isMobile = useIsMobile(1024);
 
   // IMAGE FILE SELECT
   const handeImageFileInputChange = (e) => {
@@ -154,47 +159,68 @@ const CreatePost = () => {
     }
   };
 
+  // CANCEL POST
   const handleCancel = async () => {
-    
     navigate("/dashboard?tab=blog_posts");
     setPostData({
-    title: "",
-    category: "",
-    content: "",
-    coverImage: "",
-    tags: [],
-  })
+      title: "",
+      category: "",
+      content: "",
+      coverImage: "",
+      tags: [],
+    });
 
-  setImageFile(null)
-  setImageFileUrl(null)
+    setImageFile(null);
+    setImageFileUrl(null);
+  };
 
-  }
+
+  // Match the divs height
+  useLayoutEffect(() => {
+
+      if (!formRef.current || isMobile) return;
+
+      setFormHeight(formRef.current.offsetHeight);
+
+      const resizeObserver = new window.ResizeObserver(entries => {
+        for(let entry of entries) {
+            setFormHeight(`${entry.contentRect.height- 24}px`);
+        }
+      });
+
+      resizeObserver.observe(formRef.current);
+
+      return () => resizeObserver.disconnect();
+
+  }, []);
+
+
 
   return (
     <div className="">
       <div className="flex gap-2 justify-between">
         <h1 className="font-bold text-3xl">Create a new post</h1>
-<div className="flex gap-3">
+        <div className="flex gap-3">
           <button
-          onClick={handleCancel}
-          className="button-primary bg-gray-400 dark:bg-gray-500 hover:bg-gray-600 overflow-hidden flex items-center justify-center gap-3"
-        >
-          Cancel
-        </button>
+            onClick={handleCancel}
+            className="button-primary bg-gray-400 dark:bg-gray-500 hover:bg-gray-600 overflow-hidden flex items-center justify-center gap-3"
+          >
+            Cancel
+          </button>
 
           <button
-          onClick={handlePublishPost}
-          className="button-primary overflow-hidden flex items-center justify-center gap-3"
-          disabled={laoding}
-        >
-          {laoding ? <Loader /> : <FaPaperPlane className="text-base" />}
-          {laoding ? "Publishing" : "Publish"}
-        </button>
-</div>
+            onClick={handlePublishPost}
+            className="button-primary overflow-hidden flex items-center justify-center gap-3"
+            disabled={laoding}
+          >
+            {laoding ? <Loader /> : <FaPaperPlane className="text-base" />}
+            {laoding ? "Publishing" : "Publish"}
+          </button>
+        </div>
       </div>
 
-      <div className="relative flex gap-6 mt-12 items-start">
-        <div className="grow">
+      <div className="relative flex gap-6 mt-12 items-start flex-col lg:flex-row">
+        <div ref={formRef} className="w-full order-2 lg:order-2">
           <form className="flex flex-col gap-6">
             <div className="flex gap-3">
               <div className="flex-1">
@@ -345,8 +371,8 @@ const CreatePost = () => {
           </form>
         </div>
 
-        <div className="shrink-0 overflow-auto mt-6 max-w-sm w-full dark:bg-primaryDark border border-gray-300 dark:border-gray-200/40 rounded">
-          <AIPostIdeas setPostData={setPostData}/>
+        <div   style={{ height: isMobile ? "40vh" : formHeight ? formHeight : "auto" }} className={`shrink-0 order-1 lg:order-2 overflow-auto mt-6 lg:max-w-sm w-full dark:bg-primaryDark border border-gray-300 dark:border-gray-200/40 rounded`}>
+          <AIPostIdeas setPostData={setPostData} />
         </div>
       </div>
     </div>

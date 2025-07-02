@@ -122,7 +122,7 @@ const Post = () => {
   return (
     <>
     <div className="default-padding pt-12 flex flex-col lg:flex-row items-start gap-6 relative">
-      <div className="grow">
+      <div className="w-full md:flex-1 min-w-0">
         <h2 className="font-semibold md:font-bold md:text-2xl">{post.title}</h2>
 
         <div className="mt-2 md:mt-4 flex items-center gap-4">

@@ -187,12 +187,10 @@ const CodeBlock = ({ code, language }) => {
       </div>
 
       {/* Responsive scrollable code block */}
-      <div className="overflow-x-auto max-w-fit text-sm">
-
-
-
+      <div className="text-sm">
         <SyntaxHighlighter
           language={language}
+          className="custom-scrollbar"
           style={theme === "dark" ? coldarkDark : coldarkCold}
           showLineNumbers={true}
           wrapLines={true}

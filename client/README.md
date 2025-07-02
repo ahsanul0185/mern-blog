@@ -14,13 +14,13 @@ If you are developing a production application, we recommend using TypeScript wi
 
 ENSURE
 
-- code block width
-- create post ai box height
 - email verification
 - search functionality
-- make every page mobile responsive
 - create about page
+- make every page mobile responsive
 
+done - create post ai box height
+done - code block width
 done - skelton loader
 done - generate comment reply
 done* - infinite scroll
