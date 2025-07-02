@@ -131,7 +131,7 @@ const Post = () => {
 
         <div className="flex items-center justify-between gap-2">
           <h2 className="font-semibold md:font-bold md:text-2xl">{post.title}</h2>
-                 {currentUser.role === "admin" &&  <button
+                 {currentUser?.role === "admin" &&  <button
                     onClick={() =>
                       navigate(`/dashboard/update-post/${post._id}`, { state: post })
                     }

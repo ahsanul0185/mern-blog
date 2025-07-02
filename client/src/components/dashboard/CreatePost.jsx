@@ -291,6 +291,7 @@ const CreatePost = () => {
                         setImageFile(null);
                         setImageFileUrl("");
                         e.stopPropagation();
+                        e.preventDefault();
                       }}
                       className="size-7 grid place-items-center bg-primary/50 text-gray-200 hover:text-white dark:bg-dark/50 rounded dark:hover:bg-dark/60 cursor-pointer duration-200"
                     >

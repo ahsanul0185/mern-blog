@@ -36,7 +36,7 @@ const UpdatePost = () => {
 
   useEffect(() => {
     setPostData(post);
-    setImageFileUrl(post.coverImage);
+    setImageFileUrl(post?.coverImage);
   }, []);
 
   // IMAGE FILE SELECT
@@ -170,7 +170,6 @@ const UpdatePost = () => {
 
   // CANCEL POST
   const handleCancel = async () => {
-    
     navigate("/dashboard?tab=blog_posts");
     setPostData({
       title: "",
@@ -182,11 +181,10 @@ const UpdatePost = () => {
 
     setImageFile(null);
     setImageFileUrl(null);
-
   };
 
   // DELETE POST
-    const handleDeletePost = async (postId) => {
+  const handleDeletePost = async (postId) => {
     try {
       const res = await axios.delete(
         `/api/post/delete/${postId}/${currentUser._id}`
@@ -194,7 +192,7 @@ const UpdatePost = () => {
       if (res.status === 200) {
         toast.success(res.data.message);
         setActiveModal(null);
-        navigate("/dashboard?tab=blog_posts")
+        navigate("/dashboard?tab=blog_posts");
       }
     } catch (error) {
       console.log(error);
@@ -214,18 +212,19 @@ const UpdatePost = () => {
       <div className="flex gap-2 justify-between">
         <h1 className="font-bold text-3xl">Update Post</h1>
         <div className="flex gap-3">
-                    <button
-            onClick={() => setActiveModal("delete-post")}
-            className="button-primary bg-red-500 hover:bg-red-700 overflow-hidden flex items-center justify-center gap-3"
-          >
-            Delete
-          </button>
           <button
             onClick={handleCancel}
             className="button-primary bg-gray-100 dark:bg-transparent hover:bg-gray-200 dark:hover:bg-primaryDark overflow-hidden flex items-center justify-center gap-3 text-gray-600 dark:text-gray-200"
           >
             Cancel
           </button>
+          <button
+            onClick={() => setActiveModal("delete-post")}
+            className="button-primary bg-red-500/80 hover:bg-red-700 overflow-hidden flex items-center justify-center gap-3"
+          >
+            Delete
+          </button>
+
           <button
             onClick={handleUpdatePost}
             className="button-primary overflow-hidden flex items-center justify-center gap-3"
@@ -317,7 +316,7 @@ const UpdatePost = () => {
             )}
 
             {!imageFile && (
-              <div className="border-[2px] rounded min-h-52 border-gray-400 border-dotted flex flex-col gap-2 items-center justify-center cursor-pointer hover:bg-gray-300/50 dark:hover:bg-black/50 duration-300 ease-out">
+              <div className="border-[2px] rounded min-h-52 lg:min-h-72 border-gray-400 border-dotted flex flex-col gap-2 items-center justify-center cursor-pointer hover:bg-gray-300/50 dark:hover:bg-black/50 duration-300 ease-out">
                 <IoImageOutline className="text-gray-600 dark:text-gray-300 text-4xl" />
                 <p className="text-sm">Click to uplaod a cover image</p>
               </div>
@@ -384,8 +383,6 @@ const UpdatePost = () => {
         </form>
       </div>
 
-
-
       <Modal
         showModal={activeModal === "delete-post"}
         setShowModal={setActiveModal}
@@ -410,8 +407,6 @@ const UpdatePost = () => {
           </button>
         </div>
       </Modal>
-
-
     </div>
   );
 };

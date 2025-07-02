@@ -17,6 +17,12 @@ ENSURE
 - email verification
 - search functionality
 - create about page
+- dashboard category duplication
+- tag page
+- clap option post
+- sign up modal
+- draft option
+
 - make every page mobile responsive
 
 done - make the sidebar open on hover 

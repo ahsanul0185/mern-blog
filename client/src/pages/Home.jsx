@@ -13,7 +13,7 @@ const Home = () => {
          <Wave className="absolute top-[50vh] -right-46 rotate-12 -z-10 hidden lg:block" />
 
       <div className="py-12 default-padding lg:py-0 flex flex-col lg:flex-row items-center gap-12 lg:gap-5 justify-between lg:h-[calc(100vh-120px)]">
-        <div className="">
+        <div className="animate-fadeIn">
           <span className="text-sm text-gray-600 dark:text-gray-300 font-semibold mb-6 lg:mb-12 uppercase tracking-widest block">
             Featured Post
           </span>

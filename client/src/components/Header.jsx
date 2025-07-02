@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 import MobileMenu from "./MobileMenu";
 import { IoIosMenu } from "react-icons/io";
@@ -14,6 +14,25 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.userR);
   const {path} = useGetTab();
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log(searchTerm)
+  }
+
+  
 
   return (
     <header className="sticky left-0 top-0 w-full bg-white dark:bg-primaryDark dark:text-gray-200 z-[9999]">
@@ -41,20 +60,22 @@ const Header = () => {
           </nav>
 
           <div className="flex gap-5 items-center">
-            <form className="hidden lg:block">
+            <form onSubmit={handleSearch} className="hidden lg:block">
               <div className="relative">
-                <span className="block absolute top-1/2 -translate-y-1/2 right-3 text-gray-600 dark:text-gray-200 text-xl">
+                <span onClick={handleSearch} className="block cursor-pointer absolute top-1/2 -translate-y-1/2 right-3 text-gray-600 dark:text-gray-200 text-xl">
                   <CiSearch />
                 </span>
                 <input
                   type="text"
                   className="input-field-style pr-9 max-w-fit"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search"
                 />
               </div>
             </form>
 
-            <button className="block lg:hidden text-gray-700 dark:text-gray-200 text-2xl cursor-pointer">
+            <button  className="block lg:hidden text-gray-700 dark:text-gray-200 text-2xl cursor-pointer">
               <CiSearch />
             </button>
 

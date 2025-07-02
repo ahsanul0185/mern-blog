@@ -15,6 +15,7 @@ import UpdatePost from "./components/dashboard/UpdatePost";
 import Post from "./pages/Post";
 import ScrollToTop from "./components/ScrollToTop";
 import Blogs from "./pages/Blogs";
+import Search from "./pages/Search";
 
 const App = () => {
 
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/sign-up" element={<SignUp />}/>
 
           <Route path="/about" element={<About />}/>
+          <Route path="/search" element={<Search />}/>
           <Route path="/all_blogs" element={<Blogs />}/>
           <Route path="/post/:slug" element={<Post />}/>
 

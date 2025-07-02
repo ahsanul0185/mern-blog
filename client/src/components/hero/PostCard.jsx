@@ -24,7 +24,7 @@ const PostCard = ({post}) => {
   }, []);
 
   return (
-    <div className="w-full flex flex-col gap-2 sm:gap-3 justify-between cursor-pointer group" onClick={() => navigate(`/post/${post.slug}`)}>
+    <div className="w-full flex flex-col gap-2 sm:gap-3 justify-between cursor-pointer group animate-fadeIn" onClick={() => navigate(`/post/${post.slug}`)}>
       <div className="overflow-clip rounded-2xl">
         <img
         src={post.coverImage || null}
