@@ -54,7 +54,7 @@ const DashPosts = () => {
       }
     };
     if (currentUser.role === "admin") getPosts();
-  }, [triggerReloadAfterPostDelete]);
+  }, []);
 
   const handleShowMorePosts = async () => {
     const startIndex = posts.length;

@@ -34,7 +34,7 @@ const PostCard = ({post}) => {
       </div>
       <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 text-xs md:text-sm">
         <h3 className="text-xs sm:text-sm text-gray-800 dark:text-gray-300">
-          {post.category.charAt(0).toUpperCase() + post.category.slice(1)}
+          {post.category?.charAt(0).toUpperCase() + post.category?.slice(1)}
         </h3>
       </div>
       <h2 className="text-sm sm:text-[18px] font-semibold line-clamp-2 grow group-hover:text-primary duration-300 ease-in-out">

@@ -246,13 +246,13 @@ const CreatePost = () => {
                   value={postData.category}
                   onChange={handleInputFieldChange}
                 >
-                  <option value="" disabled>
+                  <option value="" disabled className='text-black/50'>
                     Select Category
                   </option>
-                  <option value="technology">Technology</option>
-                  <option value="programming">Programming</option>
-                  <option value="travel">Travel</option>
-                  <option value="health">Health</option>
+                  <option value="technology" className='text-black'>Technology</option>
+                  <option value="programming" className='text-black'>Programming </option>
+                  <option value="travel" className='text-black'>Travel</option>
+                  <option value="health" className='text-black'>Health</option>
                 </select>
               </div>
             </div>

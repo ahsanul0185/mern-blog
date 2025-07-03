@@ -20,8 +20,8 @@ ENSURE
 - dashboard category duplication
 - tag page
 - clap option post
-- sign up modal
 - draft option
+- sign up modal
 
 - make every page mobile responsive
 
