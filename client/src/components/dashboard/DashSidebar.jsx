@@ -20,7 +20,8 @@ const sidebarItems = [
     icon: <IoMdPerson className="text-xl" />,
     path: "/dashboard?tab=profile",
     adminOption: false,
-  },
+    routes: ["/dashboard?tab=change-password"],
+  }
 ];
 
 const adminOptions = [
@@ -64,6 +65,7 @@ const DashSidebar = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
 
 
   const handleSignout = () => {
@@ -143,7 +145,7 @@ const DashSidebar = () => {
               <Link
                 to={item.path ? item.path : ""}
                 className={`flex items-center gap-4 py-2 px-3  w-full rounded cursor-pointer text-nowrap ${
-                  item.id === tab
+                 item.id === tab
                     ? "bg-primary text-white dark:bg-primary/40"
                     : "hover:bg-primary/40"
                 }`}

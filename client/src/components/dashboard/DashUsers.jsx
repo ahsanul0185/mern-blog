@@ -8,6 +8,8 @@ import { BsShieldLockFill } from "react-icons/bs";
 import Modal from "../Modal";
 import { RiAlertFill } from "react-icons/ri";
 import moment from "moment";
+import { RxCross2 } from "react-icons/rx";
+import { FaCheck } from "react-icons/fa6";
 
 const DashUsers = () => {
   const { currentUser } = useSelector((state) => state.userR);
@@ -139,7 +141,7 @@ const DashUsers = () => {
                     Email
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Role
+                    Verified
                   </th>
                   <th scope="col" className="px-6 py-3 text-right">
                     Actions
@@ -179,7 +181,7 @@ const DashUsers = () => {
                     <td className="px-6 py-4">@{user.username}</td>
                     <td className="px-6 py-4">{user.email}</td>
                     <td className="px-6 py-4">
-                      {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                      {user.isVerfied ? <FaCheck className="text-green-500" /> : <RxCross2 className="text-red-500" />}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button

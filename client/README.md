@@ -14,7 +14,6 @@ If you are developing a production application, we recommend using TypeScript wi
 
 ENSURE
 
-- email verification
 - create about page
 - tag page
 - clap option post
@@ -23,10 +22,11 @@ ENSURE
 
 - make every page mobile responsive
 
+done - email verification
 done - dashboard category duplication
 done - search functionality
 done - make the sidebar open on hover 
-done - create post ai box height
+done - fix post ai box height
 done - code block width
 done - skelton loader
 done - generate comment reply

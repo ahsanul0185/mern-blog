@@ -11,17 +11,10 @@ export const updateUser = async (req, res, next) => {
     return next(errorHandler(403, "You are not allowed to update the user"));
   }
 
-  const { username, password, email, profilePicture } = req.body;
+  const { username, email, profilePicture } = req.body;
 
-  if (!username && !password && !email && !profilePicture) {
+  if (!username && !email && !profilePicture) {
     return next(errorHandler(400, "User update failed"));
-  }
-
-  if (password) {
-    if (password.length < 6) {
-      return next(errorHandler(400, "Password must be at least 6 characters"));
-    }
-    req.body.password = bcryptjs.hashSync(password, 10);
   }
 
   if (email) {
@@ -61,7 +54,6 @@ export const updateUser = async (req, res, next) => {
           username: req.body.username,
           email: req.body.email,
           profilePicture: req.body.profilePicture,
-          password: req.body.password,
         },
       },
       { new: true }
@@ -172,17 +164,57 @@ export const getUsers = async (req, res, next) => {
 };
 
 export const getUser = async (req, res, next) => {
-
-  try { 
-    const user = await User.findById( req.params.userId);
+  try {
+    const user = await User.findById(req.params.userId);
 
     if (!user) {
       return next(errorHandler(404, "No user found"));
     }
 
-    const {password, ...rest} = user._doc;
+    const { password, ...rest } = user._doc;
     res.status(200).json(rest);
   } catch (error) {
     next(error);
-  } 
+  }
+};
+
+export const changePassword = async (req, res, next) => {
+  const { oldPassword, newPassword } = req.body;
+
+  if (!oldPassword || !newPassword) {
+    return next(errorHandler(409, "Please provide the passwords"));
+  }
+
+  if (newPassword.length < 6) {
+    return next(errorHandler(400, "Password must be at least 6 characters"));
+  }
+
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return  next(errorHandler(404, "User not found"));
+    }
+
+    const validPassword = bcryptjs.compareSync(oldPassword, user.password);
+
+    if (!validPassword) {
+      return  next(errorHandler(403, "Invalid old password"));
+    }
+
+    if (oldPassword === newPassword) {
+     return next(errorHandler(403, "New password must be different from the current password"));
+    }
+
+    const hashedPassword = bcryptjs.hashSync(newPassword, 10);
+
+    user.password = hashedPassword;
+
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+
+  } catch (error) {
+    next(error);
+  }
 };

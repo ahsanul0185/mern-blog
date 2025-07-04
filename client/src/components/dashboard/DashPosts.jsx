@@ -21,9 +21,6 @@ const DashPosts = () => {
   const [showMoreLoading, setShowMoreLoading] = useState(false);
 
 
-  const [triggerReloadAfterPostDelete, setTriggerReloadAfterPostDelete] =
-    useState(false);
-
   useEffect(() => {
     const getPosts = async () => {
       try {

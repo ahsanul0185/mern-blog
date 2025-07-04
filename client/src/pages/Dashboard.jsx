@@ -8,6 +8,7 @@ import DashPosts from "../components/dashboard/DashPosts";
 import DashUsers from "../components/dashboard/DashUsers";
 import DashComments from "../components/dashboard/DashComments";
 import DashInsights from "../components/dashboard/DashInsights";
+import DashChangePassword from "../components/dashboard/DashChangePassword";
 
 const Dashboard = () => {
   const { tab } = useGetTab();
@@ -23,6 +24,7 @@ const Dashboard = () => {
         {/* Tabs */}
         <div className="overflow-x-auto max-w-6xl w-full mx-auto">
           {tab === "profile" && <DashProfile />}
+          {tab === "change-password" && <DashChangePassword />}
         {currentUser.role === "admin" && tab === "blog_posts" && <DashPosts />}
         {currentUser.role === "admin" && tab === "users" && <DashUsers />}
         {currentUser.role === "admin" && tab === "comments" && <DashComments />}

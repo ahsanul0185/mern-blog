@@ -6,9 +6,7 @@ import "react-circular-progressbar/dist/styles.css";
 import { FaPencilAlt } from "react-icons/fa";
 import {
   deleteUserFailure,
-  deleteUserStart,
   deleteUserSuccess,
-  signOut,
   updateFalied,
   updateStart,
   updateSuccess,
@@ -257,7 +255,7 @@ const DashProfile = () => {
 
         <div className="flex items-center justify-between w-full mt-5 text-sm text-red-500 dark:text-red-400">
           <button
-            className="cursor-pointer"
+            className="cursor-pointer px-2 py-1 hover:bg-red-500/20 rounded duration-200"
             onClick={() => setActiveModal("delete")}
           >
             Delete Account
@@ -298,13 +296,12 @@ const DashProfile = () => {
           </Modal>
 
           <button
-            className="cursor-pointer"
+            className="cursor-pointer text-gray-800 dark:text-gray-200 px-2 py-1 hover:bg-primary/50 rounded duration-200"
             onClick={() => {
-              dispatch(signOut());
-              navigate("/sign-in");
+              navigate("/dashboard?tab=change-password");
             }}
           >
-            Sign Out
+            Change Password
           </button>
         </div>
       </form>

@@ -1,14 +1,18 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa'; // Import arrow icon
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import Loader from '../components/loaders/Loader';
 import { motion } from 'motion/react';
 import { FaEnvelopeOpenText } from 'react-icons/fa';
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState('');
+
+  const location = useLocation();
+  const emailFromRoute = location.state;
+
+  const [email, setEmail] = useState(emailFromRoute && emailFromRoute || '');
   const navigate = useNavigate();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loading, setIsLoading] = useState(false);
