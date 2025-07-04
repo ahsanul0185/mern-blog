@@ -45,8 +45,6 @@ export const getPosts = async (req, res, next) => {
 
   try {
 
-    console.log(req.query)
-
     const posts = await Post.find({
       ...(req.query.userId && {userId : req.query.userId}),
       ...(req.query.category && {category : req.query.category}),
@@ -73,8 +71,6 @@ export const getPosts = async (req, res, next) => {
     const lastMonthPosts = await Post.countDocuments({
       createdAt : {$gte : oneMonthAgo}
     });
-
-    console.log(posts.length)
 
     res.status(200).json({posts, totalPosts, lastMonthPosts});
     

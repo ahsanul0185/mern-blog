@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import {Toaster} from "sonner"
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { Toaster } from "sonner";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import SignIn from "./pages/SignIn";
@@ -16,42 +16,57 @@ import Post from "./pages/Post";
 import ScrollToTop from "./components/ScrollToTop";
 import Blogs from "./pages/Blogs";
 import Search from "./pages/Search";
+import VerifyEmail from "./pages/VerifyEmail";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
+  const location = useLocation();
+  const hideLayoutRoutes = [
+    "/verify-email",
+    "/forgot-password",
+    "/reset-password",
+  ];
+  const shouldHideLayout = hideLayoutRoutes.some((route) =>
+    location.pathname.startsWith(route)
+  );
 
   return (
-    <BrowserRouter>
-    <ScrollToTop />
-      <Header />
+    <>
+      <ScrollToTop />
+      {!shouldHideLayout && <Header />}
       <main className="flex-grow bg-white dark:bg-dark dark:text-gray-100">
-      <Routes>
-          <Route path="/" element={<Home />}/>
-          <Route path="/sign-in" element={<SignIn />}/>
-          <Route path="/sign-up" element={<SignUp />}/>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-          <Route path="/about" element={<About />}/>
-          <Route path="/search" element={<Search />}/>
-          <Route path="/all_blogs" element={<Blogs />}/>
-          <Route path="/post/:slug" element={<Post />}/>
+          <Route path="/about" element={<About />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/all_blogs" element={<Blogs />} />
+          <Route path="/post/:slug" element={<Post />} />
 
-          <Route element={<PrivateRoutes/>}>
+          <Route element={<PrivateRoutes />}>
             <Route path="/dashboard" element={<Dashboard />}>
               <Route element={<AdminRoutes />}>
-                <Route path="create-post" element={<CreatePost />}/>
-                <Route path="update-post/:postId" element={<UpdatePost />}/>
+                <Route path="create-post" element={<CreatePost />} />
+                <Route path="update-post/:postId" element={<UpdatePost />} />
               </Route>
             </Route>
           </Route>
 
-          <Route path="/*" element={<NotFound />}/>
-      </Routes>
+          <Route path="/*" element={<NotFound />} />
+        </Routes>
       </main>
-      <Footer />
+      {!shouldHideLayout && <Footer />}
 
-      <Toaster position="bottom-right"/>
-          <div id="modal-root"></div>
-    </BrowserRouter>
-  )
-}
+      <Toaster position="bottom-right" />
+      <div id="modal-root"></div>
+    </>
+  );
+};
 
-export default App
+export default App;

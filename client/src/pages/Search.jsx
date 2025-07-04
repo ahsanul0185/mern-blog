@@ -30,7 +30,6 @@ const Search = () => {
         const urlParams = new URLSearchParams(location.search);
         const searchQuery = urlParams.toString();
 
-        console.log(searchQuery)
         const res = await axios.get(`/api/post/get_posts?startIndex=${startIndex}&${searchQuery}`);
 
         if (res.status === 200) {

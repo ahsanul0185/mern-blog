@@ -69,7 +69,7 @@ const AIPostIdeas = ({ setPostData }) => {
         content: res.data,
         coverImage:
           "https://img.freepik.com/premium-photo/purple-pink-colored-liquid-with-purple-background_605423-227906.jpg",
-        tags: selectedPostIdea?.tags,
+        tags: selectedPostIdea?.tags || [],
       };
 
       if (res.status === 200) {

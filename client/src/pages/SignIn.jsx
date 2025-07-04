@@ -51,6 +51,11 @@ const SignIn = () => {
 
         const data = await res.json();
 
+        if (res.status === 403) {
+          toast.success("Please verify your email");
+          navigate("/verify-email");
+          return
+        }
 
         if (data.success === false) {
           dispatch(signInFailure(data.message));
@@ -113,7 +118,10 @@ const SignIn = () => {
           <OAuth />
 
 
-          <p className="text-gray-600 dark:text-gray-400 text-sm mt-5">Don't have an account? <Link to="/sign-up" className="text-primary ml-2">Sign Up</Link></p>
+         <div className="flex items-center justify-between mt-5 text-sm">
+           <p className="text-gray-600 dark:text-gray-400">Don't have an account? <Link to="/sign-up" className="hover:underline text-primary ml-2">Sign Up</Link></p>
+           <Link to="/forgot-password" className="text-primary hover:underline">Forgot Password?</Link>
+         </div>
         </div>
       </div>
     </div>

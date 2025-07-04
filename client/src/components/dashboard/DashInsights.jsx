@@ -112,11 +112,19 @@ const DashInsights = () => {
         const res = await axios.get("/api/post/get_post_state_by_category");
         if (res.status === 200) {
           setCategoryPosts(
-            res.data.map((item) => ({
-              ...item,
-              category:
-                item.category.charAt(0).toUpperCase() + item.category.slice(1),
-            }))
+            Object.values(
+              res.data.reduce((acc, item) => {
+                const category =
+                  item.category.charAt(0).toUpperCase() + item.category.slice(1).toLowerCase();
+                if (!acc[category]) {
+                  acc[category] = { ...item, category };
+                } else {
+                  // If duplicate, sum the counts (if you have a count property)
+                  acc[category].count += item.count;
+                }
+                return acc;
+              }, {})
+            )
           );
         }
       } catch (error) {
