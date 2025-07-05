@@ -32,10 +32,27 @@ const CategoryChart = ({ chartData }) => {
       </PieChart>
       </ResponsiveContainer>
             <div className="flex flex-col items-center sm:items-start flex-wrap gap-4 justify-center">
-        {chartData.sort((a, b) => b.posts - a.posts).map((entry, idx) => <div key={idx} className="flex items-center gap-2">
-          <div className="size-2 rounded-full" style={{backgroundColor : `${COLORS[idx % COLORS.length]}`}}/>
-          <div  style={{ fontSize: `${Math.max(12, Math.min(18, (chartData.length - idx + 6) * 1.7))}px` }}>{entry.category}</div>
-        </div>)}
+{[...chartData]
+  .sort((a, b) => b.posts - a.posts)
+  .map((entry, idx) => (
+    <div key={idx} className="flex items-center gap-2">
+      <div
+        className="size-2 rounded-full"
+        style={{ backgroundColor: COLORS[idx % COLORS.length] }}
+      />
+      <div
+        style={{
+          fontSize: `${Math.max(
+            12,
+            Math.min(18, (chartData.length - idx + 6) * 1.7)
+          )}px`,
+        }}
+      >
+        {entry.category}
+      </div>
+    </div>
+))}
+
       </div>
     </div>
    </div>
