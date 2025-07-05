@@ -19,7 +19,7 @@ const Blogs = () => {
 
   setLoading(true);
   try {
-    const res = await axios.get(`/api/post/get_posts?startIndex=${startIndex}`);
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/post/get_posts?startIndex=${startIndex}`);
     const newPosts = res.data.posts;
     const totalPosts = res.data.totalPosts;
 

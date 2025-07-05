@@ -8,7 +8,7 @@ export default defineConfig({
   server : {
     proxy : {
       "/api" : {
-        target : "https://mern-blog-sdjv.onrender.com/",
+        target : "http://localhost:3000",
         secure : false
       }
     }
