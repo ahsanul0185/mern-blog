@@ -21,7 +21,7 @@ const AIPostIdeas = ({ setPostData }) => {
   const [loadingGenerate, setLoadingGenerate] = useState(false);
 
   useEffect(() => {
-    if (currentUser.role === "admin" && !postIdeas) {
+    if (currentUser.role === "admin") {
       dispatch(generatePostIdeas());
     }
   }, [currentUser]);
