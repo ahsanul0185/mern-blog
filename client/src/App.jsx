@@ -35,7 +35,7 @@ const App = () => {
     <>
       <ScrollToTop />
       {!shouldHideLayout && <Header />}
-      <main className="flex-grow bg-white dark:bg-dark dark:text-gray-100">
+      <main className="flex-grow bg-white dark:bg-dark dark:text-gray-100 animate-fadeIn">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sign-in" element={<SignIn />} />
