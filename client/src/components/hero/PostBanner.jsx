@@ -2,6 +2,7 @@ import React from "react";
 import img_vr from "../../assets/img_man_vr.jpg";
 import { BsDot } from "react-icons/bs";
 import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 
 const PostBanner = () => {
   return (
@@ -42,9 +43,9 @@ const PostBanner = () => {
               to making AI accessible to everyone.
             </p>
 
-            <button className="mt-8 lg:mt-12 text-sm md:text-base rounded cursor-pointer bg-transparent border border-primary dark:border-gray-300 dark:text-white px-8 py-2 text-primary hover:text-white hover:bg-primary duration-300 ease-in-out hover:border-transparent dark:hover:bg-white dark:hover:text-gray-700">
+            <Link to="/post/how-to-make-a-game-look-more-attractive-with-new-vr-and-ai-technology" className="mt-8 block w-fit lg:mt-12 text-sm md:text-base rounded cursor-pointer bg-transparent border border-primary dark:border-gray-300 dark:text-white px-8 py-2 text-primary hover:text-white hover:bg-primary duration-300 ease-in-out hover:border-transparent dark:hover:bg-white dark:hover:text-gray-700">
               Read More
-            </button>
+            </Link>
           </div>
         </motion.div>
       </div>

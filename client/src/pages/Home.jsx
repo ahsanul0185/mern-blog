@@ -5,8 +5,10 @@ import PostBanner from "../components/hero/PostBanner";
 import OurRecentPost from "../components/hero/OurRecentPost";
 import NewsLetter from "../components/hero/NewsLetter";
 import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
+
   return (
     <div className="relative dark:bg-transparent z-0 overflow-clip">
       <Wave className="absolute -top-40 -left-36 -z-10 hidden w-[70%] lg:w-fit md:block" />
@@ -27,9 +29,9 @@ const Home = () => {
             cute. For example, home robots will overcome navigation, direction
           </p>
 
-          <button className="button-primary px-5 lg:px-8 py-2 lg:py-3">
+          <Link to="/post/how-ai-will-change-the-future"  className="button-primary px-5 lg:px-8 py-2 lg:py-3">
             Read More
-          </button>
+          </Link>
         </div>
 
         <motion.img
