@@ -192,7 +192,7 @@ const Post = ({ post, setPosts }) => {
         {tags.length > 1 && (
           <div className="flex items-center gap-1 text-[10px] md:text-xs mt-1 md:mt-3">
             Tags :{" "}
-            {tags.map((tag) => (
+            {[...tags].map((tag) => (
               <span
                 key={tag}
                 className="bg-primary/20 text-primaryDark font-semibold dark:text-white rounded px-1.5 py-0.5"
