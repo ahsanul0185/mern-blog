@@ -11,7 +11,7 @@ const firebaseConfig = {
   storageBucket: "mern-blog-app-2a76a.firebasestorage.app",
   messagingSenderId: "798600046868",
   appId: "1:798600046868:web:c5d817af748db776783a01"
-};
+}; 
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
