@@ -91,6 +91,12 @@ const Post = () => {
 
 
   const handleSummarizePost = async () => {
+
+    if (!currentUser) {
+      navigate("/sign-in");
+      return
+    }
+
     try {
       setOpenDrawer(true);
       setLoadingS(prev => ({...prev, summary : true}))

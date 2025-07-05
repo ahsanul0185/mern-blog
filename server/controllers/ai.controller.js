@@ -104,11 +104,6 @@ export const generatePostSummary = async (req, res, next) => {
 
     const {content} = req.body;
 
-  if (req.user.role !== "admin") {
-    return next(
-      errorHandler(403, "You are not allowed to generate ideas using ai")
-    );
-  }
    if (!content) {
       return next(errorHandler(400, "Missing required fields"));
     }

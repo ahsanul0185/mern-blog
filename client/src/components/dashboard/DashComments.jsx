@@ -6,11 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "../post/Comment";
 import DashCommentsSkeleton from "../loaders/DashCommentsSkeleton";
+import { toast } from "sonner";
 
 const DashComments = () => {
   const { currentUser } = useSelector((state) => state.userR);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showMore, setShowMore] = useState(false);
+    const [showMoreLoading, setShowMoreLoading] = useState(false);
 
   useEffect(() => {
     const getAllComments = async () => {
@@ -20,6 +23,13 @@ const DashComments = () => {
         if (res.status === 200) {
           setComments(res.data.comments);
         }
+
+        if (res.data.comments.map(comment => comment.parentCommentId === null).length < 10) {
+          setShowMore(false);
+        }else{
+          setShowMore(true);
+        }
+
       } catch (error) {
         console.log(error);
       } finally {
@@ -29,6 +39,28 @@ const DashComments = () => {
 
     if (currentUser.role === "admin") getAllComments();
   }, []);
+
+
+    const handleShowMorePosts = async () => {
+    const startIndex = comments.map(comment => comment.parentCommentId === null).length;
+
+    try {
+      setShowMoreLoading(true);
+      const res = await axios.get(
+        `/api/comment/get_all_comments?startIndex=${startIndex}`
+      );
+      if (res.status === 200) {
+        setComments((prev) => [...prev, ...res.data.comments]);
+      }
+      if (res.data.comments.length < 9 || res.data.totalComments === (comments.length + res.data.comments.length)) {
+        setShowMore(false);
+      }
+      setShowMoreLoading(false);
+    } catch (error) {
+      setShowMoreLoading(false);
+      toast.error(error?.response?.data?.messasge);
+    }
+  };
 
   return (
     <div>
@@ -50,6 +82,15 @@ const DashComments = () => {
           )}
         </div>
       )}
+
+            {/* {showMore && !loading && (
+          <button
+            onClick={handleShowMorePosts}
+            className={`button-primary mt-6 w-full flex gap-2 items-center justify-center ${showMoreLoading ? "bg-primary/40" : ""}`}
+          >
+            {showMoreLoading && <Loader />}Show More
+          </button>
+        )} */}
     </div>
   );
 };

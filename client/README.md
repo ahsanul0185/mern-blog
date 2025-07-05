@@ -16,9 +16,7 @@ ENSURE
 
 - create about page
 - tag page
-- clap option post
-- draft option
-- sign up modal
+- show more buttons in dash comments and users
 
 - make every page mobile responsive
 
