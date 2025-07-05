@@ -213,9 +213,9 @@ const UpdatePost = () => {
 
   return (
     <div className="">
-      <div className="flex gap-2 justify-between">
-        <h1 className="font-bold text-3xl">Update Post</h1>
-        <div className="flex gap-3">
+      <div className="flex flex-col md:flex-row gap-2 justify-between">
+        <h1 className="font-bold text-xl md:text-3xl">Update Post</h1>
+        <div className="flex gap-3 justify-end">
           <button
             onClick={handleCancel}
             className="button-primary bg-gray-100 dark:bg-transparent hover:bg-gray-200 dark:hover:bg-primaryDark overflow-hidden flex items-center justify-center gap-3 text-gray-600 dark:text-gray-200"
@@ -241,7 +241,7 @@ const UpdatePost = () => {
       </div>
       <div className="mt-12">
         <form className="flex flex-col gap-6">
-          <div className="flex gap-3">
+          <div className="flex gap-3 flex-col sm:flex-row">
             <div className="flex-1">
               <label htmlFor="title" className="form-label-primary">
                 Title
@@ -268,10 +268,10 @@ const UpdatePost = () => {
                 <option value="" disabled>
                   Select Category
                 </option>
-                <option value="technology">Technology</option>
-                <option value="programming">Programming</option>
-                <option value="travel">Travel</option>
-                <option value="health">Health</option>
+                <option value="technology" className="text-gray-900">Technology</option>
+                <option value="programming" className="text-gray-900">Programming</option>
+                <option value="travel" className="text-gray-900">Travel</option>
+                <option value="health" className="text-gray-900">Health</option>
               </select>
             </div>
           </div>
@@ -349,7 +349,7 @@ const UpdatePost = () => {
             <label htmlFor="tags" className="form-label-primary ">
               Tags
             </label>
-            <div className="input-field-style p-1 flex gap-1.5 max-w-full overflow-x-auto">
+            <div className="input-field-style p-1 flex gap-1.5 max-w-full overflow-x-auto custom-scrollbar">
               {postData.tags.map((tag) => (
                 <button
                   key={tag}

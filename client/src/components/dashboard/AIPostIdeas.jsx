@@ -91,7 +91,7 @@ const AIPostIdeas = ({ setPostData }) => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between gap-2 p-5 shrink-0">
+      <div className="flex items-center flex-col sm:flex-row justify-between gap-2 p-5 shrink-0">
         <h2 className="font-semibold flex items-center gap-2 text-primary dark:text-white">
           {" "}
           <IoSparkles /> Ideas for your next post

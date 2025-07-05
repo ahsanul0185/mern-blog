@@ -162,7 +162,7 @@ const SignIn = () => {
 
           <OAuth />
 
-          <div className="flex items-center justify-between mt-5 text-sm">
+          <div className="flex flex-col sm:flex-row items-center justify-between mt-5 text-sm">
             <p className="text-gray-600 dark:text-gray-400">
               Don't have an account?{" "}
               <Link to="/sign-up" className="hover:underline text-primary ml-2">

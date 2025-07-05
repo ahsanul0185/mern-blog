@@ -74,11 +74,11 @@ const DashComments = () => {
 
   return (
     <div>
-      <h2 className="text-3xl font-bold">Comments</h2>
+      <h2 className="text-xl md:text-3xl font-bold">Comments</h2>
       {loading ? (
         <DashCommentsSkeleton />
       ) : (
-        <div className="mt-12 flex flex-col gap-5">
+        <div className="mt-6 md:mt-12 flex flex-col gap-5 custom-scrollbar">
           {comments?.map(
             (comment) =>
               comment.parentCommentId === null && (
@@ -189,7 +189,7 @@ const CommentRow = ({ comment, setComments }) => {
   };
 
   return (
-    <div className=" bg-white/10 dark:bg-primaryDark p-4 rounded group border border-gray-300 dark:border-gray-200/20">
+    <div className=" bg-white/10 min-w-sm dark:bg-primaryDark p-4 rounded group border border-gray-300 dark:border-gray-200/20">
       <div className="flex flex-col xl:flex-row justify-between items-start gap-3">
         <div className="w-full">
           <div className="w-full ">

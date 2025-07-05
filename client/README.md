@@ -16,10 +16,10 @@ ENSURE
 
 - create about page
 - tag page
-- show more buttons in dash comments and users
 
 - make every page mobile responsive
 
+done - show more buttons in dash comments and users
 done - email verification
 done - dashboard category duplication
 done - search functionality

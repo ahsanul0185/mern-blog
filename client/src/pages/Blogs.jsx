@@ -63,7 +63,7 @@ const Blogs = () => {
     <>
       <div className="default-padding pb-20">
         {/* Header */}
-        <div className="flex flex-col py-12 gap-6 items-center max-w-[80%] lg:max-w-1/2 mx-auto">
+        <div className="flex flex-col pt-6 md:pt-0 md:py-12 gap-6 items-center sm:max-w-[80%] lg:max-w-1/2 mx-auto">
           <span className="text-xs md:text-sm text-gray-600 dark:text-gray-300 text-center font-semibold uppercase tracking-widest block">
             Our Blogs
           </span>
@@ -83,7 +83,7 @@ const Blogs = () => {
         {posts.length === 0 && loading ? (
           <LoaderAllBlogPage />
         ) : (
-          <div className="mt-14 grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-12 gap-y-10">
+          <div className="mt-12 md:mt-14 grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-12 gap-y-10">
             {posts.map((post) => (
               <PostCard key={post._id} post={post} />
             ))}

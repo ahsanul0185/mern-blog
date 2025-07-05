@@ -25,7 +25,7 @@ const DashPosts = () => {
       try {
         setLoading(true);
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/post/get_posts`, {withCredentials : true}
+          `${import.meta.env.VITE_API_URL}/api/post/get_posts`,
         );
         if (res.status === 200) {
           setPosts(res.data.posts);
@@ -58,10 +58,10 @@ const DashPosts = () => {
     try {
       setShowMoreLoading(true);
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/post/get_posts?userId=${
-          currentUser._id
-        }&startIndex=${startIndex}`, {withCredentials : true}
+        `${import.meta.env.VITE_API_URL}/api/post/get_posts?startIndex=${startIndex}`
       );
+
+      console.log(res)
       if (res.status === 200) {
         setPosts((prev) => [...prev, ...res.data.posts]);
       }
@@ -81,10 +81,10 @@ const DashPosts = () => {
   return (
     <div className="h-full flex flex-col">
       <div className="flex gap-2 justify-between">
-        <h1 className="font-bold text-3xl">Blog posts</h1>
+        <h1 className="font-bold text-xl md:text-3xl">Blog posts</h1>
         <Link
           to="/dashboard/create-post"
-          className="button-primary flex items-center justify-center gap-1"
+          className="button-primary flex text-sm md:text-base items-center justify-center gap-1"
         >
           <FiPlus className="text-[18px]" />
           Create Post
@@ -92,7 +92,7 @@ const DashPosts = () => {
       </div>
 
       {/* Posts List*/}
-      <div className="mt-16 grow">
+      <div className="mt-6 md:mt-16 grow">
         {loading ? (
           <div className="h-full grid place-items-center">
             <LoaderBlogList />

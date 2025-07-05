@@ -130,8 +130,8 @@ const Post = () => {
     <>
       <div className="default-padding pt-12 flex flex-col lg:flex-row items-start gap-6 relative">
         <div className="w-full md:flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="font-semibold md:font-bold md:text-2xl">
+          <div className="flex items-start sm:items-center flex-col sm:flex-row justify-between gap-2">
+            <h2 className="font-semibold md:font-bold text-xl md:text-2xl">
               {post.title}
             </h2>
             {currentUser?.role === "admin" && (
@@ -141,7 +141,7 @@ const Post = () => {
                     state: post,
                   })
                 }
-                className="duration-200 cursor-pointer px-3 py-1 rounded flex items-center hover:bg-gray-200 dark:hover:bg-primary/50 gap-2 bg-gray-100 dark:bg-primaryDark"
+                className="duration-200 text-sm cursor-pointer px-3 py-1 rounded flex items-center hover:bg-gray-200 dark:hover:bg-primary/50 gap-2 bg-gray-100 dark:bg-primaryDark"
               >
                 <FaPencilAlt
                   size={12}
@@ -152,7 +152,7 @@ const Post = () => {
             )}
           </div>
 
-          <div className="mt-2 md:mt-4 flex items-center gap-4">
+          <div className="mt-2 md:mt-4 flex flex-wrap items-center gap-3 sm:gap-4">
             <h3 className="text-sm md:font-semibold md:text-base text-gray-600 dark:text-gray-300">
               {capitalizedText(post.category)}
             </h3>
@@ -175,7 +175,7 @@ const Post = () => {
             src={post.coverImage}
             alt="post image"
             loading="lazy"
-            className="w-full rounded-md mt-3 md:mt-6 aspect-[23/9] object-cover"
+            className="w-full rounded-md mt-4 md:mt-6 aspect-[23/9] object-cover"
           />
 
           {/* content */}

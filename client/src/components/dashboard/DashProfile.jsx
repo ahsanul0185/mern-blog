@@ -179,7 +179,7 @@ const DashProfile = () => {
 
   return (
     <div>
-      <h1 className="font-bold text-3xl">Your Profile</h1>
+      <h1 className="font-bold text-xl md:text-3xl">Your Profile</h1>
       <form
         onSubmit={handleSubmit}
         className="mt-20 flex flex-col items-center max-w-xl w-full mx-auto"

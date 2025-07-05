@@ -139,7 +139,7 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
         } aspect-square shrink-0 object-cover rounded-full border border-gray-200/40`}
       />
       <div className="grow">
-        <div className="flex text-sm gap-2 items-center text-gray-600 dark:text-gray-300">
+        <div className="flex text-sm gap-2 flex-col sm:flex-row sm:items-center text-gray-600 dark:text-gray-300">
           <h3 className="font-semibold">
             {user ? `@${user.username}` : "Anonymous"}
           </h3>

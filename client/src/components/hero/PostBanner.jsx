@@ -11,7 +11,7 @@ const PostBanner = () => {
           src={img_vr}
           loading="lazy"
           alt=""
-          className="sm:aspect-[3/2] md:aspect-[16/8] rounded-3xl object-cover"
+          className="aspect-[2/3] sm:aspect-[3/2] md:aspect-[16/8] rounded-3xl object-cover"
         />
 
         <motion.div

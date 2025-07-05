@@ -30,7 +30,7 @@ const MarkdownContent = ({content}) => {
                         );
                     },
                     p({children}){
-                        return <p className='mb-4 leading-[22px]'>{children}</p>
+                        return <p className='text-sm sm:text-base mb-4 leading-[22px]'>{children}</p>
                     },
                     strong({children}){
                         return <strong className=''>{children}</strong>
@@ -51,16 +51,16 @@ const MarkdownContent = ({content}) => {
                         return <blockquote className='border-l-4 border-teal-400 pl-4 italic bg-gray-200 dark:bg-primary/30 pt-6 pb-2 mb-4 rounded'>{children}</blockquote>
                     },
                     h1({children}){
-                        return <h1 className='text-2xl font-bold mt-6 mb-4'>{children}</h1>
+                        return <h1 className='text-xl md:text-2xl font-bold mt-3 mb-1 md:mt-6 md:mb-4'>{children}</h1>
                     },
                     h2({children}){
-                        return <h2 className='text-xl font-bold mt-6 mb-3'>{children}</h2>
+                        return <h2 className='text-lg md:text-xl font-bold mt-2 mb-2 md:mt-6 md:mb-3'>{children}</h2>
                     },
                     h3({children}){
-                        return <h3 className='text-lg font-bold mt-5 mb-2'>{children}</h3>
+                        return <h3 className='font-bold mt-5 mb-2'>{children}</h3>
                     },
                     h4({children}){
-                        return <h4 className='text-base font-bold mt-4 mb-2'>{children}</h4>
+                        return <h4 className='font-bold mt-4 mb-2'>{children}</h4>
                     },
                     a({children}){
                         return <a className='text-teal-400 cursor-pointer hover:underline'>{children}</a>

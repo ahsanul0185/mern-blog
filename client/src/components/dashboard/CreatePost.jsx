@@ -196,9 +196,9 @@ const CreatePost = () => {
 
   return (
     <div className="">
-      <div className="flex gap-2 justify-between">
-        <h1 className="font-bold text-3xl">Create a new post</h1>
-        <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row gap-2 justify-between">
+        <h1 className="font-bold text-xl md:text-3xl">Create a new post</h1>
+        <div className="flex gap-3 justify-end">
           <button
             onClick={handleCancel}
             className="button-primary bg-gray-400 dark:bg-gray-500 hover:bg-gray-600 overflow-hidden flex items-center justify-center gap-3"
@@ -217,10 +217,10 @@ const CreatePost = () => {
         </div>
       </div>
 
-      <div className="relative flex gap-6 mt-12 items-start flex-col lg:flex-row">
+      <div className="relative flex gap-6 mt-5 sm:mt-12 items-start flex-col lg:flex-row">
         <div ref={formRef} className="w-full order-2 lg:order-2">
           <form className="flex flex-col gap-6">
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-col sm:flex-row">
               <div className="flex-1">
                 <label htmlFor="title" className="form-label-primary">
                   Title
@@ -338,7 +338,7 @@ const CreatePost = () => {
               <label htmlFor="tags" className="form-label-primary ">
                 Tags
               </label>
-              <div className="input-field-style p-1 flex gap-1.5 max-w-full overflow-x-auto">
+              <div className="input-field-style p-1 flex gap-1.5 max-w-full overflow-x-auto custom-scrollbar">
                 {postData.tags?.map((tag) => (
                   <button
                     key={tag}

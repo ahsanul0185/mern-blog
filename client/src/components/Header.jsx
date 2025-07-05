@@ -96,7 +96,7 @@ const Header = () => {
             <NavLink to="/all_blogs">Blogs</NavLink>
           </nav>
 
-          <div className="flex gap-2 sm:gap-5 items-center">
+          <div className="flex gap-3 sm:gap-5 items-center">
             <form onSubmit={handleSearch} className="block">
               <div className="relative">
                 <span

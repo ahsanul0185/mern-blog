@@ -117,22 +117,22 @@ const Search = () => {
     <>
       <div className="default-padding">
         {searchData.searchTerm && (
-          <h2 className="text-2xl text-gray-700 dark:text-gray-200">
+          <h2 className="text-xl md:text-2xl mt-2 md:mt-0 text-gray-700 dark:text-gray-200">
             Search Results for "{searchData.searchTerm}"
           </h2>
         )}
 
         <div className="my-5">
           {/* Filter Options */}
-          <div className="flex items-center justify-end gap-5">
-            <div className="flex items-center gap-2">
-              <label htmlFor="sort">Sort : </label>
+          <div className="flex flex-col sm:flex-row items-center justify-end gap-5">
+            <div className="flex whitespace-nowrap w-full sm:w-fit items-center gap-2">
+              <label htmlFor="sort" className="min-w-18 sm:min-w-fit flex items-center justify-between">Sort <span>:</span> </label>
               <select
                 name="sort"
                 id="sort"
                 onChange={handleChange}
                 value={searchData.sort || ""}
-                className="input-field-style max-w-fit py-1"
+                className="input-field-style max-w-full sm:max-w-fit py-1"
               >
                 <option value="desc" className="text-black">
                   Latest
@@ -142,16 +142,16 @@ const Search = () => {
                 </option>
               </select>
             </div>
-            <div className="flex items-center gap-2">
-              <label htmlFor="category">Category : </label>
+            <div className="flex whitespace-nowrap w-full sm:w-fit items-center gap-2">
+              <label htmlFor="category" className="min-w-18 sm:min-w-fit flex items-center justify-between">Category <span>:</span> </label>
               <select
                 name="category"
                 id="category"
                 onChange={handleChange}
                 value={searchData.category || ""}
-                className="input-field-style max-w-fit py-1"
+                className="input-field-style max-w-full  sm:max-w-fit py-1"
               >
-                <option value="" className="text-black">
+                <option value="" className="text-black ">
                   All
                 </option>
                 <option value="technology" className="text-black">

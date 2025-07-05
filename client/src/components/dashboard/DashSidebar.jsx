@@ -87,7 +87,7 @@ const DashSidebar = () => {
     <div
       className={`${
         expended && !isMobile ? "w-72" : "w-16 sm:w-20"
-      } duration-300 h-[calc(100vh-58px)] lg:h-[calc(100vh-67px)] sticky top-[59px] lg:top-[67px] left-0  shrink-0 ${
+      } duration-300 h-[calc(100vh-58px)] lg:h-[calc(100vh-67px)] sticky top-[63px] sm:top-[67px] lg:top-[67px] left-0  shrink-0 ${
         isMobile ? "z-[999]" : "z-auto"
       }`}
     >
@@ -122,7 +122,7 @@ const DashSidebar = () => {
           </motion.p>
         </div>
 
-        <div onMouseEnter={() => !active && setExpended(true)} onMouseLeave={() => !active && setExpended(false)} className="flex flex-col gap-3 mt-40 text-sm md:text-base overflow-hidden">
+        <div onMouseEnter={() => !active && !isMobile && setExpended(true)} onMouseLeave={() => !active && !isMobile && setExpended(false)} className="flex flex-col gap-3 mt-40 text-sm md:text-base overflow-hidden">
           {sidebarItems.map((item, idx) => (
             <div className="relative" key={item.id}>
               {item.id === "profile" && (

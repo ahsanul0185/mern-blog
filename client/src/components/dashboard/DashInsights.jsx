@@ -190,10 +190,10 @@ const DashInsights = () => {
   return (
     <div>
       <div>
-        <h2 className="text-3xl font-semibold">
+        <h2 className="text-xl md:text-3xl font-semibold">
           Hello {currentUser.username} !
         </h2>
-        <p className="mt-1 text-gray-600 dark:text-gray-300">
+        <p className="text-sm md:text-base mt-1 text-gray-600 dark:text-gray-300">
           {moment().format("Do MMMM YYYY")}
         </p>
       </div>
@@ -207,10 +207,10 @@ const DashInsights = () => {
           >
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h2 className="text-sm uppercase text-gray-600 dark:text-gray-300">
+                <h2 className="text-xs md:text-sm uppercase text-gray-600 dark:text-gray-300">
                   {insight.title}
                 </h2>
-                <p className="text-3xl font-semibold">{insight.total}</p>
+                <p className="text-2xl md:text-3xl font-semibold">{insight.total}</p>
               </div>
               {insight.icon}
             </div>
@@ -227,7 +227,7 @@ const DashInsights = () => {
 
       <div className="mt-6 flex flex-col lg:flex-row gap-6">
         {/* Donut Chart */}
-        <div className="lg:w-[60%] shrink-0 bg-gray-200 dark:bg-primaryDark dark:border border-gray-300 dark:border-gray-200/40 p-4 rounded">
+        <div className="lg:w-[60%] shrink-0 bg-gray-200 pb-8 dark:bg-primaryDark dark:border border-gray-300 dark:border-gray-200/40 p-4 rounded">
           <CategoryChart chartData={categoryPosts} />
         </div>
 
@@ -255,7 +255,7 @@ const DashInsights = () => {
                   alt="post image"
                   className="w-18 aspect-[3/2] object-cover rounded"
                 />
-                <div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
                   <h3 className="text-[13.5px] line-clamp-2">{post.title}</h3>
                   <p className="text-xs text-gray-600 dark:text-gray-300">
                     {moment(post.createdAt).fromNow()}

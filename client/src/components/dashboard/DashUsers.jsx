@@ -98,8 +98,8 @@ const DashUsers = () => {
 
   return (
     <div className="">
-      <h2 className="text-3xl font-bold">Users List</h2>
-      <div className="mt-16">
+      <h2 className="text-xl md:text-3xl font-bold">Users List</h2>
+      <div className="mt-6 md:mt-16">
         {loading ? (
           <DashUsersSkeleton />
         ) : users.length > 0 ? (
