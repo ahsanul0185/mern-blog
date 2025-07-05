@@ -8,13 +8,15 @@ const CommentReplies = ({ replies, parentComment, setParentComments }) => {
   const [showReplies, setShowReplies] = useState(false);
   const [replyComments, setReplyComments] = useState([]);
 
-  const {currentUser} = useSelector(state => state.userR);
+  const { currentUser } = useSelector((state) => state.userR);
 
   useEffect(() => {
     const getReplies = async () => {
       try {
         const res = await axios.get(
-          `/api/comment/get_comment_replies/${parentComment._id}`
+          `${import.meta.env.VITE_API_URL}/api/comment/get_comment_replies/${
+            parentComment._id
+          }`, {withCredentials : true}
         );
         if (res.status === 200) {
           setReplyComments(res.data);
@@ -26,8 +28,6 @@ const CommentReplies = ({ replies, parentComment, setParentComments }) => {
     getReplies();
   }, [showReplies, replies]);
 
-
-  
   const handleLike = async (comment) => {
     const commentId = comment._id;
     if (!currentUser) {
@@ -35,7 +35,9 @@ const CommentReplies = ({ replies, parentComment, setParentComments }) => {
     }
 
     try {
-      const res = await axios.put(`/api/comment/like_comment/${commentId}`);
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/comment/like_comment/${commentId}`, {}, {withCredentials : true}
+      );
 
       if (res.status === 200) {
         setReplyComments((prev) =>
@@ -51,7 +53,6 @@ const CommentReplies = ({ replies, parentComment, setParentComments }) => {
     }
   };
 
-
   return (
     <div className="">
       <button
@@ -65,7 +66,15 @@ const CommentReplies = ({ replies, parentComment, setParentComments }) => {
       {showReplies && (
         <div className="flex flex-col gap-4">
           {replyComments.map((reply) => (
-            <Comment key={reply._id} onLike={handleLike} setComments={setReplyComments} comment={reply} setParentComments={setParentComments} type="reply" setShowReplies={setShowReplies}  />
+            <Comment
+              key={reply._id}
+              onLike={handleLike}
+              setComments={setReplyComments}
+              comment={reply}
+              setParentComments={setParentComments}
+              type="reply"
+              setShowReplies={setShowReplies}
+            />
           ))}
         </div>
       )}

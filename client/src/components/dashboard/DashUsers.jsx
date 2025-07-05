@@ -10,88 +10,65 @@ import { RiAlertFill } from "react-icons/ri";
 import moment from "moment";
 import { RxCross2 } from "react-icons/rx";
 import { FaCheck } from "react-icons/fa6";
+import Loader from "../loaders/Loader";
+import ReactPaginate from "react-paginate";
 
 const DashUsers = () => {
   const { currentUser } = useSelector((state) => state.userR);
   const [users, setUsers] = useState([]);
+  const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showMore, setShowMore] = useState(false);
-  const [showMoreLoading, setShowMoreLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const itemsPerPage = 10;
+
   const [activeModal, setActiveModal] = useState("");
   const [userToDelete, setUserToDelete] = useState(null);
 
   useEffect(() => {
-    const getUsers = async () => {
+
+    window.scrollTo({top : 0});
+
+    const fetchUsers = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("/api/user/get_users");
+        const res = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/api/user/get_users?page=${page}&limit=${itemsPerPage}`,
+          { withCredentials: true }
+        );
+
         if (res.status === 200) {
+          setAdmins(res.data.admins);
           setUsers(res.data.users);
+          setTotalPages(res.data.totalPages);
         }
+      } catch (err) {
+        console.log(err);
+      } finally {
         setLoading(false);
-        if (res.data.users.length < 10) {
-          setShowMore(false);
-        } else {
-          setShowMore(true);
-        }
-      } catch (error) {
-        setLoading(false);
-        toast("Could not get users", {
-          style: {
-            backgroundColor: "#a93800",
-            color: "white",
-            border: "1px solid rgba(255, 255, 255, 0.4)",
-          },
-        });
-        console.log(error);
       }
     };
 
-    if (currentUser.role === "admin") getUsers();
-  }, []);
+    currentUser.role === "admin" && fetchUsers();
+  }, [page]);
 
-  const handleShowMoreUsers = async () => {
-    const startIndex = users.length;
-
-    try {
-      setShowMoreLoading(true);
-      const res = await axios.get(
-        `/api/user/get_users?startIndex=${startIndex}`
-      );
-
-      if (res.status === 200) {
-        setUsers((prev) => [...prev, ...res.data.users]);
-      }
-
-      if (
-        res.data.users.length < 10 ||
-        res.data.totalUsers === users.length + res.data.users.length
-      ) {
-        setShowMore(false);
-      }
-
-      setShowMoreLoading(false);
-    } catch (error) {
-      setShowMoreLoading(false);
-      toast.error("Could not get users", {
-        style: {
-          backgroundColor: "#a93800",
-          color: "white",
-          border: "1px solid rgba(255, 255, 255, 0.4)",
-        },
-      });
-      console.log(error);
-    }
+  const handlePageClick = (event) => {
+    setPage(event.selected + 1); // react-paginate is 0-based
   };
 
   const handleDeleteUser = async () => {
-
-    if (!userToDelete) return
+    if (!userToDelete) return;
 
     try {
-      const res = await axios.delete(`/api/user/delete/${userToDelete._id}`, {
-        data: { password : "" },
-      });
+      const res = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/user/delete/${userToDelete._id}`,
+        {
+          data: { password: "" },
+          withCredentials: true,
+        }
+      );
 
       if (res.status === 200) {
         toast.error(res.data.message, {
@@ -101,7 +78,9 @@ const DashUsers = () => {
             border: "1px solid rgba(255, 255, 255, 0.4)",
           },
         });
-        setUsers((prev) => prev.filter((user) => user._id !== userToDelete._id));
+        setUsers((prev) =>
+          prev.filter((user) => user._id !== userToDelete._id)
+        );
         setActiveModal(null);
       }
     } catch (error) {
@@ -122,7 +101,7 @@ const DashUsers = () => {
       <h2 className="text-3xl font-bold">Users List</h2>
       <div className="mt-16">
         {loading ? (
-         <DashUsersSkeleton />
+          <DashUsersSkeleton />
         ) : users.length > 0 ? (
           <div className="relative overflow-x-auto rounded border border-gray-200 dark:border-gray-200/40 custom-scrollbar">
             <table className="w-full text-sm text-left rtl:text-right text-gray-600 dark:text-gray-200">
@@ -149,52 +128,58 @@ const DashUsers = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user, idx) => (
-                  <tr
-                    key={user._id}
-                    className={`bg-white dark:bg-primaryDark dark:border-gray-200/30 border-gray-200 hover:bg-primary/10 dark:hover:bg-primary/20 ${
-                      idx + 1 === users.length ? "border-b-0" : "border-b"
-                    }`}
-                  >
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium whitespace-nowrap "
+                {(page == 1 ? [...admins, ...users] : users).map(
+                  (user, idx) => (
+                    <tr
+                      key={user._id}
+                      className={`bg-white dark:bg-primaryDark dark:border-gray-200/30 border-gray-200 hover:bg-primary/10 dark:hover:bg-primary/20 ${
+                        idx + 1 === users.length ? "border-b-0" : "border-b"
+                      }`}
                     >
-                      {new Date(user.createdAt).toLocaleDateString()}
-                    </th>
-                    <td className="px-6 py-4">
-                      <div className="relative w-fit mx-auto">
-                        <img
-                          src={user.profilePicture}
-                          className="size-9 md:size-12 min-w-fit rounded-full aspect-square object-cover"
-                          alt=""
-                        />
-
-                        {user.role === "admin" && (
-                          <BsShieldLockFill
-                            title="Admin"
-                            className="absolute bottom-0 right-0 text-teal-400"
-                          />
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">@{user.username}</td>
-                    <td className="px-6 py-4">{user.email}</td>
-                    <td className="px-6 py-4">
-                      {user.isVerfied ? <FaCheck className="text-green-500" /> : <RxCross2 className="text-red-500" />}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button
-                        onClick={() => {
-                          setActiveModal("user-delete");
-                          setUserToDelete(user);
-                        }}
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium whitespace-nowrap "
                       >
-                        <MdOutlineDelete className="text-[18px] md:text-[22px] text-red-400 hover:text-red-600 duration-200 cursor-pointer" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                        {new Date(user.createdAt).toLocaleDateString()}
+                      </th>
+                      <td className="px-6 py-4">
+                        <div className="relative w-fit mx-auto">
+                          <img
+                            src={user.profilePicture}
+                            className="size-9 md:size-12 min-w-fit rounded-full aspect-square object-cover"
+                            alt=""
+                          />
+
+                          {user.role === "admin" && (
+                            <BsShieldLockFill
+                              title="Admin"
+                              className="absolute bottom-0 right-0 text-teal-400"
+                            />
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">@{user.username}</td>
+                      <td className="px-6 py-4">{user.email}</td>
+                      <td className="px-6 py-4">
+                        {user.isVerified ? (
+                          <FaCheck className="text-green-500" />
+                        ) : (
+                          <RxCross2 className="text-red-500" />
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          onClick={() => {
+                            setActiveModal("user-delete");
+                            setUserToDelete(user);
+                          }}
+                        >
+                          <MdOutlineDelete className="text-[18px] md:text-[22px] text-red-400 hover:text-red-600 duration-200 cursor-pointer" />
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>
@@ -204,19 +189,21 @@ const DashUsers = () => {
           )
         )}
 
-
-        {showMore && !loading && (
-          <div className="text-center">
-            <button
-              className={`button-primary mt-5 flex mx-auto gap-2 ${
-                showMoreLoading ? "bg-primary/40" : ""
-              }`}
-              onClick={handleShowMoreUsers}
-            >
-              {showMoreLoading ? <Loader /> : ""}Show More
-            </button>
-          </div>
-        )}
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel="Next"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          pageCount={totalPages}
+          previousLabel="Previous"
+          renderOnZeroPageCount={null}
+          className="flex items-center justify-end gap-2 mt-4"
+          pageLinkClassName="size-6 cursor-pointer rounded-sm grid place-items-center text-white font-semibold"
+          activeLinkClassName="bg-primary"
+          previousLinkClassName="text-gray-500 font-semibold mr-2 text-sm cursor-pointer"
+          nextLinkClassName="text-gray-500 font-semibold ml-2 text-sm cursor-pointer"
+          breakLinkClassName="text-2xl"
+        />
 
         <Modal
           showModal={activeModal === "user-delete"}
@@ -224,16 +211,24 @@ const DashUsers = () => {
         >
           <RiAlertFill className="text-7xl mx-auto text-gray-300" />
 
-          {userToDelete && 
-          
-          <div className="flex gap-3 my-6 bg-primary/40 p-3 rounded">
-            <img src={userToDelete.profilePicture} className="size-10 rounded-full" alt="user profile" />
-            <div>
-              <h2 className="text-gray-600 dark:text-gray-300 font-semibold">@{userToDelete.username}</h2>
-              <p className="text-xs">User since {moment(userToDelete.updatedAt).format("Do MMMM YYYY")}</p>
+          {userToDelete && (
+            <div className="flex gap-3 my-6 bg-primary/40 p-3 rounded">
+              <img
+                src={userToDelete.profilePicture}
+                className="size-10 rounded-full"
+                alt="user profile"
+              />
+              <div>
+                <h2 className="text-gray-600 dark:text-gray-300 font-semibold">
+                  @{userToDelete.username}
+                </h2>
+                <p className="text-xs">
+                  User since{" "}
+                  {moment(userToDelete.updatedAt).format("Do MMMM YYYY")}
+                </p>
+              </div>
             </div>
-          </div>
-          }
+          )}
 
           <h2 className="font-bold text-xl mt-2">
             Are you sure you want to delete the user?
@@ -254,7 +249,6 @@ const DashUsers = () => {
             </button>
           </div>
         </Modal>
-
       </div>
     </div>
   );

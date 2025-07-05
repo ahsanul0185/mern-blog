@@ -29,9 +29,12 @@ const InputCommentField = ({
         return;
       }
 
-      const res = await axios.post("/api/ai/generate_commment_reply", {
-        content: parentComment.content,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/ai/generate_commment_reply`,
+        {
+          content: parentComment.content,
+        }, {withCredentials : true}
+      );
 
       if (res.status === 200) {
         setText(res.data);
@@ -79,10 +82,10 @@ const InputCommentField = ({
         </div>
 
         <div className="flex items-center gap-2 justify-between">
-         <div className="flex items-center gap-5">
-           <span className="text-sm text-gray-600 dark:text-gray-300">
-            {200 - text?.length} characters remaining
-          </span>
+          <div className="flex items-center gap-5">
+            <span className="text-sm text-gray-600 dark:text-gray-300">
+              {200 - text?.length} characters remaining
+            </span>
 
             {currentUser.role === "admin" && buttonText === "Reply" && (
               <button
@@ -94,8 +97,7 @@ const InputCommentField = ({
                 {loadingGReply ? "Generating" : "Generate Reply"}
               </button>
             )}
-         </div>
-
+          </div>
 
           <div className="flex items-center gap-2 justify-end">
             <button

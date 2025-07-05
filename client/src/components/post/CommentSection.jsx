@@ -14,13 +14,14 @@ const CommentSection = ({ postId }) => {
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState([]);
 
-  
-
-
   useEffect(() => {
     const getComments = async () => {
       try {
-        const res = await axios.get(`/api/comment/get_post_comments/${postId}`);
+        const res = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/api/comment/get_post_comments/${postId}`, {withCredentials : true}
+        );
 
         if (res.status === 200) {
           setComments(res.data);
@@ -42,11 +43,14 @@ const CommentSection = ({ postId }) => {
     try {
       setLoading(true);
 
-      const res = await axios.post("/api/comment/create", {
-        userId: currentUser._id,
-        postId,
-        content: commentText,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/comment/create`,
+        {
+          userId: currentUser._id,
+          postId,
+          content: commentText,
+        }, {withCredentials : true}
+      );
 
       if (res.status === 201) {
         setCommentText("");
@@ -74,7 +78,9 @@ const CommentSection = ({ postId }) => {
     }
 
     try {
-      const res = await axios.put(`/api/comment/like_comment/${commentId}`);
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/comment/like_comment/${commentId}`, {}, {withCredentials : true}
+      );
 
       if (res.status === 200) {
         setComments((prev) =>
@@ -84,7 +90,7 @@ const CommentSection = ({ postId }) => {
               : comment
           )
         );
-        console.log(res.data)
+
       }
     } catch (error) {
       console.log(error);
@@ -122,16 +128,27 @@ const CommentSection = ({ postId }) => {
         {/* Comments */}
         <div className="mt-6 flex flex-col gap-6">
           {comments.length !== 0 ? (
-            comments.map((comment) => (
-              comment.parentCommentId === null && <div key={comment._id}>
-                <Comment
-                  comment={comment}
-                  onLike={handleLike}
-                  setComments={setComments}
-                />
-                {comment.replies.length !== 0 && <div className="ml-13"><CommentReplies parentComment={comment} replies={comment.replies} setParentComments={setComments}/></div>}
-              </div>
-            ))
+            comments.map(
+              (comment) =>
+                comment.parentCommentId === null && (
+                  <div key={comment._id}>
+                    <Comment
+                      comment={comment}
+                      onLike={handleLike}
+                      setComments={setComments}
+                    />
+                    {comment.replies.length !== 0 && (
+                      <div className="ml-13">
+                        <CommentReplies
+                          parentComment={comment}
+                          replies={comment.replies}
+                          setParentComments={setComments}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )
+            )
           ) : (
             <h2 className="text-gray-600 dark:text-gray-300 italic">
               No comments yet!

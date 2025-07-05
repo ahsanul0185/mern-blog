@@ -58,10 +58,13 @@ const AIPostIdeas = ({ setPostData }) => {
 
     try {
       setLoadingGenerate(true);
-      const res = await axios.post("/api/ai/generate_blog_post", {
-        title: generatePostData.title.trim(),
-        tone: generatePostData.tone.trim(),
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/ai/generate_blog_post`,
+        {
+          title: generatePostData.title.trim(),
+          tone: generatePostData.tone.trim(),
+        }, {withCredentials : true}
+      );
 
       const aiGeneratedPostData = {
         title: generatePostData.title,
@@ -79,7 +82,7 @@ const AIPostIdeas = ({ setPostData }) => {
       console.log(aiGeneratedPostData);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to generate post")
+      toast.error("Failed to generate post");
     } finally {
       setLoadingGenerate(false);
       setActiveModal(null);
@@ -95,29 +98,35 @@ const AIPostIdeas = ({ setPostData }) => {
         </h2>
         <div className="flex gap-2">
           <button
-          onClick={() => {
-            setGeneratePostData({ tone: "", title: "" });
-            setActiveModal(true);
-          }}
-          className="text-xs button-primary"
-        >
-          Generate New
-        </button>
+            onClick={() => {
+              setGeneratePostData({ tone: "", title: "" });
+              setActiveModal(true);
+            }}
+            className="text-xs button-primary"
+          >
+            Generate New
+          </button>
 
-        <button onClick={() => postIdeas && dispatch(generatePostIdeas())} className=" cursor-pointer hover:text-white">
-          <IoReload />
-        </button>
+          <button
+            onClick={() => postIdeas && dispatch(generatePostIdeas())}
+            className=" cursor-pointer hover:text-white"
+          >
+            <IoReload />
+          </button>
         </div>
       </div>
 
       <div className="flex flex-col flex-1 overflow-auto custom-scrollbar">
-        {!postIdeas ? <div className="px-5 pb-5"><SkeltonLoader /><SkeltonLoader /></div> : 
-        
-        postIdeas?.map((idea, idx) => (
-          <PostIdeaCard key={idx} idea={idea} onIdeaClick={handleIdeaClick} />
-        ))
-          
-        }
+        {!postIdeas ? (
+          <div className="px-5 pb-5">
+            <SkeltonLoader />
+            <SkeltonLoader />
+          </div>
+        ) : (
+          postIdeas?.map((idea, idx) => (
+            <PostIdeaCard key={idx} idea={idea} onIdeaClick={handleIdeaClick} />
+          ))
+        )}
       </div>
 
       <Modal

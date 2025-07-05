@@ -1,26 +1,26 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { FaArrowLeft, FaLock } from 'react-icons/fa';
-import { useNavigate, useParams } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { FaCheckCircle } from 'react-icons/fa';
-import Loader from '../components/loaders/Loader';
-import { toast } from 'sonner';
+import axios from "axios";
+import React, { useState } from "react";
+import { FaArrowLeft, FaLock } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "motion/react";
+import { FaCheckCircle } from "react-icons/fa";
+import Loader from "../components/loaders/Loader";
+import { toast } from "sonner";
 
 const ResetPassword = () => {
   const [formData, setFormData] = useState({
-    password: '',
-    confirmPassword: '',
+    password: "",
+    confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isResetSuccess, setIsResetSuccess] = useState(false);
 
-  const {token} = useParams();
+  const { token } = useParams();
 
   const handleChange = (e) => {
-    setError(null)
-    setFormData(prev => ({
+    setError(null);
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -29,41 +29,41 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { password, confirmPassword } = formData;
-  
-    
+
     if (password.trim().length < 6) {
-      setError('Password must be at least 6 characters long');
+      setError("Password must be at least 6 characters long");
       return;
     }
 
     if (!password || !confirmPassword) {
-      setError('Please fill out both fields.');
+      setError("Please fill out both fields.");
       return;
     }
 
-
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError("Passwords do not match.");
       return;
     }
 
     try {
-        setLoading(true)
-        setError(null);
-        const res = await axios.post(`/api/auth/reset-password/${token}`, {password});
-        if (res.status === 200) {
-            setIsResetSuccess(true)
-        }
+      setLoading(true);
+      setError(null);
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/reset-password/${token}`,
+        { password }, {withCredentials : true}
+      );
+      if (res.status === 200) {
+        setIsResetSuccess(true);
+      }
     } catch (error) {
-        toast.error(error?.response?.data?.message)
-        console.log(error)
-    }finally {
-        setLoading(false);
+      toast.error(error?.response?.data?.message);
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    !isResetSuccess ? 
+  return !isResetSuccess ? (
     <div className="min-h-screen bg-white dark:bg-dark flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-gray-50 dark:bg-primaryDark rounded-xl shadow-md p-8">
         <h2 className="text-2xl font-semibold text-center text-gray-800 dark:text-white mb-6">
@@ -97,7 +97,7 @@ const ResetPassword = () => {
             />
           </div>
 
-          {error && <p className='text-red-400 mb-4'>{error}</p>}
+          {error && <p className="text-red-400 mb-4">{error}</p>}
 
           {/* Submit Button */}
           <button
@@ -105,19 +105,23 @@ const ResetPassword = () => {
             disabled={loading}
             className="w-full bg-[#00adae] cursor-pointer flex items-center justify-center gap-2 hover:bg-[#009192] text-white font-medium py-2 rounded-md transition"
           >
-             {loading ? <><Loader /> Reset Password</> : "Reset Password"}
+            {loading ? (
+              <>
+                <Loader /> Reset Password
+              </>
+            ) : (
+              "Reset Password"
+            )}
           </button>
         </form>
       </div>
     </div>
-    : 
+  ) : (
     <ResetSuccess />
   );
 };
 
 export default ResetPassword;
-
-
 
 const ResetSuccess = () => {
   const navigate = useNavigate();
@@ -125,12 +129,11 @@ const ResetSuccess = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-dark flex items-center justify-center px-4">
       <div className="bg-gray-50 dark:bg-primaryDark rounded-xl shadow-md p-8 max-w-md w-full text-center">
-
         {/* Animated Success Icon */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ type: 'spring', duration: 0.6 }}
+          transition={{ type: "spring", duration: 0.6 }}
           className="flex justify-center mb-6"
         >
           <motion.div
@@ -149,18 +152,19 @@ const ResetSuccess = () => {
           Password Reset Successful!
         </h2>
         <p className="text-gray-600 dark:text-gray-300 text-sm mb-6">
-          Your password has been successfully updated. You can now log in using your new password.
+          Your password has been successfully updated. You can now log in using
+          your new password.
         </p>
 
         {/* Back to Login Button */}
         <button
-                      type="button"
-                      onClick={() => navigate('/sign-in')}
-                      className="w-full flex items-center justify-center gap-2 text-[#00adae] hover:underline mt-2"
-                    >
-                      <FaArrowLeft className="text-sm" />
-                      Back to Sign in
-                    </button>
+          type="button"
+          onClick={() => navigate("/sign-in")}
+          className="w-full flex items-center justify-center gap-2 text-[#00adae] hover:underline mt-2"
+        >
+          <FaArrowLeft className="text-sm" />
+          Back to Sign in
+        </button>
       </div>
     </div>
   );

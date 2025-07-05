@@ -20,13 +20,12 @@ const DashPosts = () => {
   const [showMore, setShowMore] = useState(false);
   const [showMoreLoading, setShowMoreLoading] = useState(false);
 
-
   useEffect(() => {
     const getPosts = async () => {
       try {
         setLoading(true);
         const res = await axios.get(
-          `/api/post/get_posts`
+          `${import.meta.env.VITE_API_URL}/api/post/get_posts`, {withCredentials : true}
         );
         if (res.status === 200) {
           setPosts(res.data.posts);
@@ -59,12 +58,17 @@ const DashPosts = () => {
     try {
       setShowMoreLoading(true);
       const res = await axios.get(
-        `/api/post/get_posts?userId=${currentUser._id}&startIndex=${startIndex}`
+        `${import.meta.env.VITE_API_URL}/api/post/get_posts?userId=${
+          currentUser._id
+        }&startIndex=${startIndex}`, {withCredentials : true}
       );
       if (res.status === 200) {
         setPosts((prev) => [...prev, ...res.data.posts]);
       }
-      if (res.data.posts.length < 9 || res.data.totalPosts === (posts.length + res.data.posts.length)) {
+      if (
+        res.data.posts.length < 9 ||
+        res.data.totalPosts === posts.length + res.data.posts.length
+      ) {
         setShowMore(false);
       }
       setShowMoreLoading(false);
@@ -107,7 +111,9 @@ const DashPosts = () => {
         {showMore && !loading && (
           <button
             onClick={handleShowMorePosts}
-            className={`button-primary mt-6 w-full flex gap-2 items-center justify-center ${showMoreLoading ? "bg-primary/40" : ""}`}
+            className={`button-primary mt-6 w-full flex gap-2 items-center justify-center ${
+              showMoreLoading ? "bg-primary/40" : ""
+            }`}
           >
             {showMoreLoading && <Loader />}Show More
           </button>
@@ -129,7 +135,9 @@ const Post = ({ post, setPosts }) => {
   const handleDeletePost = async (postId) => {
     try {
       const res = await axios.delete(
-        `/api/post/delete/${postId}/${currentUser._id}`
+        `${import.meta.env.VITE_API_URL}/api/post/delete/${postId}/${
+          currentUser._id
+        }`, {withCredentials : true}
       );
       if (res.status === 200) {
         toast(res.data.message, {

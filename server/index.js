@@ -26,8 +26,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'https://blogbyahsanul.vercel.app', 
-  credentials: true,             
+  origin: process.env.CLIENT_URL, 
+  credentials: true,        
 }));
 const PORT = 3000;
 

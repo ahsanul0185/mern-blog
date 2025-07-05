@@ -12,7 +12,9 @@ const OurRecentPost = () => {
   useEffect(() => {
     const getGetRecentPosts = async () => {
       try {
-        const res = await axios.get("/api/post/get_posts?limit=3&order=desc");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/post/get_posts?limit=3&sort=desc`, {withCredentials : true}
+        );
         if (res.status === 200) {
           setRecentPosts(res.data.posts);
         }
@@ -34,7 +36,12 @@ const OurRecentPost = () => {
           className="lg:w-[60%] rounded-2xl aspect-[3/2] object-cover z-10"
           loading="lazy"
         />
-        <motion.div initial={{opacity : 0, x : -100}} whileInView={{opacity : 1, x : 0}} transition={{duration : 0.6, ease : "circOut"}} viewport={{once : true, amount : 0.4}}>
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "circOut" }}
+          viewport={{ once: true, amount: 0.4 }}
+        >
           <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 text-sm md:text-base">
             <h3 className="uppercase font-semibold text-gray-800 dark:text-gray-300">
               Travel
@@ -61,8 +68,14 @@ const OurRecentPost = () => {
         </motion.div>
       </div>
 
-      <motion.div initial={{opacity : 0}} whileInView={{opacity : 1}} transition={{duration : 0.35, ease : "backInOut"}} viewport={{once : true, amount : 0.4}} className="mt-14 grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-12 gap-y-10">
-        {recentPosts.map((post) => (
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.35, ease: "backInOut" }}
+        viewport={{ once: true, amount: 0.4 }}
+        className="mt-14 grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-12 gap-y-10"
+      >
+        {recentPosts?.map((post) => (
           <PostCard key={post._id} post={post} />
         ))}
       </motion.div>

@@ -16,7 +16,7 @@ const DashUsersSkeleton = () => {
             </tr>
           </thead>
           <tbody>
-            {[1, 2, 3, 4, 5].map((i) => (
+            {[1, 2, 3, 4, 5, 6, 7].map((i) => (
               <tr key={i} className="bg-white dark:bg-primaryDark border-b dark:border-gray-200/30 border-gray-200">
                 <td className="px-6 py-4">
                   <div className="h-4 w-20 bg-gray-300 dark:bg-primary/40 rounded animate-shimmer" />

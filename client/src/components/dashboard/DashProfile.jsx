@@ -115,8 +115,8 @@ const DashProfile = () => {
       dispatch(updateStart());
 
       const res = await axios.put(
-        `/api/user/update/${currentUser._id}`,
-        formData
+        `${import.meta.env.VITE_API_URL}/api/user/update/${currentUser._id}`,
+        formData, {withCredentials : true}
       );
       const data = await res.data;
 
@@ -141,11 +141,14 @@ const DashProfile = () => {
 
   // delete account
   const handleDeleteAccount = async (password) => {
-
     try {
-      const res = await axios.delete(`/api/user/delete/${currentUser._id}`, {
-        data: { password },
-      });
+      const res = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/user/delete/${currentUser._id}`,
+        {
+          data: { password },
+          withCredentials : true
+        }, 
+      );
       if (res.status === 200) {
         dispatch(deleteUserSuccess());
         toast.error("Account deleted", {

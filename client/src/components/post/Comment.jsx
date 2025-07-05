@@ -15,7 +15,7 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
   const { currentUser } = useSelector((state) => state.userR);
 
   const [editCommentText, setEditCommentText] = useState(comment.content || "");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [activeModal, setActiveModal] = useState("");
 
   const [isReplying, setIsReplying] = useState(false);
@@ -24,12 +24,17 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await axios.get(`/api/user/${comment.userId}`);
+        setLoading(true);
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/${comment.userId}`, {withCredentials : true}
+        );
         if (res.status === 200) {
           setUser(res.data);
         }
       } catch (error) {
         console.log(error);
+      }finally{
+        setLoading(false)
       }
     };
 
@@ -38,9 +43,14 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
 
   const handleEditComment = async () => {
     try {
-      const res = await axios.put(`/api/comment/edit_comment/${comment._id}`, {
-        content: editCommentText,
-      });
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/comment/edit_comment/${
+          comment._id
+        }`,
+        {
+          content: editCommentText,
+        }, {withCredentials : true}
+      );
       if (res.status === 200) {
         setComments((prev) =>
           prev.map((c) =>
@@ -58,7 +68,9 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
   const handleDeleteComment = async (commentId) => {
     try {
       const res = await axios.delete(
-        `/api/comment/delete_comment/${commentId}`
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/comment/delete_comment/${commentId}`, {withCredentials : true}
       );
 
       if (res.status === 200) {
@@ -88,11 +100,16 @@ const Comment = ({ comment, onLike, setComments, type, setParentComments }) => {
 
   const handleReplyComment = async () => {
     try {
-      const res = await axios.put(`/api/comment/reply_comment/${comment._id}`, {
-        postId: comment.postId,
-        userId: currentUser._id,
-        content: replyCommentText,
-      });
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/comment/reply_comment/${
+          comment._id
+        }`,
+        {
+          postId: comment.postId,
+          userId: currentUser._id,
+          content: replyCommentText,
+        }, {withCredentials : true}
+      );
 
       if (res.status === 200) {
         setComments((prev) =>

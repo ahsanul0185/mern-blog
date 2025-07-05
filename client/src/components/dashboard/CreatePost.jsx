@@ -33,7 +33,7 @@ const CreatePost = () => {
 
   const formRef = useRef();
   const [formHeight, setFormHeight] = useState();
-    const isMobile = useIsMobile(1024);
+  const isMobile = useIsMobile(1024);
 
   // IMAGE FILE SELECT
   const handeImageFileInputChange = (e) => {
@@ -130,10 +130,13 @@ const CreatePost = () => {
 
       const imageUrl = await uploadImageToCloudinary();
 
-      const res = await axios.post(`/api/post/create`, {
-        ...postData,
-        coverImage: imageUrl || postData.coverImage,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/post/create`,
+        {
+          ...postData,
+          coverImage: imageUrl || postData.coverImage,
+        }, {withCredentials : true}
+      );
       if (res.status === 201) {
         toast.success("Post published successfully", {
           style: {
@@ -174,27 +177,22 @@ const CreatePost = () => {
     setImageFileUrl(null);
   };
 
-
   // Match the divs height
   useLayoutEffect(() => {
+    if (!formRef.current || isMobile) return;
 
-      if (!formRef.current || isMobile) return;
+    setFormHeight(formRef.current.offsetHeight);
 
-      setFormHeight(formRef.current.offsetHeight);
+    const resizeObserver = new window.ResizeObserver((entries) => {
+      for (let entry of entries) {
+        setFormHeight(`${entry.contentRect.height - 24}px`);
+      }
+    });
 
-      const resizeObserver = new window.ResizeObserver(entries => {
-        for(let entry of entries) {
-            setFormHeight(`${entry.contentRect.height- 24}px`);
-        }
-      });
+    resizeObserver.observe(formRef.current);
 
-      resizeObserver.observe(formRef.current);
-
-      return () => resizeObserver.disconnect();
-
+    return () => resizeObserver.disconnect();
   }, []);
-
-
 
   return (
     <div className="">
@@ -246,13 +244,21 @@ const CreatePost = () => {
                   value={postData.category}
                   onChange={handleInputFieldChange}
                 >
-                  <option value="" disabled className='text-black/50'>
+                  <option value="" disabled className="text-black/50">
                     Select Category
                   </option>
-                  <option value="technology" className='text-black'>Technology</option>
-                  <option value="programming" className='text-black'>Programming </option>
-                  <option value="travel" className='text-black'>Travel</option>
-                  <option value="health" className='text-black'>Health</option>
+                  <option value="technology" className="text-black">
+                    Technology
+                  </option>
+                  <option value="programming" className="text-black">
+                    Programming{" "}
+                  </option>
+                  <option value="travel" className="text-black">
+                    Travel
+                  </option>
+                  <option value="health" className="text-black">
+                    Health
+                  </option>
                 </select>
               </div>
             </div>
@@ -372,7 +378,12 @@ const CreatePost = () => {
           </form>
         </div>
 
-        <div   style={{ height: isMobile ? "40vh" : formHeight ? formHeight : "auto" }} className={`shrink-0 order-1 lg:order-2 overflow-auto mt-6 lg:max-w-sm w-full dark:bg-primaryDark border border-gray-300 dark:border-gray-200/40 rounded`}>
+        <div
+          style={{
+            height: isMobile ? "40vh" : formHeight ? formHeight : "auto",
+          }}
+          className={`shrink-0 order-1 lg:order-2 overflow-auto mt-6 lg:max-w-sm w-full dark:bg-primaryDark border border-gray-300 dark:border-gray-200/40 rounded`}
+        >
           <AIPostIdeas setPostData={setPostData} />
         </div>
       </div>

@@ -41,12 +41,14 @@ const DashInsights = () => {
   const [categoryPosts, setCategoryPosts] = useState([]);
   const [recentPosts, setRecentPosts] = useState([]);
   const [comments, setRecentComments] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getUsersData = async () => {
       try {
-        const res = await axios.get("/api/user/get_users");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/get_users`, {withCredentials : true}
+        );
         if (res.status === 200) {
           setInsights((prev) =>
             prev.map((insight, idx) =>
@@ -67,7 +69,9 @@ const DashInsights = () => {
 
     const getPostsData = async () => {
       try {
-        const res = await axios.get("/api/post/get_posts");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/post/get_posts` , {withCredentials : true}
+        );
         if (res.status === 200) {
           setInsights((prev) =>
             prev.map((insight, idx) =>
@@ -88,7 +92,9 @@ const DashInsights = () => {
 
     const getCommentsData = async () => {
       try {
-        const res = await axios.get("/api/comment/get_all_comments?order=desc");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/comment/get_all_comments?sort=desc`, {withCredentials : true}
+        );
         if (res.status === 200) {
           setInsights((prev) =>
             prev.map((insight, idx) =>
@@ -109,13 +115,16 @@ const DashInsights = () => {
 
     const getCategory = async () => {
       try {
-        const res = await axios.get("/api/post/get_post_state_by_category");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/post/get_post_state_by_category`, {withCredentials : true}
+        );
         if (res.status === 200) {
           setCategoryPosts(
             Object.values(
               res.data.reduce((acc, item) => {
                 const category =
-                  item.category.charAt(0).toUpperCase() + item.category.slice(1).toLowerCase();
+                  item.category.charAt(0).toUpperCase() +
+                  item.category.slice(1).toLowerCase();
                 if (!acc[category]) {
                   acc[category] = { ...item, category };
                 } else {
@@ -134,7 +143,9 @@ const DashInsights = () => {
 
     const getRecentPosts = async () => {
       try {
-        const res = await axios.get("/api/post/get_posts?limit=5");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/post/get_posts?limit=5`, {withCredentials : true}
+        );
         if (res.status === 200) {
           setRecentPosts(res.data.posts);
         }
@@ -145,7 +156,9 @@ const DashInsights = () => {
 
     const getAllComments = async () => {
       try {
-        const res = await axios.get("/api/comment/get_all_comments?sort=desc&limit=5");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/comment/get_all_comments?sort=desc&limit=5`, {withCredentials : true}
+        );
         if (res.status === 200) {
           setRecentComments(res.data.comments);
         }
@@ -154,7 +167,7 @@ const DashInsights = () => {
       }
     };
 
-        const fetchAll = async () => {
+    const fetchAll = async () => {
       setLoading(true);
       await Promise.all([
         getUsersData(),
@@ -168,7 +181,7 @@ const DashInsights = () => {
     };
 
     if (currentUser.role === "admin") {
-fetchAll()
+      fetchAll();
     }
   }, []);
 
@@ -233,7 +246,7 @@ fetchAll()
           <div className="flex flex-col gap-4 mt-6">
             {recentPosts.map((post) => (
               <div
-              key={post._id}
+                key={post._id}
                 className="flex items-center gap-3 cursor-pointer"
                 onClick={() => navigate(`/post/${post.slug}`)}
               >
@@ -268,14 +281,14 @@ fetchAll()
 
         <div className="mt-6 flex flex-col gap-6">
           {comments.map((comment) => (
-            <div key={comment._id} >
+            <div key={comment._id}>
               <Comment comment={comment} type="dash" />
               <Link
-            to={`/post/${comment.postId}`}
-            className="text-xs px-1 py-0.5 rounded cursor-pointer hover:bg-primary/30 duration-200 ml-13 bg-primary/50"
-          >
-            See Post
-          </Link>
+                to={`/post/${comment.postId}`}
+                className="text-xs px-1 py-0.5 rounded cursor-pointer hover:bg-primary/30 duration-200 ml-13 bg-primary/50"
+              >
+                See Post
+              </Link>
             </div>
           ))}
         </div>

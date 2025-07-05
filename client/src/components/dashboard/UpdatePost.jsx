@@ -135,11 +135,13 @@ const UpdatePost = () => {
       const imageUrl = await uploadImageToCloudinary();
 
       const res = await axios.put(
-        `/api/post/update/${post._id}/${currentUser._id}`,
+        `${import.meta.env.VITE_API_URL}/api/post/update/${post._id}/${
+          currentUser._id
+        }`,
         {
           ...postData,
           coverImage: imageUrl || imageFileUrl,
-        }
+        }, {withCredentials : true}
       );
 
       if (res.status === 200) {
@@ -187,7 +189,9 @@ const UpdatePost = () => {
   const handleDeletePost = async (postId) => {
     try {
       const res = await axios.delete(
-        `/api/post/delete/${postId}/${currentUser._id}`
+        `${import.meta.env.VITE_API_URL}/api/post/delete/${postId}/${
+          currentUser._id
+        }`, {withCredentials : true}
       );
       if (res.status === 200) {
         toast.success(res.data.message);

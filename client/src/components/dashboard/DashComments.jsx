@@ -13,23 +13,27 @@ const DashComments = () => {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState(false);
-    const [showMoreLoading, setShowMoreLoading] = useState(false);
+  const [showMoreLoading, setShowMoreLoading] = useState(false);
 
   useEffect(() => {
     const getAllComments = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("/api/comment/get_all_comments");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/comment/get_all_comments?sort=desc`, {withCredentials : true}
+        );
         if (res.status === 200) {
           setComments(res.data.comments);
         }
 
-        if (res.data.comments.map(comment => comment.parentCommentId === null).length < 10) {
+        if (
+          res.data.comments.map((comment) => comment.parentCommentId === null)
+            .length < 10
+        ) {
           setShowMore(false);
-        }else{
+        } else {
           setShowMore(true);
         }
-
       } catch (error) {
         console.log(error);
       } finally {
@@ -40,19 +44,25 @@ const DashComments = () => {
     if (currentUser.role === "admin") getAllComments();
   }, []);
 
-
-    const handleShowMorePosts = async () => {
-    const startIndex = comments.map(comment => comment.parentCommentId === null).length;
+  const handleShowMorePosts = async () => {
+    const startIndex = comments.map(
+      (comment) => comment.parentCommentId === null
+    ).length;
 
     try {
       setShowMoreLoading(true);
       const res = await axios.get(
-        `/api/comment/get_all_comments?startIndex=${startIndex}`
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/comment/get_all_comments?startIndex=${startIndex}&sort=desc`, {withCredentials : true}
       );
       if (res.status === 200) {
         setComments((prev) => [...prev, ...res.data.comments]);
       }
-      if (res.data.comments.length < 9 || res.data.totalComments === (comments.length + res.data.comments.length)) {
+      if (
+        res.data.comments.length < 9 ||
+        res.data.totalComments === comments.length + res.data.comments.length
+      ) {
         setShowMore(false);
       }
       setShowMoreLoading(false);
@@ -83,14 +93,14 @@ const DashComments = () => {
         </div>
       )}
 
-            {/* {showMore && !loading && (
+      {showMore && !loading && (
           <button
             onClick={handleShowMorePosts}
             className={`button-primary mt-6 w-full flex gap-2 items-center justify-center ${showMoreLoading ? "bg-primary/40" : ""}`}
           >
             {showMoreLoading && <Loader />}Show More
           </button>
-        )} */}
+        )}
     </div>
   );
 };
@@ -110,7 +120,9 @@ const CommentRow = ({ comment, setComments }) => {
     const getPost = async () => {
       try {
         const res = await axios.get(
-          `/api/post/get_posts?postId=${comment.postId}`
+          `${import.meta.env.VITE_API_URL}/api/post/get_posts?postId=${
+            comment.postId
+          }`, {withCredentials : true}
         );
         if (res.status === 200) {
           setPost(res.data.posts[0]);
@@ -127,7 +139,9 @@ const CommentRow = ({ comment, setComments }) => {
       if (comment.replies.length === 0) return;
       try {
         const res = await axios.get(
-          `/api/comment/get_comment_replies/${comment._id}`
+          `${import.meta.env.VITE_API_URL}/api/comment/get_comment_replies/${
+            comment._id
+          }`, {withCredentials : true}
         );
         if (res.status === 200) {
           setReplyComments(res.data);
@@ -146,7 +160,9 @@ const CommentRow = ({ comment, setComments }) => {
     }
 
     try {
-      const res = await axios.put(`/api/comment/like_comment/${commentId}`);
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/comment/like_comment/${commentId}`,{}, {withCredentials : true}
+      );
 
       if (res.status === 200) {
         if (commentToLike.parentCommentId === null) {

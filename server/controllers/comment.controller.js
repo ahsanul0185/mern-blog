@@ -55,7 +55,7 @@ export const getAllComments = async (req, res, next) => {
   const sortDirection = req.query.sort === "desc" ? -1 : 1;
 
   try {
-    const comments = await Comment.find().sort({
+    const comments = await Comment.find({parentCommentId : null}).sort({
       createdAt: sortDirection,
     }).skip(startIndex).limit(limit);
 

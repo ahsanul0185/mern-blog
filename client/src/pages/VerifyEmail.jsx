@@ -10,17 +10,17 @@
 
 // export default VerifyEmail
 
-import axios from 'axios';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { toast } from 'sonner';
-import Loader from '../components/loaders/Loader';
-import { useDispatch } from 'react-redux';
-import { signInSuccess } from '../features/user/userSlice';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import Loader from "../components/loaders/Loader";
+import { useDispatch } from "react-redux";
+import { signInSuccess } from "../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const VerifyEmail = () => {
-  const [code, setCode] = useState(['', '', '', '', '', '']);
+  const [code, setCode] = useState(["", "", "", "", "", ""]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -40,60 +40,67 @@ const VerifyEmail = () => {
   };
 
   const handleKeyDown = (e, index) => {
-    if (e.key === 'Backspace') {
-      if (code[index] !== '') {
+    if (e.key === "Backspace") {
+      if (code[index] !== "") {
         // Just clear the current input
         const newCode = [...code];
-        newCode[index] = '';
+        newCode[index] = "";
         setCode(newCode);
       } else if (index > 0) {
         // Move to the previous input
         document.getElementById(`code-${index - 1}`).focus();
       }
     }
-    if (e.key === 'ArrowLeft' && index > 0) {
+    if (e.key === "ArrowLeft" && index > 0) {
       document.getElementById(`code-${index - 1}`).focus();
     }
-    if (e.key === 'ArrowRight' && index < 5) {
+    if (e.key === "ArrowRight" && index < 5) {
       document.getElementById(`code-${index + 1}`).focus();
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const finalCode = code.join('');
+    const finalCode = code.join("");
     if (finalCode.length !== 6) {
-      toast.error('Please enter all 6 digits');
+      toast.error("Please enter all 6 digits");
       return;
     }
-    
+
     try {
+      setError(null);
+      setLoading(true);
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/verify-email`,
+        { code: finalCode }, {withCredentials : true}
+      );
+
+      if (res.status === 200) {
+        dispatch(signInSuccess(res.data));
+        toast.success("Signed in", {
+          style: {
+            backgroundColor: "#008b8c",
+            color: "white",
+            border: "1px solid rgba(255, 255, 255, 0.4)",
+          },
+        });
         setError(null);
-        setLoading(true)
-        const res = await axios.post("/api/auth/verify-email", {code : finalCode});
-
-        if (res.status === 200) {
-             dispatch(signInSuccess(res.data));
-                      toast.success("Signed in", {style : {backgroundColor : "#008b8c", color : "white", border : "1px solid rgba(255, 255, 255, 0.4)"}});
-                      setError(null);
-                      navigate("/");
-        }
+        navigate("/");
+      }
     } catch (error) {
-        setError(error.response.data.message)
-        console.log(error)
-    }finally {
-        setLoading(false);
+      setError(error.response.data.message);
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-
   };
 
   useEffect(() => {
-  const firstInput = document.getElementById('code-0');
-  if (firstInput) {
-    firstInput.focus();
-  }
-}, []);
-
+    const firstInput = document.getElementById("code-0");
+    if (firstInput) {
+      firstInput.focus();
+    }
+  }, []);
 
   return (
     <div className="bg-white dark:bg-dark h-screen grid place-items-center">
@@ -122,14 +129,20 @@ const VerifyEmail = () => {
             ))}
           </div>
 
-          {error && <p className='text-red-500 mb-5'>{error}</p>}
+          {error && <p className="text-red-500 mb-5">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
             className="w-full py-2 cursor-pointer px-4 flex items-center gap-2 justify-center bg-primary hover:bg-primary/50 text-white font-medium rounded-md transition"
           >
-            {loading ? <><Loader /> Verifying...</> : "Verify"}
+            {loading ? (
+              <>
+                <Loader /> Verifying...
+              </>
+            ) : (
+              "Verify"
+            )}
           </button>
         </form>
 

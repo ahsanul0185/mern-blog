@@ -12,10 +12,10 @@ const DashChangePassword = () => {
     confirmNewPassword: "",
   });
 
-  const {currentUser} = useSelector(state => state.userR);
+  const { currentUser } = useSelector((state) => state.userR);
 
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,7 +23,7 @@ const DashChangePassword = () => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    setError(""); 
+    setError("");
   };
 
   const handleSubmit = async (e) => {
@@ -35,7 +35,11 @@ const DashChangePassword = () => {
       return;
     }
 
-    if (currentPassword.trim().length < 6 || newPassword.trim().length < 6 || confirmNewPassword.trim().length < 6) {
+    if (
+      currentPassword.trim().length < 6 ||
+      newPassword.trim().length < 6 ||
+      confirmNewPassword.trim().length < 6
+    ) {
       setError("Password must me at least 6 character long");
       return;
     }
@@ -51,28 +55,28 @@ const DashChangePassword = () => {
     }
 
     setError("");
-    console.log(currentPassword, "Changing password to:", newPassword);
 
     try {
-      setLoading(true)
-      const res = await axios.put("/api/user/change-password", {oldPassword : currentPassword, newPassword});
+      setLoading(true);
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/user/change-password`,
+        { oldPassword: currentPassword, newPassword }, {withCredentials : true}
+      );
       if (res.status === 200) {
         toast.success(res.data.message);
         setFormData({
-    currentPassword: "",
-    newPassword: "",
-    confirmNewPassword: "",
-  })
+          currentPassword: "",
+          newPassword: "",
+          confirmNewPassword: "",
+        });
       }
 
-      console.log(res)
     } catch (error) {
       setError(error?.response?.data?.message);
-      console.log(error)
-    }finally {
-      setLoading(false)
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-
   };
 
   return (
@@ -128,19 +132,26 @@ const DashChangePassword = () => {
           <p className="text-red-500 text-sm text-start -mt-2">{error}</p>
         )}
 
-   
         <button
           type="submit"
           disabled={loading}
           className="w-full bg-[#00adae] flex items-center gap-2 justify-center cursor-pointer hover:bg-[#009192] text-white font-medium py-2 rounded-md transition"
         >
-          {loading? <><Loader/> Updating</> : "Update Password"}
+          {loading ? (
+            <>
+              <Loader /> Updating
+            </>
+          ) : (
+            "Update Password"
+          )}
         </button>
 
         <p className="text-sm text-end  text-gray-500">
           <button
             type="button"
-            onClick={() => navigate("/forgot-password", {state : currentUser.email})}
+            onClick={() =>
+              navigate("/forgot-password", { state: currentUser.email })
+            }
             className="text-[#00adae] hover:underline cursor-pointer"
           >
             Forgot Password?
