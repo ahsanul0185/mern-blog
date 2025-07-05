@@ -63,21 +63,23 @@ const Blogs = () => {
     <>
       <div className="default-padding pb-20">
         {/* Header */}
-        <div className="flex flex-col pt-6 md:pt-0 md:py-12 gap-6 items-center sm:max-w-[80%] lg:max-w-1/2 mx-auto">
-          <span className="text-xs md:text-sm text-gray-600 dark:text-gray-300 text-center font-semibold uppercase tracking-widest block">
-            Our Blogs
-          </span>
 
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold">
-            Find our all blogs from here
-          </h2>
+      <div className="flex flex-col py-6 md:py-12 gap-3 md:gap-6 items-center max-w-[80%] md:max-w-[70%] mx-auto">
+        <span className="text-xs md:text-sm text-gray-600 dark:text-gray-300 text-center font-semibold uppercase tracking-widest block">
+          Our Blogs
+        </span>
 
-          <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 text-center">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-center">
+          Find our all blogs from here
+        </h2>
+
+        <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 text-center">
             Our blogs are written from very research research and well known
             writers writers so that we can provide you the best blogs and
             articles articles for you to read them all along
-          </p>
-        </div>
+        </p>
+      </div>
+
 
         {/* Posts */}
         {posts.length === 0 && loading ? (
