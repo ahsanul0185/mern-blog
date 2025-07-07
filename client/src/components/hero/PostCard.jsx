@@ -41,22 +41,25 @@ const PostCard = ({ post }) => {
           {post.category?.charAt(0).toUpperCase() + post.category?.slice(1)}
         </h3>
       </div>
-      <h2 className="text-sm sm:text-[18px] font-semibold line-clamp-2 grow group-hover:text-primary duration-300 ease-in-out">
+      <h2 className="text-sm sm:text-[18px] font-semibold line-clamp-2 overflow-hidden grow group-hover:text-primary duration-300 ease-in-out">
         {post.title}
       </h2>
 
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-1 sm:gap-2">
+      <div className="flex justify-between flex-col items-start sm:items-center sm:flex-row gap-1">
+        <div className="flex items-center gap-2">
           <img
             src={author?.profilePicture}
             alt="author profile"
-            className="size-5 sm:size-7 bg-gray-500 rounded-full object-cover"
+            className="size-6 sm:size-7 bg-gray-500 rounded-full object-cover"
           />
-          <span className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-semibold">
+          <div className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-semibold max-w-full sm:max-w-fit overflow-hidden">
             @{author?.username}
-          </span>
+            <p className="text-gray-600 dark:text-gray-300 text-[9px] sm:text-sm block sm:hidden">
+          {moment(post.createdAt).format("DD MMMM YYYY")}
+        </p>
+          </div>
         </div>
-        <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm">
+        <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm hidden sm:block">
           {moment(post.createdAt).format("DD MMMM YYYY")}
         </p>
       </div>
