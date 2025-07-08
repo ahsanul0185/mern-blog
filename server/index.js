@@ -23,12 +23,17 @@ mongoose
   });
 
 const app = express();
+
+app.set("trust proxy", 1);
+
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(cors({
   origin: process.env.CLIENT_URL, 
   credentials: true,        
 }));
+
 const PORT = 3000;
 
 app.listen(PORT, () => {
