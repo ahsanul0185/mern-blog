@@ -186,11 +186,11 @@ const newReplyComment = await Comment.create({
   content: req.body.content,
 });
 
-        const updatedParent = await Comment.findByIdAndUpdate(
-      parentComment._id,
-      { $push: { replies: newReplyComment._id } },
-      { new: true }
-    );
+  const updatedParent = await Comment.findByIdAndUpdate(
+    parentComment._id,
+    { $push: { replies: newReplyComment._id } },
+    { new: true }
+  );
 
     res
       .status(200)
