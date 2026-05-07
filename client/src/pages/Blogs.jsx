@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PostCard from "../components/hero/PostCard";
-import Loader from "../components/loaders/Loader";
 import LoaderAllBlogPage from "../components/loaders/LoaderAllBlogPage";
 import NewsLetter from "../components/hero/NewsLetter";
 

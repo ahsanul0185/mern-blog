@@ -1,29 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import moment from "moment";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const PostCard = ({ post }) => {
-  const [author, setAuthor] = useState(null);
-
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const getPostAuthor = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/user/${post.userId}`, {withCredentials : true}
-        );
-        if (res.status === 200) {
-          setAuthor(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPostAuthor();
-  }, []);
-
   return (
     <div
       className="w-full flex flex-col gap-2 sm:gap-3 justify-between cursor-pointer group animate-fadeIn"
@@ -48,12 +29,12 @@ const PostCard = ({ post }) => {
       <div className="flex justify-between flex-col items-start sm:items-center sm:flex-row gap-1">
         <div className="flex items-center gap-2">
           <img
-            src={author?.profilePicture}
+            src={post.userId?.profilePicture}
             alt="author profile"
             className="size-6 sm:size-7 bg-gray-500 rounded-full object-cover"
           />
           <div className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-semibold max-w-full sm:max-w-fit overflow-hidden">
-            @{author?.username}
+            @{post.userId?.username}
             <p className="text-gray-600 dark:text-gray-300 text-[9px] sm:text-sm block sm:hidden">
           {moment(post.createdAt).format("DD MMMM YYYY")}
         </p>
